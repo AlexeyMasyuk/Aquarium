@@ -40,6 +40,22 @@ namespace ComputerToArduino
             }
         }
 
+        private void portFind()
+        {
+            comboBox1.Items.Clear();
+            comboBox1.Text = null;
+            getAvailableComPorts();
+            foreach (string port in ports)
+            {
+                comboBox1.Items.Add(port);
+                Console.WriteLine(port);
+                if (ports[0] != null)
+                {
+                    comboBox1.SelectedItem = ports[0];
+                }
+            }
+        }
+
         void getAvailableComPorts()
         {
             port = null;
@@ -178,21 +194,7 @@ namespace ComputerToArduino
 
         }
 
-        private void portFind()
-        {
-            comboBox1.Items.Clear();
-            comboBox1.Text = null;
-            getAvailableComPorts();            
-            foreach (string port in ports)
-            {
-                comboBox1.Items.Add(port);
-                Console.WriteLine(port);
-                if (ports[0] != null)
-                {
-                    comboBox1.SelectedItem = ports[0];
-                }
-            }
-        }
+
 
         private void wifiFind()
         {
