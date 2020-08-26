@@ -70,7 +70,7 @@ namespace ComputerToArduino
             portsToBox();
         }
 
-        public void connectToPort(string portName)
+/*        public void connectToPort(string portName)
         {
             if (portName != null)
             {
@@ -80,6 +80,6 @@ namespace ComputerToArduino
                     Port.Open();
                 }
             }
-        }
+        }*/
     }
 }

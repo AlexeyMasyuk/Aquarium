@@ -23,3 +23,15 @@ C:\Users\Alexey Masyuk\source\repos\ComputerToArduino\ComputerToArduino\obj\Debu
 C:\Users\Alexey Masyuk\source\repos\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
 C:\Users\Alexey Masyuk\source\repos\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe
 C:\Users\Alexey Masyuk\source\repos\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.pdb
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csprojAssemblyReference.cache
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Form1.resources
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Properties.Resources.resources
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csproj.GenerateResource.cache
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.pdb
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.exe.manifest
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.application
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.exe
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.pdb
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
+C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application

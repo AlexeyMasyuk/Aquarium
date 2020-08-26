@@ -101,5 +101,19 @@ namespace ComputerToArduino
             UserNameBox.Enabled = state;
             UserPassBox.Enabled = state;
         }
+
+        public void textClear()
+        {
+            WifiPassBox.Text = "";
+            UserNameBox.Text = "";
+            UserPassBox.Text = "";
+        }
+
+        public bool textValidation()
+        {
+            if (WifiPassBox.Text.Length > 0 && UserNameBox.Text.Length > 0 && UserPassBox.Text.Length > 0)
+                return true;
+            return false;
+        }
     }
 }
