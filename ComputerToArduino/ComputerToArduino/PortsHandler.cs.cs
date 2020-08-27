@@ -14,8 +14,9 @@ namespace ComputerToArduino
 
         public PortsHandler(ComboBox portsBox)
         {
-            PortsNames = SerialPort.GetPortNames();
             PortsBox = portsBox;
+            PortsNames = SerialPort.GetPortNames();
+            portsToBox();           
         }
 
         public string[] PortsNames
@@ -67,19 +68,29 @@ namespace ComputerToArduino
         {
             PortsNames = null;
             PortsBox.Items.Clear();
+            PortsBox.Text = "";
+            PortsNames = SerialPort.GetPortNames();
             portsToBox();
         }
 
-/*        public void connectToPort(string portName)
+        public bool connectToPort(string portName)
         {
-            if (portName != null)
+            try
             {
-                try
-                {
-                    Port = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
-                    Port.Open();
-                }
+                Port = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
+                Port.Open();
+                return Port.IsOpen;
             }
-        }*/
+            catch (Exception e)
+            {
+                MessageBox.Show("Cannot open Port", "PortFail", MessageBoxButtons.OK);
+                return false;
+            }
+        }
+
+        public void disconnectFromPort()
+        {
+            Port.Close();
+        }
     }
 }

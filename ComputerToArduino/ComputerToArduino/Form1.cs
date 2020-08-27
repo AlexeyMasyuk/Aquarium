@@ -12,8 +12,10 @@ using System.Timers;
 namespace ComputerToArduino
 {
     public partial class Form1 : Form
-
     {
+        private PortsHandler portsHandler;
+        private ButtonsAndTextBoxesControl buttonsAndText;
+
         bool isConnected = false;
         String[] ports;
         SerialPort port;
@@ -22,81 +24,34 @@ namespace ComputerToArduino
         public Form1()
         {
             InitializeComponent();
-            disableControls();
-            getAvailableComPorts();
-
-            wifiFind();
-            portFind();
+            portsHandler = new PortsHandler(portsBox);
+            buttonsAndText = new ButtonsAndTextBoxesControl
+                (connectBtn, refreshBtn, writeBtn, wifiPassTextBox, userNameTextBox, userPassTextBox);
+            buttonsAndText.ConnectBtnStatusSwitch(portsHandler.PortsNames.Length != 0);
+            WlanClient.wifiFind(wifiList);
         }
 
         private void connect_Click(object sender, EventArgs e)
         {
-            if (!isConnected)
-            {
-                connectToArduino();
-            } else
-            {
-                disconnectFromArduino();
-            }
-        }
-
-        private void portFind()
-        {
-            comboBox1.Items.Clear();
-            comboBox1.Text = null;
-            getAvailableComPorts();
-            foreach (string port in ports)
-            {
-                comboBox1.Items.Add(port);
-                Console.WriteLine(port);
-                if (ports[0] != null)
-                {
-                    comboBox1.SelectedItem = ports[0];
-                }
-            }
-        }
-
-        void getAvailableComPorts()
-        {
-            port = null;
-            ports = SerialPort.GetPortNames();
-            if (ports.Length > 0)
-                connect.Enabled = true;
-            else
-                connect.Enabled = false;
-        }
-
-        private void connectToArduino()
-        {
-            isConnected = true;
-            string selectedPort = comboBox1.GetItemText(comboBox1.SelectedItem);
-            port = new SerialPort(selectedPort, 9600, Parity.None, 8, StopBits.One);
-            try
-            {
-                port.Open();
-            }catch(Exception e)
-            {
-                MessageBox.Show("Cannot open Port","PortFail", MessageBoxButtons.OK);
-                return;
-            }
-            connect.Text = "Disconnect";
-            enableControls();
+            if (!portsHandler.connectToPort(portsBox.SelectedItem.ToString()))
+                MAT.ConnFail();
+            AnsRead();
         }
 
 
-        private void disconnectFromArduino()
-        {
-            isConnected = false;
-            port.Close();
-            connect.Text = "Connect";
-            disableControls();
-            resetDefaults();
-        }
+
+
+
+
+
+
+
 
         private bool AnsRead()
         {
-            try {
-                if (port.IsOpen)
+            try 
+            {
+                if (portsHandler.Port.IsOpen) 
                 {
                     DateTime now = DateTime.Now;
                     DateTime prev = now;
@@ -104,30 +59,22 @@ namespace ComputerToArduino
                     while (true)
                     {
                         if (now > prev.AddSeconds(10))
-                        {
-                            throw new Exception("No answer from arduino");
-                        }
-                        data_rx = port.ReadLine();
+                            throw new Exception(MAT.NoAns());
+                        data_rx = portsHandler.Port.ReadLine();
                         if (data_rx.Contains("OKEY"))
-                        {
-                            MessageBox.Show("Arduino got it", "Secssed", MessageBoxButtons.OK);
-                            return true;
-                        }
-                        else if(data_rx.Contains("FALSE"))
-                        {
-                            MessageBox.Show("Arduino fail to write", "Fail", MessageBoxButtons.OK);
-                            return false;
-                        }
+                            break;
+                        else if (data_rx.Contains("FALSE"))
+                            throw new Exception(MAT.WrFail());
                         now = DateTime.Now;
                     }
+                    MAT.Secssed();
+                    return true;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("No answer from arduino", "Fail", MessageBoxButtons.OK);
-                return false;
+                MessageBox.Show(e.Message.ToString(), "Fail", MessageBoxButtons.OK);                
             }
-            
             return false;
         }
 
@@ -141,53 +88,30 @@ namespace ComputerToArduino
             
             if (isConnected)
             {
-                string send = "<OKEY" + listView1.SelectedItems[0].Text + " " + wifiPass.Text + " " + userNm.Text + " " + userPs.Text + "\n";
+                string send = "<OKEY" + wifiList.SelectedItems[0].Text + " " + wifiPassTextBox.Text + " " + userNameTextBox.Text + " " + userPassTextBox.Text + "\n";
                 try
                 {
                     port.Write(send);
-                    disableControls();
+                    buttonsAndText.DisableOrEnableAll(false);
                     System.Threading.Thread.Sleep(9000);
                     MessageBox.Show("Press OK to read answer from Arduino", "Continue", MessageBoxButtons.OK);
                     AnsRead();
-                    enableControls();
+                    buttonsAndText.DisableOrEnableAll(true);
                 }
                 catch (Exception)
                 {
                     isConnected = false;
-                    connect.Text = "Connect";
-                    disableControls();
-                    resetDefaults();
-                    portFind();
+                    connectBtn.Text = "Connect";
+                    buttonsAndText.DisableOrEnableAll(false);
+                    buttonsAndText.textClear();
+                    portsHandler.PortsRefresh();
                     MessageBox.Show("No arduino connected", "Fail", MessageBoxButtons.OK);
                 }
 
             }
         }
 
-        private void enableControls()
-        {
-            refresh.Enabled = true;
-            wifiPass.Enabled = true;
-            userNm.Enabled = true;
-            userPs.Enabled = true;
-            groupBox3.Enabled = true;
-        }
 
-        private void disableControls()
-        {
-            wifiPass.Enabled = false;
-            userNm.Enabled = false;
-            userPs.Enabled = false;
-            groupBox3.Enabled = false;
-            write.Enabled = false;
-        }
-
-        private void resetDefaults()
-        {
-            wifiPass.Text = "";
-            userNm.Text = "";
-            userPs.Text = "";
-        }
 
         private void groupBox3_Enter(object sender, EventArgs e)
         {
@@ -196,41 +120,23 @@ namespace ComputerToArduino
 
 
 
-        private void wifiFind()
-        {
 
-            listView1.Items.Clear();
-            WlanClient client = new WlanClient();
-            foreach (WlanClient.WlanInterface wlanInterface in client.Interfaces)
-            {
-                Wlan.WlanAvailableNetwork[] networks = wlanInterface.GetAvailableNetworkList(0);
-                foreach (Wlan.WlanAvailableNetwork network in networks)
-                {
-                    Wlan.Dot11Ssid ssid = network.dot11Ssid;
-                    string networkName = Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
-                    ListViewItem item = new ListViewItem(networkName);
-                    item.SubItems.Add(network.wlanSignalQuality + "%");
-                    if(!listView1.Items.Contains(item))
-                        listView1.Items.Add(item);
-                }
-            }
-        }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(listView1.SelectedItems.Count>0 && isConnected)
-                write.Enabled = true;
+            if(wifiList.SelectedItems.Count>0 && isConnected)
+                writeBtn.Enabled = true;
             else
-                write.Enabled = false;
+                writeBtn.Enabled = false;
         }
 
         /*------------------------------------------------------------------*/
 
         private void refresh_Click(object sender, EventArgs e)
         {
-            wifiFind();
-            portFind();
-            resetDefaults();
+            WlanClient.wifiFind(wifiList);
+            portsHandler.PortsRefresh();
+            buttonsAndText.ConnectBtnStatusSwitch(portsHandler.PortsNames.Length != 0);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

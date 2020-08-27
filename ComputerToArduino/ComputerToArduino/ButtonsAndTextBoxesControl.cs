@@ -24,6 +24,7 @@ namespace ComputerToArduino
             WifiPassBox = wifiPassBox;
             UserNameBox = userNameBox;
             UserPassBox = userPassBox;
+            DisableOrEnableAll(false);
         }
 
         public Button ConnectBtn
@@ -114,6 +115,14 @@ namespace ComputerToArduino
             if (WifiPassBox.Text.Length > 0 && UserNameBox.Text.Length > 0 && UserPassBox.Text.Length > 0)
                 return true;
             return false;
+        }
+
+        public void ConnectBtnStatusSwitch(bool swichCondition)
+        {
+            if (swichCondition)
+                ConnectBtn.Enabled = true;
+            else
+                ConnectBtn.Enabled = false;
         }
     }
 }

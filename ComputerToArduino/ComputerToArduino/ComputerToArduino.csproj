@@ -75,9 +75,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Interop.cs" />
+    <Compile Include="MAT.cs" />
     <Compile Include="PortsHandler.cs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tmpFuncHolder.cs" />
     <Compile Include="WlanApi.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

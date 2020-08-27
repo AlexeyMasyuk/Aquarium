@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Text;
+using System.Windows.Forms;
 
 namespace NativeWifi
 {
@@ -841,6 +842,26 @@ namespace NativeWifi
 			Wlan.ThrowIfError(
 				Wlan.WlanReasonCodeToString(reasonCode, sb.Capacity, sb, IntPtr.Zero));
 			return sb.ToString();
+		}
+
+		public static void wifiFind(ListView wifiList)
+		{
+
+			wifiList.Items.Clear();
+			WlanClient client = new WlanClient();
+			foreach (WlanClient.WlanInterface wlanInterface in client.Interfaces)
+			{
+				Wlan.WlanAvailableNetwork[] networks = wlanInterface.GetAvailableNetworkList(0);
+				foreach (Wlan.WlanAvailableNetwork network in networks)
+				{
+					Wlan.Dot11Ssid ssid = network.dot11Ssid;
+					string networkName = Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
+					ListViewItem item = new ListViewItem(networkName);
+					item.SubItems.Add(network.wlanSignalQuality + "%");
+					if (!wifiList.Items.Contains(item))
+						wifiList.Items.Add(item);
+				}
+			}
 		}
 	}
 }

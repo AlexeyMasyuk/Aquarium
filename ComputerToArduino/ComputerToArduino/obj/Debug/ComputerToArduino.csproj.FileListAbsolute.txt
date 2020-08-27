@@ -35,3 +35,15 @@ C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\b
 C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.pdb
 C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
 C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csprojAssemblyReference.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Form1.resources
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Properties.Resources.resources
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csproj.GenerateResource.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.pdb
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.exe.manifest
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.application
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.exe
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.pdb
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
