@@ -9,12 +9,12 @@ namespace ComputerToArduino
     {
         private static string[] message =
             { "Can't connect to Port", "No answer from arduino", "Arduino fail to write", "Arduino got it" };
-        private static string head = "Secssed";
+        private static string[] head = { "Secssed", "Fail" };
 
 
-        public static string ConnFail()
+        public static void ConnFail()
         {
-            return message[0];
+            MessageBox.Show(message[0], head[1], MessageBoxButtons.OK);
         }
 
         public static string NoAns()
@@ -29,7 +29,7 @@ namespace ComputerToArduino
 
         public static void Secssed()
         {
-            MessageBox.Show(message[3], head, MessageBoxButtons.OK);
+            MessageBox.Show(message[3], head[0], MessageBoxButtons.OK);
         }
     }
 }

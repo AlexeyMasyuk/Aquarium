@@ -95,8 +95,7 @@ namespace ComputerToArduino
         }
 
         public void DisableOrEnableAll(bool state)
-        {
-            ConnectBtn.Enabled = state;
+        {           
             WriteBtn.Enabled = state;
             WifiPassBox.Enabled = state;
             UserNameBox.Enabled = state;
@@ -124,5 +123,40 @@ namespace ComputerToArduino
             else
                 ConnectBtn.Enabled = false;
         }
+
+        public void ConnectDisconnect_Switch()
+        {
+            if (ConnectBtn.Text.ToString() == "Connect")
+                ConnectBtn.Text = "Disconnect";
+            else
+                ConnectBtn.Text = "Connect";
+        }
+
+        public string ComunicationString(string wifiName)
+        {
+            string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString() };
+            string[] signs = { "<OKEY", " ", "\n" };
+            StringBuilder str = null;
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == 0)
+                    str.Append(signs[i]);
+                str.Append(strArr[i]);
+                str.Append(signs[1]);
+                if (i == 3)
+                    str.Append(signs[i - 1]);
+            }
+            return str.ToString();
+        }
+
+        public void writeBtnVision(bool isConnected,int wifiItemsCount)
+        {
+            if (textValidation() && isConnected && wifiItemsCount > 0)
+                WriteBtn.Enabled = true;
+            else
+                WriteBtn.Enabled = false;
+        }
+
     }
 }
+

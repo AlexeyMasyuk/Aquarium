@@ -73,17 +73,19 @@ namespace ComputerToArduino
             portsToBox();
         }
 
+
         public bool connectToPort(string portName)
         {
             try
             {
                 Port = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
                 Port.Open();
+                PortsBox.Enabled = false;
                 return Port.IsOpen;
             }
             catch (Exception e)
             {
-                MessageBox.Show("Cannot open Port", "PortFail", MessageBoxButtons.OK);
+                PortsBox.Enabled = true ;
                 return false;
             }
         }

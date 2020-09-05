@@ -301,7 +301,7 @@ namespace NativeWifi
 			{
 				IntPtr availNetListPtr;
 				Wlan.ThrowIfError(
-					Wlan.WlanGetAvailableNetworkList(client.clientHandle, info.interfaceGuid, flags, IntPtr.Zero, out availNetListPtr));
+	                 Wlan.WlanGetAvailableNetworkList(client.clientHandle, info.interfaceGuid, flags, IntPtr.Zero, out availNetListPtr));
 				try
 				{
 					return ConvertAvailableNetworkListPtr(availNetListPtr);

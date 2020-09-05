@@ -31,21 +31,29 @@ namespace ComputerToArduino
             WlanClient.wifiFind(wifiList);
         }
 
-        private void connect_Click(object sender, EventArgs e)
+        private void connectionControl()
         {
-            if (!portsHandler.connectToPort(portsBox.SelectedItem.ToString()))
-                MAT.ConnFail();
-            AnsRead();
+            if(isConnected)
+                portsHandler.Port.Close();
+            portsHandler.PortsBox.Enabled = isConnected;                          
+            isConnected = !isConnected;
+            buttonsAndText.DisableOrEnableAll(isConnected);
+            buttonsAndText.ConnectDisconnect_Switch();
+            buttonsAndText.WriteBtn.Enabled = false;
         }
 
-
-
-
-
-
-
-
-
+        private void connect_Click(object sender, EventArgs e)
+        {
+            if (!isConnected)
+            {
+                if (!portsHandler.connectToPort(portsBox.SelectedItem.ToString()))
+                    MAT.ConnFail();
+                else
+                    connectionControl();
+            }
+            else
+                connectionControl();
+        }
 
         private bool AnsRead()
         {
@@ -78,16 +86,12 @@ namespace ComputerToArduino
             return false;
         }
 
-        private void failReset(object sender, EventArgs e)
-        {
-
-        }
-
         private void write_Click(object sender, EventArgs e)
         {
             
             if (isConnected)
             {
+                string commStr = buttonsAndText.ComunicationString(wifiList.SelectedItems[0].Text.ToString());
                 string send = "<OKEY" + wifiList.SelectedItems[0].Text + " " + wifiPassTextBox.Text + " " + userNameTextBox.Text + " " + userPassTextBox.Text + "\n";
                 try
                 {
@@ -111,23 +115,9 @@ namespace ComputerToArduino
             }
         }
 
-
-
-        private void groupBox3_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-
-
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(wifiList.SelectedItems.Count>0 && isConnected)
-                writeBtn.Enabled = true;
-            else
-                writeBtn.Enabled = false;
+            buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
         }
 
         /*------------------------------------------------------------------*/
@@ -139,24 +129,19 @@ namespace ComputerToArduino
             buttonsAndText.ConnectBtnStatusSwitch(portsHandler.PortsNames.Length != 0);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void wifiPassTextBox_TextChanged(object sender, EventArgs e)
         {
-
+            buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void userNameTextBox_TextChanged(object sender, EventArgs e)
         {
-
+            buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void userPassTextBox_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
         }
     }
 }
