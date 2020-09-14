@@ -136,15 +136,18 @@ namespace ComputerToArduino
         {
             string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString() };
             string[] signs = { "<OKEY", " ", "\n" };
-            StringBuilder str = null;
+            StringBuilder str = new StringBuilder();
             for (int i = 0; i < 4; i++)
             {
                 if (i == 0)
                     str.Append(signs[i]);
                 str.Append(strArr[i]);
-                str.Append(signs[1]);
                 if (i == 3)
+                {
                     str.Append(signs[i - 1]);
+                    break;
+                }
+                str.Append(signs[1]);
             }
             return str.ToString();
         }

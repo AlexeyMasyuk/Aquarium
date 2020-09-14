@@ -27,6 +27,11 @@ namespace ComputerToArduino
             return message[2];
         }
 
+        public static void MessBox(string text)
+        {
+            MessageBox.Show(text, head[1], MessageBoxButtons.OK);
+        }
+
         public static void Secssed()
         {
             MessageBox.Show(message[3], head[0], MessageBoxButtons.OK);

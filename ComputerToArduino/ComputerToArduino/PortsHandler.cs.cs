@@ -94,5 +94,44 @@ namespace ComputerToArduino
         {
             Port.Close();
         }
+
+        private void AnsRead()
+        {
+            if (Port.IsOpen)
+            {
+                DateTime now = DateTime.Now;
+                DateTime prev = now;
+                string data_rx = "";
+                while (true)
+                {
+                    if (now > prev.AddSeconds(10))
+                        throw new Exception(MAT.NoAns());
+                    data_rx = Port.ReadLine();
+                    if (data_rx.Contains("OKEY"))
+                        break;
+                    else if (data_rx.Contains("FALSE"))
+                        throw new Exception(MAT.WrFail());
+                    now = DateTime.Now;
+                }
+                MAT.Secssed();
+            }
+            throw new Exception(MAT.NoAns());
+        }
+
+        public bool writeToPort(string MessageToWrite)
+        {
+            try
+            {
+                Port.Write(MessageToWrite);
+                System.Threading.Thread.Sleep(9000);
+                AnsRead();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MAT.MessBox(e.Message);
+                return false;
+            }
+        }
     }
 }

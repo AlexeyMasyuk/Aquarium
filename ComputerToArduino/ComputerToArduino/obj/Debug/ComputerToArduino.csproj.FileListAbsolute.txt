@@ -47,3 +47,4 @@ D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerTo
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerToArduino.pdb
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csproj.CoreCompileInputs.cache

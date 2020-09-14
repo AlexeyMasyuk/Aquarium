@@ -17,8 +17,6 @@ namespace ComputerToArduino
         private ButtonsAndTextBoxesControl buttonsAndText;
 
         bool isConnected = false;
-        String[] ports;
-        SerialPort port;
 
 
         public Form1()
@@ -55,64 +53,12 @@ namespace ComputerToArduino
                 connectionControl();
         }
 
-        private bool AnsRead()
-        {
-            try 
-            {
-                if (portsHandler.Port.IsOpen) 
-                {
-                    DateTime now = DateTime.Now;
-                    DateTime prev = now;
-                    string data_rx = "";
-                    while (true)
-                    {
-                        if (now > prev.AddSeconds(10))
-                            throw new Exception(MAT.NoAns());
-                        data_rx = portsHandler.Port.ReadLine();
-                        if (data_rx.Contains("OKEY"))
-                            break;
-                        else if (data_rx.Contains("FALSE"))
-                            throw new Exception(MAT.WrFail());
-                        now = DateTime.Now;
-                    }
-                    MAT.Secssed();
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message.ToString(), "Fail", MessageBoxButtons.OK);                
-            }
-            return false;
-        }
+
 
         private void write_Click(object sender, EventArgs e)
         {
-            
-            if (isConnected)
-            {
-                string commStr = buttonsAndText.ComunicationString(wifiList.SelectedItems[0].Text.ToString());
-                string send = "<OKEY" + wifiList.SelectedItems[0].Text + " " + wifiPassTextBox.Text + " " + userNameTextBox.Text + " " + userPassTextBox.Text + "\n";
-                try
-                {
-                    port.Write(send);
-                    buttonsAndText.DisableOrEnableAll(false);
-                    System.Threading.Thread.Sleep(9000);
-                    MessageBox.Show("Press OK to read answer from Arduino", "Continue", MessageBoxButtons.OK);
-                    AnsRead();
-                    buttonsAndText.DisableOrEnableAll(true);
-                }
-                catch (Exception)
-                {
-                    isConnected = false;
-                    connectBtn.Text = "Connect";
-                    buttonsAndText.DisableOrEnableAll(false);
-                    buttonsAndText.textClear();
-                    portsHandler.PortsRefresh();
-                    MessageBox.Show("No arduino connected", "Fail", MessageBoxButtons.OK);
-                }
-
-            }
+            string commStr = buttonsAndText.ComunicationString(wifiList.SelectedItems[0].Text.ToString());
+            portsHandler.writeToPort(commStr);
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
