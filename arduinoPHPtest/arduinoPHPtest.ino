@@ -4,66 +4,60 @@
 typedef struct {
   String userData[7];
 } userData_type;
-userData_type data = {"Android", "am123456", "alex", "1234", "", "", ""};
-// {"Zion", "00548048023", "alex", "1234", "", "", ""}
+userData_type data = {"HOTBOX 4-4618", "00548048023", "alex", "1234", "", "", ""};
+// {"HOTBOX 4-4618", "00548048023", "alex", "1234", "", "", ""};
 
 String input = "";         // a string to hold incoming data
 boolean strComplete = false;  // whether the string is complete
-
-boolean isConnected = false;
-boolean usbConnected = false;
+boolean allDataRec = false;
 
 WiFiClient client;
-String server = "192.168.43.77";
+String server = "192.168.1.33";
+void(* resetFunc)(void) = 0;
 
 void setup() {
   Serial.begin(9600);
 
-  //  wifiConnect();
-
-  //  mmWrite();
   //  mmRead();
-  //  WiFi.disconnect();
-  //  Serial.println();
-  //
-  //  Serial.println(data.userData[0]);
+    Serial.println(data.userData[0]);
   //  Serial.println(data.userData[1]);
   //  Serial.println(data.userData[2]);
   //  Serial.println(data.userData[3]);
   //  Serial.println(data.userData[4]);
   //  Serial.println(data.userData[5]);
   //  Serial.println(data.userData[6]);
-  //  if (phpEvantHandler())
-  //  {
-  //    mmWrite();
-  //    Serial.println("OKEY");
-  //  }
-  //  else
-  //  {
-  //    Serial.println("1");
-  //  }
 
-  mmRead();
-  if (wifiConnect()) {
-    Serial.println("first if");
-  }
-  else if (serialAndDataHandlerEvent()) {
-    if (phpEvantHandler())
-    {
+  if (Serial) {
+    //    if (serialAndDataHandlerEvent()) {
+    Serial.print("1");
+    if (phpEvantHandler()) {
       mmWrite();
-      Serial.println("OKEY");
+      allDataRec = true;
     }
-    else
-    {
-      Serial.println("FALSE");
+    //    }
+    String ans = "FALSE\n";
+    Serial.print(ans);
+    if (allDataRec) {
+      ans = "OKEY\n";
+    }
+
+    unsigned long currentMillis = millis();
+    unsigned long previousMillis = currentMillis;
+    int interval = 8000;
+    while (true) {
+      Serial.print(ans);
+      if (currentMillis - previousMillis > interval) {
+        break;
+      }
+      currentMillis = millis();
+      delay(1000);
     }
   }
-  else{
-    Serial.println("res");
-  }
+
+
 }
 
-void(* resetFunc)(void) = 0;
+
 
 void loop() {
   //  if (data.userData[0].length() != 0)
@@ -76,14 +70,14 @@ void loop() {
   //             Serial.println(data.userData[5]);
   //             Serial.println(data.userData[6]);
   //  }
-    resetFunc();
+  resetFunc();
 }
 
 //--------------------------- FUNCTIONS ------------------------//
 String CUT(String str)
 {
   String newStr;
-  for (int i = 0; str.charAt(i) != ' ' && str.charAt(i) != '\n'; i++) {
+  for (int i = 0; str.charAt(i) != ',' && str.charAt(i) != '\n'; i++) {
     newStr.concat(str.charAt(i));
   }
   return newStr;
@@ -173,7 +167,9 @@ boolean phpEvantHandler()
     if (phpReq()) {
       if (phpAns()) {
         dataToStruct(3, 4);
+        Serial.println("After dataToStruct");
         if (toStructCheck(3, 4)) {
+          Serial.println("After toStructCheck");
           return true;
         }
       }
@@ -191,7 +187,7 @@ boolean phpReq()
 
   String post = "data=";
   post.concat(data.userData[2]);
-  post.concat(" ");
+  post.concat(",");
   post.concat(data.userData[3]);
   post.concat("\n");
   Serial.println(post);
@@ -209,12 +205,13 @@ boolean phpReq()
       client.print(post);
       client.println();
       delay(1000);
-      Serial.println("AfterPost");
+      Serial.println("After Post");
       return true;
     }
     if (currentMillis - previousMillis > interval) {
       break;
     }
+    delay(0);
   }
   delay(9000);
   return false;
@@ -222,6 +219,7 @@ boolean phpReq()
 
 boolean phpAns()
 {
+  Serial.println("Start AnsReas");
   input = "";
   char c;
   while (client.connected() || client.available())
@@ -229,16 +227,20 @@ boolean phpAns()
     c = client.read(); //read first character
     while (c != '<') { //while < character is not coming yet, keep reading character
       c = client.read();
+      delay(0);
     }
     c = client.read(); //read the '<' character, but not storing in array
     while (c != '>') { //while > character is not coming yet,
       input.concat(c); //store character in array
       c = client.read(); //read next character
+      delay(0);
     }
+    delay(0);
   }
   client.stop();  //stop connection
   if (input.length() > 0)
   {
+    Serial.println(input);
     return true;
   }
   return false;
@@ -246,28 +248,24 @@ boolean phpAns()
 
 boolean wifiConnect()
 {
+  Serial.println("wifi");
   WiFi.mode(WIFI_STA);
   WiFi.begin(data.userData[0], data.userData[1]);
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
-  int interval = 5000;
+  int interval = 8000;
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    Serial.print(currentMillis - previousMillis);
-
     if (currentMillis - previousMillis > interval) {
-      Serial.println("res1");
       break;
     }
     currentMillis = millis();
     delay(100);
+    Serial.print(".");
   }
-  Serial.println("res2");
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.println(" connected");
+    Serial.println("true");
     return true;
   }
-  Serial.println("res3");
   return false;
 }
 //*********************************************************//

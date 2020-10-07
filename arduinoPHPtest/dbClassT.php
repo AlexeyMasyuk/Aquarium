@@ -14,7 +14,7 @@ class dbClassT
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
 	public $connection;
 	
-	public function __construct(string $host="localhost", string $db = "test1",string $charset="utf8", string $user = "root", string $pass = "")
+	public function __construct(string $host="localhost", string $db = "test",string $charset="utf8", string $user = "root", string $pass = "")
 						{
 							$this->host = $host;
 							$this->db = $db;
@@ -59,19 +59,32 @@ class dbClassT
 			return true;
 	}
 	
-	function buildQuery( $get_var,$name ) 
+	public function buildQuery( $get_var,$name ) 
     {
-	    if(strlen($name)>0){
+		echo "<br>$name[0]";
+	    if(strlen($name[0])>0&&strlen($name[1])&&strlen($name[2])){
             switch($get_var)
             {
                 case 1:
                     $sql = "SELECT * FROM $name";
-                    break;
+					break;
+				case 2:
+					$sql = "INSERT INTO sensor_data ( PH, temp, level) VALUES ('$name[1]', '$name[0]', '$name[2]')";					
+					break;
             }
 	        $stmt = ($this->connection)->prepare($sql);
 	        return $sql;
     	}
     }
+	
+	public function insert($sensorData){
+		if($this->connect())
+		{
+			$sql=$this->buildQuery( 2,$sensorData );
+			$this->connection->query($sql);
+			$this->disconnect();
+		}
+	}
 	
 	public function selectQuery($name)
 	{

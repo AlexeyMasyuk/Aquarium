@@ -99,6 +99,7 @@ namespace ComputerToArduino
         {
             if (Port.IsOpen)
             {
+                Port.DiscardInBuffer();
                 DateTime now = DateTime.Now;
                 DateTime prev = now;
                 string data_rx = "";
@@ -106,7 +107,15 @@ namespace ComputerToArduino
                 {
                     if (now > prev.AddSeconds(10))
                         throw new Exception(MAT.NoAns());
-                    data_rx = Port.ReadLine();
+                    try
+                    {
+                        data_rx = Port.ReadExisting();
+                        
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception(MAT.NoAns());
+                    }
                     if (data_rx.Contains("OKEY"))
                         break;
                     else if (data_rx.Contains("FALSE"))
@@ -123,7 +132,7 @@ namespace ComputerToArduino
             try
             {
                 Port.Write(MessageToWrite);
-                System.Threading.Thread.Sleep(9000);
+                System.Threading.Thread.Sleep(2000);
                 AnsRead();
                 return true;
             }
