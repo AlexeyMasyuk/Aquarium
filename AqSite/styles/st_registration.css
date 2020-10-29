@@ -1,0 +1,160 @@
+
+* {
+  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/* The navigation bar */
+
+nav {
+	 font-family: 'Montserrat', sans-serif;
+ 
+    font-size:1.5em;
+    
+    
+    z-index: 10;
+    overflow: hidden;
+    position: fixed;
+    /* Set the navbar to fixed position */
+    top: 0;
+    /* Position the navbar at the top of the page */
+    /* Full width */
+    margin:auto;
+  
+    background: rgba(0, 0, 0, 0.5);
+	width:100%;
+}
+
+.topnav a {
+    float: left;
+    color: lightgray;
+    text-align: center;
+    padding: 1vw 1.2vw;;
+    text-decoration: none;
+    font-size:100%;
+    font-family: 'Montserrat', sans-serif;
+    width: auto;
+}
+
+.topnav a.icon {
+    display: none;
+}
+
+.topnav a :visited {
+    color: lightgray;
+}
+
+.topnav a:hover {
+    color: snow;
+}
+
+.topnav a.logo {
+    float: left;
+    padding-bottom: 0;
+    width: 14%;
+    height: auto;
+}
+
+@media screen and (max-width:768px) {
+    .topnav a:not(:first-child) {
+        display: none;
+    }
+    .topnav a.icon {
+        float: right;
+        display: block;
+        color: white;
+
+       
+    }
+    nav {
+        width: 100%;
+        height: auto;
+    }
+ 
+}
+
+/*Navigation bar end*/
+
+h1{
+    margin-bottom: 0;
+    font-size: 2.5em;
+     padding-top: 0;
+    font-family: 'Cinzel', serif;
+    color: darkgoldenrod;
+    width: 100%;
+}
+body{
+     background-color: #f2f2f2;
+    height: auto;
+}
+
+/* Style inputs */
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+}
+input[type=email]{
+     width: 100%;
+  padding: 12px;
+     border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+/* Style the container/contact section */
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+/* Create two columns that float next to eachother */
+.column {
+  float: left;
+  width: 50%;
+  margin-top: 6px;
+  padding: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.social {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.social a{
+     margin-top: 5%;
+    padding: 5%;
+}
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+

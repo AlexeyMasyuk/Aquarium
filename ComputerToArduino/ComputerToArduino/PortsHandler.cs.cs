@@ -110,7 +110,7 @@ namespace ComputerToArduino
                     try
                     {
                         data_rx = Port.ReadExisting();
-                        
+
                     }
                     catch (Exception)
                     {
@@ -124,7 +124,10 @@ namespace ComputerToArduino
                 }
                 MAT.Secssed();
             }
-            throw new Exception(MAT.NoAns());
+            else
+            {
+                throw new Exception(MAT.NoAns());
+            }
         }
 
         public bool writeToPort(string MessageToWrite)
