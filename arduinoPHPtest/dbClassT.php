@@ -1,5 +1,5 @@
 <?php //Alexey Masyuk,Yulia Berkovich Aquarium Control System
-
+require_once('Querys.php'); 
 
 // Class to handle all worck with SQL DataBase
 class dbClassT
@@ -14,7 +14,7 @@ class dbClassT
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
 	public $connection;
 	
-	public function __construct(string $host="localhost", string $db = "test1",string $charset="utf8", string $user = "root", string $pass = "")
+	public function __construct(string $host="localhost", string $db = "php_prj",string $charset="utf8", string $user = "root", string $pass = "")
 						{
 							$this->host = $host;
 							$this->db = $db;
@@ -33,76 +33,10 @@ class dbClassT
 	catch(Exception $e){return false;}
 	}
 
-	public function disconnect()
-	{
-	$this->connection = null;
+	public function disconnect(){
+	  $this->connection = null;
 	}
 
-
-	
-	// Function deleating wanted data from user data table in DataBase
-	public function store($data)
-	{
-		$this->connect();
-		if($this->connection->exec("INSERT INTO `test` (`Temperature`) VALUES ('".$data."')"))
-		{
-			$this->disconnect();
-			return true;
-		}
-		$this->disconnect();
-		return false;
-	}
-	
-	private function equal($data,$user,$pass)
-	{
-		if($data['users'][0]['username'] == $user && $data['users'][0]['password'] == $pass)
-			return true;
-	}
-	
-	function buildQuery( $get_var,$name ) 
-    {
-	    if(strlen($name)>0){
-            switch($get_var)
-            {
-                case 1:
-                    $sql = "SELECT * FROM $name";
-					break;
-				case 2:
-					$sql = "INSERT INTO `sensor_data` ( `PH`, `temp`, `level`) VALUES ('$name[1]', '$name[0]', '$name[2]')";					
-					break;
-            }
-	        $stmt = ($this->connection)->prepare($sql);
-	        return $sql;
-    	}
-    }
-	
-	public function insert($sensorData){
-		if($this->connect())
-		{
-			$sql=buildQuery( 2,$sensorData );
-			$this->connection->query($sql);
-			$this->disconnect();
-		}
-	}
-
-	public function selectQuery($name)
-	{
-		$tmpData=array("flag" => 0);
-			try {
-				if($qry = $this->buildQuery( 1,$name )){
-					$result = $this->connection->query($qry);
-					if($result){
-						while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-							array_push($tmpData,$row);
-						}
-				    	$tmpData['flag']=1;
-				    	return $tmpData;
-					}
-				}
-			} catch (Exception $e) {
-		    	$this->disconnect();
-			}
-	}
 	
 	
 	public function check($user,$pass)
@@ -110,18 +44,23 @@ class dbClassT
 		$st = "<NCDB>"; // not connected to db
 		if($this->connect())
 		{
-			$tmpData;
-			$tmpData['users']=$this->selectQuery("userpass");
-			$tmpData[$user."_initial"]=$this->selectQuery($user."_initial");
-			if($tmpData["users"]['flag']==1&&$tmpData[$user."_initial"]['flag']==1){
-				$st = "<WRNG>"; // Wrong user or no init data
-				if($this->equal($tmpData,$user,$pass))
-				{
-					$init = $tmpData[$user."_initial"][0];			
-					$st = "<OKEY".$init['Temp'].",".$init['co'].",".$init['ph']."\n>";		
+			try{
+				$tmpData=array();
+				$qry=Query::select($this->connection, "userpass");
+				if($qry->execute(array())){
+					$st = "<NFU>"; // not found user
+					while($row = $qry->fetch(PDO::FETCH_ASSOC)) {
+						if($row['username'] == $user && $row['password']==$pass){
+							$st="<OKEY".$row['temp'].",".$row['ph']."\n>";
+						}
+					}
 				}
+			}catch(Exception $e){				
 			}
-			$this->disconnect();
+			finally{
+				$this->disconnect();
+				return $st;
+			}
 		}
 		return $st;
 	}
