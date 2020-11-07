@@ -17,41 +17,45 @@ $entry=$sql->chartQuery($user->getUserName());
 
 	function change(wantedValue){
 
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
 
-        var dataTemp = google.visualization.arrayToDataTable([
-        ['time',	wantedValue],
-        <?php echo $entry['temp']?>
-        ]);
-	    var dataPH = google.visualization.arrayToDataTable([
-        ['time',	wantedValue],
-        <?php echo $entry['PH']?>
-        ]);
-        var dataLevel = google.visualization.arrayToDataTable([
-        ['time',	wantedValue],
-        <?php echo $entry['level']?>
-        ]);
+            var dataTemp = google.visualization.arrayToDataTable([
+                ['time',	wantedValue],
+                <?php echo $entry['temp']?>
+            ]);
+            var dataPH = google.visualization.arrayToDataTable([
+                ['time',	wantedValue],
+                <?php echo $entry['PH']?>
+            ]);
+            var dataLevel = google.visualization.arrayToDataTable([
+                ['time',	wantedValue],
+                <?php echo $entry['level']?>
+            ]);
 
-        var options = {
-            title: 'Aquarium',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-        };
+            var options = {
+                title: 'Aquarium',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
 
-
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-		if (wantedValue == 'PH') {
-        var data = dataPH;
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		    if (wantedValue == 'PH') {
+                var data = dataPH;
+            }
+            else if (wantedValue == 'temp') {
+                var data = dataTemp;
+            }
+            else if (wantedValue == 'level') {
+                var data = dataLevel;
+            }
+            chart.draw(data, options);
         }
-        else if (wantedValue == 'temp') {
-        var data = dataTemp;
-        }
-        else if (wantedValue == 'level') {
-        var data = dataLevel;
-        }
-        chart.draw(data, options);
-    }
+
+        var toDiv=document.getElementById('alarms_div');
+        var alarmData = "<?php echo $entry['alarms'] ?>";
+       
+        toDiv.innerHTML = alarmData;
+
 	}
 </script>

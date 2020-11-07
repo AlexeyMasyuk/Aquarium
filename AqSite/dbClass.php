@@ -121,21 +121,47 @@ class dbClass
 		return false;
 	}
 
+	public function alarms($name){
+		$alarm=array('ph'=>"",'temp'=>"");
+		$result = $this->connection->query("SELECT * FROM `userpass` WHERE `username`='".$name."'");
+		if($result){
+			while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+				$alarm['ph']=$row['ph'];
+				$alarm['temp']=$row['temp'];
+			}
+			return $alarm;
+		}
+	}
+
+    private function alarmCheck($row,$alarmsArr){
+		$alarmStr="";
+		$text=array('start'=>"? Alarm Occure at ",'midd'=>" and the ? was ",'br'=>"<br>");
+		if(floatval($row['ph'])>floatval($alarmsArr['ph']))
+			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
+		else if(floatval($row['ph'])<floatval($alarmsArr['ph']))
+			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
+		$alarmType="Temperature";
+		if(floatval($row['temp'])>floatval($alarmsArr['temp']))
+			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
+		else if(floatval($row['temp'])<floatval($alarmsArr['temp']))
+			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
+		return $alarmStr;
+	}
+
 	public function chartQuery($name)
 	{
-		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"");		
+		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"");		
 		$this->connect();
 			try {
+				    $alarms=$this->alarms($name);
 					$result = $this->connection->query("SELECT * FROM `".$name."`");
 					if($result){
 						while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-							$ph .= "['".$row{'time'}."',".$row{'ph'}."],";
-							$temp .= "['".$row{'time'}."',".$row{'temp'}."],";
-							$level .="['".$row{'time'}."',".$row{'level'}."],";
+							$dataArr['PH'] .= "['".$row{'time'}."',".$row{'ph'}."],";
+							$dataArr['temp'] .= "['".$row{'time'}."',".$row{'temp'}."],";
+							$dataArr['level'] .="['".$row{'time'}."',".$row{'level'}."],";
+							$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);
 						}
-						$dataArr['temp']=$temp;
-						$dataArr['PH']=$ph;
-						$dataArr['level']=$level;
 				    	return $dataArr;
 					}
 
