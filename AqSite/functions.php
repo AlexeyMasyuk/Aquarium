@@ -50,6 +50,14 @@ function dataToFile($data)
 	}
 }
 
+function passHash($pass){
+	return password_hash($pass, PASSWORD_DEFAULT);
+}
+
+function passCheck($pass,$cryptPass){
+	return password_verify($pass,$cryptPass);
+}
+
 function sendMail($mail)
 {
 	$subject='Welcome!';

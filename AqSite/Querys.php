@@ -9,6 +9,9 @@ function buildQuery( $querySelect,$tabelName,string $insertAction="",string $use
         case "select":
             $query = "SELECT * FROM `$tabelName`";			
             break;
+        case "selectWhere":
+            $query = "SELECT * FROM `$tabelName` WHERE `username`='?'";			
+            break;
 			
 		case "create":
 		    $query = "CREATE TABLE `$tabelName`
@@ -28,6 +31,12 @@ function buildQuery( $querySelect,$tabelName,string $insertAction="",string $use
     public static function select($dbConn,$tabelName)
     {
         $query=Query::buildQuery( "select",$tabelName );
+        return Query::prep($dbConn,$query);
+    }
+
+    public static function selectWhere($dbConn,$tabelName)
+    {
+        $query=Query::buildQuery( "selectWhere",$tabelName );
         return Query::prep($dbConn,$query);
     }
 

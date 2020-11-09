@@ -47,10 +47,9 @@ class dbClass
 		$this->connect();
 		$stmnt=Query::select($this->connection,"userpass");
 		$stmnt->execute(array());
-		print_r($this->user);
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-			if($act=="userAndPass"&&$row["username"]==$this->user->getUserName()&&$row["password"]==$this->user->getPassword()){			
-				$this->disconnect();
+			if($act=="userAndPass"&&$row["username"]==$this->user->getUserName()&&password_verify($this->user->getPassword(),$row["password"])){			
+				$this->disconnect();      
 				return true;
 			}
 			if($act=="onlyUser"&&$row["username"]==$this->user->getUserName())
@@ -123,14 +122,13 @@ class dbClass
 
 	public function alarms($name){
 		$alarm=array('ph'=>"",'temp'=>"");
-		$result = $this->connection->query("SELECT * FROM `userpass` WHERE `username`='".$name."'");
-		if($result){
-			while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+		$stmnt=Query::selectWhere($this->connection,"userpass");
+		$stmnt->execute(array($name));
+			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
 				$alarm['ph']=$row['ph'];
 				$alarm['temp']=$row['temp'];
 			}
 			return $alarm;
-		}
 	}
 
     private function alarmCheck($row,$alarmsArr){
@@ -152,18 +150,17 @@ class dbClass
 	{
 		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"");		
 		$this->connect();
-			try {
-				    $alarms=$this->alarms($name);
-					$result = $this->connection->query("SELECT * FROM `".$name."`");
-					if($result){
-						while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-							$dataArr['PH'] .= "['".$row{'time'}."',".$row{'ph'}."],";
-							$dataArr['temp'] .= "['".$row{'time'}."',".$row{'temp'}."],";
-							$dataArr['level'] .="['".$row{'time'}."',".$row{'level'}."],";
-							$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);
-						}
-				    	return $dataArr;
+		try {
+				$alarms=$this->alarms($name);
+				$stmnt=Query::select($this->connection,$name);
+				$stmnt->execute(array());
+					while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+						$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
+						$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
+						$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
+						$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);
 					}
+				    return $dataArr;
 
 			} catch (Exception $e) {
 		    	$this->disconnect();

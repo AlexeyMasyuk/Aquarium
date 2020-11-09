@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 	 <link rel="icon" href="images/fish.png" type="image/x-icon">
-    
+     <script src="js/index.js"></script> 
     <link rel="stylesheet" href="styles/site.css">
 	
     <link href="https://fonts.googleapis.com/css?family=Cinzel|Montserrat|Permanent+Marker|Quicksand" rel="stylesheet">
@@ -52,7 +52,7 @@
           <label>password</label>
         </div>
         <input type="Submit"  value="Sign in">
-		<a class="create" href="registration.html">new user?</a>
+		<a class="create" href="registration.php">new user?</a>
       </form>
     </section>
 		
@@ -105,7 +105,7 @@
     <footer >
     &#9990; +97277777777 &#9993; y.b.doar@gmail.com 
     </footer>
-     <script src="js/index.js"></script> 
+     
 </body>
 
 </html>

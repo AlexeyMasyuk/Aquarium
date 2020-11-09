@@ -10,7 +10,7 @@ session_start();
 $msg=new MSG();    // Creating new object to throw relevant masseges
 if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
-	$user=new User($_POST['uname'],$_POST['pword'],$_POST['fname'],$_POST['lname'],$_POST['email']);
+	$user=new User($_POST['uname'],passHash($_POST['pword']),$_POST['fname'],$_POST['lname'],$_POST['email']);
 	$sql=new dbClass($user);    // Creating new object to connect to DataBase 
 	
 	if(!$sql->userExists("onlyUser")) // If entered username NOT exists in DataBase
