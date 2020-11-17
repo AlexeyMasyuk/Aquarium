@@ -57,6 +57,11 @@ class dbClass
 				$this->disconnect();
 				return true;
 			}
+			if($act=="forgot"&&$row["username"]==$this->user->getUserName())
+			{
+				$this->disconnect();
+				return $row["email"];
+			}
 		}
 		$this->disconnect();
 		return false;
@@ -120,7 +125,8 @@ class dbClass
 		return false;
 	}
 
-	public function alarms($name){
+	public function alarms($name)
+	{
 		$alarm=array('ph'=>"",'temp'=>"");
 		$stmnt=Query::selectWhere($this->connection,"userpass");
 		$stmnt->execute(array($name));
@@ -131,7 +137,8 @@ class dbClass
 			return $alarm;
 	}
 
-    private function alarmCheck($row,$alarmsArr){
+	private function alarmCheck($row,$alarmsArr)
+	{
 		$alarmStr="";
 		$text=array('start'=>"? Alarm Occure at ",'midd'=>" and the ? was ",'br'=>"<br>");
 		if(floatval($row['ph'])>floatval($alarmsArr['ph']))
@@ -166,6 +173,19 @@ class dbClass
 		    	$this->disconnect();
 			}
 			$this->disconnect();
+	}
+
+	public function passUp($pass,$username)
+	{
+		$this->connect();
+		try
+	    {
+			$stmnt=Query::update($this->connection,"userpass",$username);
+			$stmnt->execute(array($pass));
+	    } catch (Exception $e) {
+		    $this->disconnect();
+	    }
+	    $this->disconnect();
 	}
 }
 ?>

@@ -2,7 +2,7 @@
 
 class Query
 {
-function buildQuery( $querySelect,$tabelName,string $insertAction="",string $userName="" ) 
+function buildQuery( $querySelect,$tabelName,string $insertOrUpdateAct="",string $userName="" ) 
 {
     switch($querySelect)
     {
@@ -20,10 +20,10 @@ function buildQuery( $querySelect,$tabelName,string $insertAction="",string $use
 			break;
 			
         case "update":
-				   $qString="UPDATE `$tabelName` SET `temp`=`?` AND `PH`=`?` WHERE `username`=$userName";
-				   break;
+            $query =Query::updateSelect($insertOrUpdateAct,$userName,$tabelName);
+			break;
 		case "insert":		
-            $query =Query::insertSelect($insertAction,$tabelName);
+            $query =Query::insertSelect($insertOrUpdateAct,$tabelName);
     }
     return $query;
 }
@@ -54,16 +54,34 @@ function buildQuery( $querySelect,$tabelName,string $insertAction="",string $use
 
     private function insertSelect($insertAction,$tabelName)
 	{
+        $qrStart="INSERT INTO `$tabelName` ";
 		switch($insertAction)
 		{
 		       case "user":
-			      $qString="INSERT INTO `$tabelName` (`username`, `password`, `firstName`, `lastName`, `email`, `temp`, `ph`)
+			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`, `temp`, `ph`)
                                          VALUES (?, ?, ?, ?, ?, '', '')";
 				  break;
 			    case "sensorData":
-				   $qString="INSERT INTO `$tabelName` (`temp`, `PH`, `level`) VALUES (?, ?, ?)";
+				   $qString=$qrStart."(`temp`, `PH`, `level`) VALUES (?, ?, ?)";
 				   break;
+		}
+		return $qString;
+    }
 
+    private function updateSelect($updateAction,$userName,$tabelName)
+	{
+        $qrStart="UPDATE `$tabelName` SET ";
+		switch($updateAction)
+		{
+		       case "tempAndPH":
+                  $qString=$qrStart."`temp`=`?` AND PH=? WHERE `username`='$userName'";
+				  break;
+			    case "pass":
+                   $qString=$qrStart."`password`=? WHERE `username`='$userName'";
+                   break;
+                case "email":
+                    $qString=$qrStart."`email`=? WHERE `username`='$userName'";
+                    break;
 		}
 		return $qString;
 	}
@@ -74,9 +92,9 @@ function buildQuery( $querySelect,$tabelName,string $insertAction="",string $use
 			return Query::prep($dbConn,$query);      
     }
 	
-	public static function update($dbConn,$tabelName,$userName)
+	public static function update($dbConn,$tabelName,$userName,string $updateAct="pass")
     {   
-            $query=Query::buildQuery( "update",$tabelName,$userName );	
+            $query=Query::buildQuery( "update", $tabelName, $updateAct, $userName );	
 			return Query::prep($dbConn,$query);   
     }
 
