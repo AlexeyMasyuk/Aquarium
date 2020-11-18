@@ -130,11 +130,11 @@ class dbClass
 		$alarm=array('ph'=>"",'temp'=>"");
 		$stmnt=Query::selectWhere($this->connection,"userpass");
 		$stmnt->execute(array($name));
-			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-				$alarm['ph']=$row['ph'];
-				$alarm['temp']=$row['temp'];
-			}
-			return $alarm;
+		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+			$alarm['ph']=$row['ph'];
+			$alarm['temp']=$row['temp'];
+		}
+		return $alarm;
 	}
 
 	private function alarmCheck($row,$alarmsArr)
@@ -155,19 +155,24 @@ class dbClass
 
 	public function chartQuery($name)
 	{
-		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"");		
+		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"Alarm values not defined. ");		
 		$this->connect();
 		try {
 				$alarms=$this->alarms($name);
 				$stmnt=Query::select($this->connection,$name);
 				$stmnt->execute(array());
-					while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-						$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
-						$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
-						$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
-						$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);
+				while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+					$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
+					$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
+					$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
+					if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0){
+						if(strpos($dataArr['alarms'],"defined") !== false){
+							$dataArr['alarms']="";
+						}
+						$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
 					}
-				    return $dataArr;
+				}
+				return $dataArr;
 
 			} catch (Exception $e) {
 		    	$this->disconnect();
