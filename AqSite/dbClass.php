@@ -185,7 +185,7 @@ class dbClass
 		$this->connect();
 		try
 	    {
-			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName());
+			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName(),$whatToChange);
 			$stmnt->execute(array($data));
 	    } catch (Exception $e) {
 		    $this->disconnect();

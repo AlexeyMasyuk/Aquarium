@@ -1,15 +1,16 @@
 function change(){
     var oReq = new XMLHttpRequest(); // New request object
     oReq.onload = function() {
-        
+
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
-        
+        console.log(responseText);
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var wantedChart = document.getElementById('chart').value;
-
+            
             function strToTableArr(arr){
+                
                 var newArr=arr.split(",");
 
                 var data = new google.visualization.DataTable();

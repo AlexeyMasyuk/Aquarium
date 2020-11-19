@@ -14,20 +14,20 @@
         <input type="checkbox" id="allP" onchange="openAllTextBox(value,'personalInput')" value="allP"><br>
 
         <label>email</label>
-        <input type="checkbox" onclick="openOrClose('email')">
-        <input type="text" class="personalInput" name="email" style="display: none;"><br>
+        <input type="checkbox" name="personalInput" onclick="openOrClose('email')">
+        <input type="text" class="personalInput" id="email" name="email" style="display: none;"><br>
 
         <label>Password</label>
-        <input type="checkbox" onchange="openOrClose('pass')">
-        <input type="text" class="personalInput" name="pass" style="display: none;"><br>
+        <input type="checkbox" name="personalInput" onchange="openOrClose('pass')">
+        <input type="text" class="personalInput" id="pass" name="pass" style="display: none;"><br>
 
         <label>First Name</label>
-        <input type="checkbox" onchange="openOrClose('fname')" value="fname">
-        <input type="text" class="personalInput" name="fname" style="display: none;"><br>
+        <input type="checkbox" name="personalInput" onchange="openOrClose('fname')" value="fname">
+        <input type="text" class="personalInput" id="fname"  name="fname" style="display: none;"><br>
 
         <label>Last Name</label>
-        <input type="checkbox" onchange="openOrClose('lname')" value="lname">
-        <input type="text" class="personalInput" name="lname" style="display: none;"><br>
+        <input type="checkbox" name="personalInput" onchange="openOrClose('lname')" value="lname">
+        <input type="text" class="personalInput" id="lname" name="lname" style="display: none;"><br>
         </div>
 
         <div id="aqua" style="display: none;">
@@ -35,38 +35,50 @@
         <input type="checkbox" id="allA" onchange="openAllTextBox(value,'aquaInput')" value="allA"><br>
 
         <label>PH</label>
-        <input type="checkbox" onchange="openOrClose('ph')" value="ph">
-        <input type="text" class="aquaInput"  name="ph" style="display: none;"><br>
+        <input type="checkbox" name="aquaInput" onchange="openOrClose('ph')" value="ph">
+        <input type="text" class="aquaInput" id="ph"  name="ph" style="display: none;"><br>
 
         <label>Temperature</label>
-        <input type="checkbox" onchange="openOrClose('temp')" value="temp">
-        <input type="text" class="aquaInput"  name="temp" style="display: none;"><br>
+        <input type="checkbox" name="aquaInput" onchange="openOrClose('temp')" value="temp">
+        <input type="text" class="aquaInput" id="temp"  name="temp" style="display: none;"><br>
         </div>
 
         <input type="submit" value="Submit"><br>
     </form>
     <script type="text/javascript">
-        function changeCycle(elementsToChange,stateToChange){
+        function changeCycle(elementsToChange,stateToChange,checkBoxToCheck){
+            
             for(var i=0;i<elementsToChange.length;i++)
                 {
                     elementsToChange[i].style.display=stateToChange;
+                    if(stateToChange=="none"){
+                        elementsToChange[i].value="";
+                        checkBoxToCheck[i].checked=false;                 
+                    }
+                    else{
+                        checkBoxToCheck[i].checked=true;
+                    }
                 }
         }
 
         function openAllTextBox(idToCheck,nameToOpen){
+            var checkbox = document.getElementsByName(nameToOpen);
             if(document.getElementById(idToCheck).checked==true){
-                changeCycle(document.getElementsByClassName(nameToOpen),"inline");
+                changeCycle(document.getElementsByClassName(nameToOpen),"inline",checkbox);
             }                
            else{
-            changeCycle(document.getElementsByClassName(nameToOpen),"none");
+            changeCycle(document.getElementsByClassName(nameToOpen),"none",checkbox);
             }
         }
 
         function openOrClose(name){                
-           if(document.getElementById(name).style.display=="none")
+           if(document.getElementById(name).style.display=="none"){
                document.getElementById(name).style.display = "inline";
-           else
+           }
+           else{
                document.getElementById(name).style.display="none";
+               document.getElementById(name).value="";
+           }
         }
     </script>
     </body>
