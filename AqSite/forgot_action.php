@@ -14,7 +14,7 @@ if(isset($_POST['uname'])) // If entered name is possible (first char not a numb
 	
 	if($mail=$sql->userExists("forgot")) // If entered username NOT exists in DataBase
 	{
-        $sql->passUp(newPass($mail),$user->getUserName());
+        $sql->change(newPass($mail),"pass");
         
         header('Location:indexAq.php');    // Redirect to data generator file
         exit; 

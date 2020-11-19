@@ -180,13 +180,13 @@ class dbClass
 			$this->disconnect();
 	}
 
-	public function passUp($pass,$username)
+	public function change($data,$whatToChange)
 	{
 		$this->connect();
 		try
 	    {
-			$stmnt=Query::update($this->connection,"userpass",$username);
-			$stmnt->execute(array($pass));
+			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName());
+			$stmnt->execute(array($data));
 	    } catch (Exception $e) {
 		    $this->disconnect();
 	    }

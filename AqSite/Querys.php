@@ -78,15 +78,24 @@ class Query
         $qrStart="UPDATE `$tabelName` SET ";
 		switch($updateAction)
 		{
-		    case "tempAndPH":
-                $qString=$qrStart."`temp`=? AND PH=? WHERE `username`='$userName'";
+		    case "ph":
+                $qString=$qrStart."`ph`=? WHERE `username`='$userName'";
+            break;
+            case "temp":
+                $qString=$qrStart."`temp`=? WHERE `username`='$userName'";
 			break;
 			case "pass":
                $qString=$qrStart."`password`=? WHERE `username`='$userName'";
             break;
             case "email":
                 $qString=$qrStart."`email`=? WHERE `username`='$userName'";
-             break;
+            break;
+            case "fname":
+                $qString=$qrStart."`firstName`=? WHERE `username`='$userName'";
+            break;
+            case "lname":
+                $qString=$qrStart."`lastName`=? WHERE `username`='$userName'";
+            break;
 		}
 		return $qString;
 	}

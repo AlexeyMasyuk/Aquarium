@@ -3,13 +3,11 @@
 <head>
 </head>
     <body>
-    <form method='POST' action='forgot_action.php'>
-	  
+    <form method='POST' action='forgot_action.php'>	  
       <div>
-        <input type="text" name="uname" required="">
         <label>username</label>
+        <input type="text" name="uname" required="">
       </div>
-
       <input type="Submit"  value="Sign in">
     </form>
     </body>
