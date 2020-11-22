@@ -44,27 +44,26 @@ class dbClass
 	// Returning true or false 
 	public function userExists(String $act="userAndPass")
 	{
-		$this->connect();
-		$stmnt=Query::select($this->connection,"userpass");
-		$stmnt->execute(array());
-		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-			if($act=="userAndPass"&&$row["username"]==$this->user->getUserName()&&password_verify($this->user->getPassword(),$row["password"])){			
-				$this->disconnect();      
-				return true;
-			}
-			if($act=="onlyUser"&&$row["username"]==$this->user->getUserName())
-			{
-				$this->disconnect();
-				return true;
-			}
-			if($act=="forgot"&&$row["username"]==$this->user->getUserName())
-			{
-				$this->disconnect();
-				return $row["email"];
-			}
+		try
+		{
+			$this->connect();
+			$stmnt=Query::select($this->connection,"userpass");
+			$stmnt->execute(array($this->user->getUserName()));
+			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+				if($act=="userAndPass"&&$row["username"]==$this->user->getUserName()&&password_verify($this->user->getPassword(),$row["password"]))						    
+					return $row;
+				else if($act=="onlyUser"&&$row["username"]==$this->user->getUserName())				
+					return true;
+				else if($act=="forgot"&&$row["username"]==$this->user->getUserName())				
+					return $row["email"];
+			}			
+			return false;
+		}catch(Exception $e){
+			return false;
 		}
-		$this->disconnect();
-		return false;
+		finally{
+			$this->disconnect();
+		}
 	}
 	
 
@@ -75,27 +74,28 @@ class dbClass
 	// return true or false depends if querys seccsed
 	public function userCreate()
 	{
-		$this->connect();
-		$stmnt1=Query::TableCreate($this->connection,$this->user->getUserName());
-		$stmnt2=Query::insert($this->connection,"userpass");
-		if($stmnt1->execute(array()))
+		try
 		{
-			if($stmnt2->execute(array($this->user->getUserName(),$this->user->getPassword(),$this->user->getFirstName(),$this->user->getLastName(),$this->user->getEmail())))
-			{
-				$this->disconnect();
-				return true;
-			}
-			else
-				{
-					$this->disconnect();
-					return false;
-				}
+			$this->connect();
+			$stmnt1=Query::TableCreate($this->connection,$this->user->getUserName());
+			$stmnt2=Query::insert($this->connection,"userpass");
+			$stmnt1->execute(array());
+			$stmnt2->execute(
+				array(
+					$this->user->getUserName(),
+					$this->user->getPassword(),
+					$this->user->getFirstName(),
+					$this->user->getLastName(),
+					$this->user->getEmail()
+				)
+			);
+			return true;
+		}catch(Exception $e){				
+			return false;
 		}
-		else
-			{
-				$this->disconnect();
-				return false;
-			}
+		finally{
+			$this->disconnect();
+		}
 	}
 	
 	// Function getting data from DataBase
@@ -128,7 +128,7 @@ class dbClass
 	public function alarms($name)
 	{
 		$alarm=array('ph'=>"",'temp'=>"");
-		$stmnt=Query::selectWhere($this->connection,"userpass");
+		$stmnt=Query::select($this->connection,"userpass");
 		$stmnt->execute(array($name));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
 			$alarm['ph']=$row['ph'];
@@ -155,42 +155,52 @@ class dbClass
 
 	public function chartQuery($name)
 	{
-		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"Alarm values not defined. ");		
-		$this->connect();
-		try {
-				$alarms=$this->alarms($name);
-				$stmnt=Query::select($this->connection,$name);
-				$stmnt->execute(array());
-				while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-					$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
-					$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
-					$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
-					if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0){
-						if(strpos($dataArr['alarms'],"defined") !== false){
-							$dataArr['alarms']="";
-						}
-						$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
+		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"Alarm values not defined. ");				
+		try 
+		{
+			$this->connect();
+			$alarms=$this->alarms($name);
+			$stmnt=Query::select($this->connection,$name,"select");
+			$stmnt->execute(array());
+			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+				$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
+				$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
+				$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
+				if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0){
+					if(strpos($dataArr['alarms'],"defined") !== false){
+						$dataArr['alarms']="";
 					}
+					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
 				}
-				return $dataArr;
-
-			} catch (Exception $e) {
-		    	$this->disconnect();
 			}
+			return $dataArr;
+		} catch (Exception $e) {
 			$this->disconnect();
+			return false;
+		}
+		$this->disconnect();
 	}
 
 	public function change($data,$whatToChange)
 	{
-		$this->connect();
 		try
 	    {
+			$this->connect();
 			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName(),$whatToChange);
 			$stmnt->execute(array($data));
 	    } catch (Exception $e) {
 		    $this->disconnect();
 	    }
 	    $this->disconnect();
+	}
+
+	public function arduinoUserValidation()
+	{
+		$st = "<NFU>"; // not found user
+		if($row=$this->userExists()){
+			$st="<OKEY".$row['temp'].",".$row['ph']."\n>";
+		}
+		return $st;
 	}
 }
 ?>

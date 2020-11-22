@@ -33,15 +33,9 @@ class Query
         return $retQuery;
     }
 	
-    public static function select($dbConn,$tabelName)
+    public static function select($dbConn,$tabelName,$allOrWhere="selectWhere")
     {
-        $query=Query::buildQuery( "select",$tabelName );
-        return Query::prep($dbConn,$query);
-    }
-
-    public static function selectWhere($dbConn,$tabelName)
-    {
-        $query=Query::buildQuery( "selectWhere",$tabelName );
+        $query=Query::buildQuery( $allOrWhere,$tabelName );
         return Query::prep($dbConn,$query);
     }
 

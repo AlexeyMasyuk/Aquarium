@@ -4,7 +4,6 @@ function change(){
 
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
-        console.log(responseText);
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var wantedChart = document.getElementById('chart').value;
