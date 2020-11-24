@@ -1,4 +1,8 @@
 function change(){
+    if(!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+    }
     var oReq = new XMLHttpRequest(); // New request object
     oReq.onload = function() {
 

@@ -53,7 +53,7 @@
         </div>
         <input type="Submit"  value="Sign in">
 		<a class="create" href="registration.php">new user?</a>
-        <a class="forgot" href="forgot.php">Forgot Pass</a>
+        <a class="create" href="forgot.php">Forgot Pass</a>
       </form>
     </section>
 		

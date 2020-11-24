@@ -173,6 +173,9 @@ class dbClass
 					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
 				}
 			}
+			if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0&&strpos($dataArr['alarms'],"defined") !== false){
+				$dataArr['alarms'] = "Perfect no alarms";
+			}
 			return $dataArr;
 		} catch (Exception $e) {
 			$this->disconnect();
@@ -188,10 +191,13 @@ class dbClass
 			$this->connect();
 			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName(),$whatToChange);
 			$stmnt->execute(array($data));
+			return true;
 	    } catch (Exception $e) {
-		    $this->disconnect();
+		    return false;
 	    }
-	    $this->disconnect();
+	    finally{
+			$this->disconnect();
+		}
 	}
 
 	public function arduinoUserValidation()
