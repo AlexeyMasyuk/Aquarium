@@ -25,22 +25,11 @@
     <div id="alarms_div" style="width: 100%; height: 20%; text-align: center; overflow-y:scroll;"></div>
     
     <div id="chart_div" style="width: 100%; height: 500px;"></div>
-    <select id="chart" onchange="ContentSwich()">
+    <select id="chart" onChange="change()">
       <option name="select" value="temp">Temp</option>
       <option name="select" value="PH">PH</option>
       <option name="select" value="level">Level</option>
     </select>
-    <select id="chartFilter" onchange="openSelection(value)" >
-      <option name="select" value="all">All Collected</option>
-      <option name="select" value="day">Day</option>
-      <option name="select" value="month">Month</option>
-    </select>
-    <p id="day" class="dayMonth" style="display: none;">Enter YYYY-MM-DD day format</p>
-    <p id="month" class="dayMonth" style="display: none;">Enter YYYY-MM month format</p>
-    <form class="dayMonth" id="dayMonthForm" onsubmit="dateFormatValidation(); return false;" style="display: none;">
-    <input type="text" id="wantedDate">
-    <input type="submit" value="Submit">
-    </form>
     <a class="forgot" href="settChng.php">Settings Change</a>
 	
 	
