@@ -56,13 +56,21 @@
             <label>All Aqua Settings</label>
             <input type="checkbox" id="allA" onchange="openAllTextBox(value,'aquaInput')" value="allA"><br>
     
-            <label>PH</label>
-            <input type="checkbox" class="aquaInput" name="phCheckbox" onchange="openOrClose('ph')" value="ph">
-            <input type="text" class="aquaInput" id="ph"  name="ph" style="display: none;"><br>
+            <label>PH High Level</label>
+            <input type="checkbox" class="aquaInput" name="phHighCheckbox" onchange="openOrClose('phHigh')" value="phHigh">
+            <input type="text" class="aquaInput" id="phHigh"  name="phHigh" style="display: none;"><br>
+
+            <label>PH Low Level</label>
+            <input type="checkbox" class="aquaInput" name="phLowCheckbox" onchange="openOrClose('phLow')" value="phLow">
+            <input type="text" class="aquaInput" id="phLow"  name="phLow" style="display: none;"><br>
     
-            <label>Temperature</label>
-            <input type="checkbox" class="aquaInput" name="tempCheckbox" onchange="openOrClose('temp')" value="temp">
-            <input type="text" class="aquaInput" id="temp"  name="temp" style="display: none;"><br>
+            <label>Temperature High Level</label>
+            <input type="checkbox" class="aquaInput" name="tempHighCheckbox" onchange="openOrClose('tempHigh')" value="tempHigh">
+            <input type="text" class="aquaInput" id="tempHigh"  name="tempHigh" style="display: none;"><br>
+
+            <label>Temperature Low Level</label>
+            <input type="checkbox" class="aquaInput" name="tempLowCheckbox" onchange="openOrClose('tempLow')" value="tempLow">
+            <input type="text" class="aquaInput" id="tempLow"  name="tempLow" style="display: none;"><br>
             </div>
     
             <input type="submit" value="Submit"><br>

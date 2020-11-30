@@ -27,12 +27,12 @@ function validation($key,$inp){
                 return false;
         return true;
     }
-    else if($key=="temp"){
+    else if($key=="tempHigh"||$key=="tempLow"){
         if (is_numeric($inp) == true)
             if(floatval($inp)<=30 && floatval($inp)>=15)
                 return true;
     }
-    else if($key=="ph"){
+    else if($key=="phHigh"||$key=="phLow"){
         if (is_numeric( $inp) == true)
             if(floatval($inp)>=6.5 && floatval($inp)<=8)
                 return true;

@@ -11,6 +11,7 @@ class MSG
 	private String $settingsEmptyField;
 	private String $settingsBadInp;
 	private String $settingsNotChoosen;
+	private String $setDefaultAlarms;
 	
 	public function __construct()
 	{
@@ -22,6 +23,7 @@ class MSG
 		$this->cannotBeUser="User name  cannot be only a number<br/>choose other one.";
 		$this->settingsEmptyField="Please fill all the choosen field you want to change .";
 		$this->settingsNotChoosen="Press on Personal or Aquarium and select settings to update";
+		$this->$setDefaultAlarms="<button type='submit' onclick='defaultAlarm_set.php'>Set to default</button>";
 	}
 	
 	public function getWrong(){return $this->Wrong;}

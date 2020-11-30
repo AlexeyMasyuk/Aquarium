@@ -127,12 +127,14 @@ class dbClass
 
 	public function alarms($name)
 	{
-		$alarm=array('ph'=>"",'temp'=>"");
+		$alarm=array('phHigh'=>"",'phLow'=>"",'tempHigh'=>"",'tempLow'=>"");
 		$stmnt=Query::select($this->connection,"userpass");
 		$stmnt->execute(array($name));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-			$alarm['ph']=$row['ph'];
-			$alarm['temp']=$row['temp'];
+			$alarm['phHigh']=$row['phHigh'];
+			$alarm['phLow']=$row['phLow'];
+			$alarm['tempHigh']=$row['tempHigh'];
+			$alarm['tempLow']=$row['tempLow'];
 		}
 		return $alarm;
 	}
@@ -141,40 +143,49 @@ class dbClass
 	{
 		$alarmStr="";
 		$text=array('start'=>"? Alarm Occure at ",'midd'=>" and the ? was ",'br'=>"<br>");
-		if(floatval($row['ph'])>floatval($alarmsArr['ph']))
+		if(floatval($row['ph'])>floatval($alarmsArr['phHigh']))
 			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
-		else if(floatval($row['ph'])<floatval($alarmsArr['ph']))
+		else if(floatval($row['ph'])<floatval($alarmsArr['phLow']))
 			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
 		$alarmType="Temperature";
-		if(floatval($row['temp'])>floatval($alarmsArr['temp']))
+		if(floatval($row['temp'])>floatval($alarmsArr['tempHigh']))
 			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
-		else if(floatval($row['temp'])<floatval($alarmsArr['temp']))
+		else if(floatval($row['temp'])<floatval($alarmsArr['tempLow']))
 			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
 		return $alarmStr;
 	}
 
 	public function chartQuery($name)
 	{
-		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",'alarms'=>"Alarm values not defined. ");				
+		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",
+		'alarms'=>"Alarm values not defined.<br>
+		<a href='defaultAlarm_set.php'>Set to default</a>"
+	    );
+		$defineAlarmFlag=false;			
 		try 
 		{
 			$this->connect();
 			$alarms=$this->alarms($name);
+			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
+				$defineAlarmFlag=true;
+			}
 			$stmnt=Query::select($this->connection,$name,"select");
 			$stmnt->execute(array());
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
 				$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
 				$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
 				$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
-				if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0){
+				if($defineAlarmFlag){
 					if(strpos($dataArr['alarms'],"defined") !== false){
 						$dataArr['alarms']="";
 					}
 					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
 				}
 			}
-			if(strlen($alarms['ph'])>0 && strlen($alarms['temp'])>0&&strpos($dataArr['alarms'],"defined") !== false){
-				$dataArr['alarms'] = "Perfect no alarms";
+			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
+				if(strpos($dataArr['alarms'],"defined") !== false){
+					$dataArr['alarms'] = "Perfect no alarms";
+				}
 			}
 			return $dataArr;
 		} catch (Exception $e) {

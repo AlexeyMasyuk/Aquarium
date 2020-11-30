@@ -72,11 +72,17 @@ class Query
         $qrStart="UPDATE `$tabelName` SET ";
 		switch($updateAction)
 		{
-		    case "ph":
-                $qString=$qrStart."`ph`=? WHERE `username`='$userName'";
+		    case "phHigh":
+                $qString=$qrStart."`phHigh`=? WHERE `username`='$userName'";
             break;
-            case "temp":
-                $qString=$qrStart."`temp`=? WHERE `username`='$userName'";
+		    case "phLow":
+                $qString=$qrStart."`phLow`=? WHERE `username`='$userName'";
+            break;
+            case "tempHigh":
+                $qString=$qrStart."`tempHigh`=? WHERE `username`='$userName'";
+			break;
+            case "tempLow":
+                $qString=$qrStart."`tempLow`=? WHERE `username`='$userName'";
 			break;
 			case "pass":
                $qString=$qrStart."`password`=? WHERE `username`='$userName'";
