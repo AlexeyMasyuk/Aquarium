@@ -1,7 +1,6 @@
 function dataFilter(arr,wantedDate){
     var newArr="";
     var spitedArr=arr.split(',');
-    alert(arr);
     for(i=0;i<spitedArr.length;i++){
         if(spitedArr[i].includes(wantedDate)){
             newArr+=(spitedArr[i++]+','+spitedArr[i]+',');
@@ -81,7 +80,6 @@ function change(){
     
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
-        alert(arr);
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var options = {
