@@ -3,15 +3,15 @@
 class MSG
 //class for error messages
 {
-	private String $Wrong;
-	private String $userExist;
-	private String $noDeletedData;
-	private String $fileFail;
-	private String $cannotBeUser;
-	private String $settingsEmptyField;
-	private String $settingsBadInp;
-	private String $settingsNotChoosen;
-	private String $setDefaultAlarms;
+	private $Wrong;
+	private $userExist;
+	private $noDeletedData;
+	private $fileFail;
+	private $cannotBeUser;
+	private $settingsEmptyField;
+	private $settingsBadInp;
+	private $settingsNotChoosen;
+	private $setDefaultAlarms;
 	
 	public function __construct()
 	{

@@ -1,6 +1,7 @@
 function dataFilter(arr,wantedDate){
     var newArr="";
     var spitedArr=arr.split(',');
+    alert(arr);
     for(i=0;i<spitedArr.length;i++){
         if(spitedArr[i].includes(wantedDate)){
             newArr+=(spitedArr[i++]+','+spitedArr[i]+',');
@@ -22,32 +23,54 @@ function sort(arr){
     return newArr;
 }
 
-function strToTableArr(arr,wantedChart){
-    
+function limitToData(chartData,limitsStr,newArr,limitType){
+    var wantedLimits=limitsStr.split(',');
+    var choosenLimits=Array(wantedLimits[0],wantedLimits[1])
+    if(limitType=="Temp"){
+        choosenLimits[0]=wantedLimits[2];
+        choosenLimits[1]=wantedLimits[3];
+    }
+    for(i = 0; i < newArr.length-1; i++)
+    {
+        chartData.addRow([newArr[i], parseFloat(newArr[++i]),parseFloat(choosenLimits[0]),parseFloat(choosenLimits[1])]);
+    }
+    return chartData;
+}
+
+function noLimitsChart(chartData,newArr){
+    for(i = 0; i < newArr.length-1; i++)
+    {
+        chartData.addRow([newArr[i], parseFloat(newArr[++i])]);
+    }
+    return chartData;
+}
+
+function strToTableArr(arr,wantedChart,limitsArr){
     var newArr=arr.split(",");
 
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'time');
     data.addColumn('number', wantedChart);
-    for(i = 0; i < newArr.length-1; i++)
-    {
-        data.addRow([newArr[i], parseFloat(newArr[++i])]);
+    if(wantedChart=="Temp"||wantedChart=="PH"){
+        data.addColumn('number', wantedChart+" HighLimit");
+        data.addColumn('number', wantedChart+" LowLimit");
+        return limitToData(data,limitsArr,newArr,wantedChart);
     }
-    return data;
+    return noLimitsChart(data,newArr);
 }
 
 function dataToChartFormat(arr){
     var wantedChart = document.getElementById('chart').value;
     var data;
     if (wantedChart == 'PH') {
-        data = strToTableArr(sort(arr[7]),wantedChart);
+        data = strToTableArr(sort(arr[7]),wantedChart,arr[19]);
     }
-    else if (wantedChart == 'temp') {
-        data = strToTableArr(sort(arr[3]),wantedChart);
+    else if (wantedChart == 'Temp') {
+        data = strToTableArr(sort(arr[3]),wantedChart,arr[19]);
         
     }
     else if (wantedChart == 'level') {
-        data = strToTableArr(sort(arr[11]),wantedChart);
+        data = strToTableArr(sort(arr[11]),wantedChart,arr[19]);
     }
     return data;
 }
@@ -58,7 +81,7 @@ function change(){
     
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
-            
+        alert(arr);
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var options = {
@@ -72,6 +95,7 @@ function change(){
         }
         var toDiv = document.getElementById('alarms_div');
         var alarmData = arr[15];
+
         toDiv.innerHTML = alarmData;
         };
         oReq.open("get", "js/chartData.php", true);
@@ -104,7 +128,7 @@ function dayMonth(val){
 function lineSeperatorsAndAmountCheck(wantedDate,wantedSeperator){
     var counterFlag=wantedSeperator;
     for(i=0;i<wantedDate.length;i++){
-        if(wantedDate[i]=='-'){
+        if(wantedDate[i]=='.'){
             counterFlag--;
         }
     }
@@ -116,7 +140,7 @@ function lineSeperatorsAndAmountCheck(wantedDate,wantedSeperator){
 
 function dateNumbersValitation(wantedDate){
     for(i=0;i<wantedDate.length;i++){
-        if(wantedDate[i]!='-'&&(wantedDate[i]<'0'||wantedDate[i]>'9')){
+        if(wantedDate[i]!='.'&&(wantedDate[i]<'0'||wantedDate[i]>'9')){
             return false;
         }
     }
@@ -142,10 +166,10 @@ function dateFormatValidation(){
         wantedSeperator=2;
     }
     if(wantedDate.length>0){
-        if(DayOrMotnh=="day"&&wantedDate.length==10){
+        if(DayOrMotnh=="day"&&wantedDate.length==8){
             ValidFlag=ValidationExecution(wantedDate,wantedSeperator);
         }
-        else if(DayOrMotnh=="month"&&wantedDate.length==7){
+        else if(DayOrMotnh=="month"&&wantedDate.length==5){
             ValidFlag=ValidationExecution(wantedDate,wantedSeperator);
         }
     }

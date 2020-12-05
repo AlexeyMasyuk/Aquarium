@@ -14,4 +14,5 @@ $alarm=array('phHigh'=>"7.5",'phLow'=>"6.5",'tempHigh'=>"25",'tempLow'=>"23");
 foreach ($alarm as $key=>$val){
         $sql->change($val,$key);
     }
+    header('Location:dataTbl.php');
 ?>

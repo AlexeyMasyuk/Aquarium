@@ -26,7 +26,7 @@
     
     <div id="chart_div" style="width: 100%; height: 500px;"></div>
     <select id="chart" onchange="ContentSwich()">
-      <option name="select" value="temp">Temp</option>
+      <option name="select" value="Temp">Temp</option>
       <option name="select" value="PH">PH</option>
       <option name="select" value="level">Level</option>
     </select>

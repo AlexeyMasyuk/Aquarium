@@ -142,39 +142,46 @@ class dbClass
 	private function alarmCheck($row,$alarmsArr)
 	{
 		$alarmStr="";
+		$phpdate = strtotime( $row{'time'} );
+		$dateTime=date("d.m.y H:i:s",$phpdate);
 		$text=array('start'=>"? Alarm Occure at ",'midd'=>" and the ? was ",'br'=>"<br>");
 		if(floatval($row['ph'])>floatval($alarmsArr['phHigh']))
-			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
+			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
 		else if(floatval($row['ph'])<floatval($alarmsArr['phLow']))
-			$alarmStr .= str_replace('?',"PH",$text['start']).$row['time'].str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
+			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
 		$alarmType="Temperature";
-		if(floatval($row['temp'])>floatval($alarmsArr['tempHigh']))
-			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
-		else if(floatval($row['temp'])<floatval($alarmsArr['tempLow']))
-			$alarmStr .= str_replace('?',"Temperature",$text['start']).$row['time'].str_replace('?',"Temp.",$text['midd']).$row['temp'].$text['br'];
+		if(floatval($row['Temp'])>floatval($alarmsArr['tempHigh']))
+			$alarmStr .= str_replace('?',"Temperature",$text['start']).$dateTime.str_replace('?',"Temp.",$text['midd']).$row['Temp'].$text['br'];
+		else if(floatval($row['Temp'])<floatval($alarmsArr['tempLow']))
+			$alarmStr .= str_replace('?',"Temperature",$text['start']).$dateTime.str_replace('?',"Temp.",$text['midd']).$row['Temp'].$text['br'];
 		return $alarmStr;
 	}
 
 	public function chartQuery($name)
 	{
-		$dataArr=array('temp'=>"",'PH'=>"",'level'=>"",
-		'alarms'=>"Alarm values not defined.<br>
-		<a href='defaultAlarm_set.php'>Set to default</a>"
+		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
+		'alarms'=>"Alarm values not defined.<br><a href='defaultAlarm_set.php'>Set to default",
+		"limits"=>""
 	    );
 		$defineAlarmFlag=false;			
 		try 
 		{
 			$this->connect();
 			$alarms=$this->alarms($name);
+			
 			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
 				$defineAlarmFlag=true;
+				
+				$dataArr['limits']=implode(',',$alarms);
 			}
 			$stmnt=Query::select($this->connection,$name,"select");
 			$stmnt->execute(array());
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-				$dataArr['temp'] .= $row{'time'}.",".$row{'temp'}.",";
-				$dataArr['PH'] .= $row{'time'}.",".$row{'ph'}.",";
-				$dataArr['level'] .= $row{'time'}.",".$row{'level'}.",";
+				$phpdate = strtotime( $row{'time'} );
+				$dateTime=date("d.m.y H:i:s",$phpdate);
+				$dataArr['Temp'] .= $dateTime.",".$row{'Temp'}.",";
+				$dataArr['PH'] .= $dateTime.",".$row{'ph'}.",";
+				$dataArr['level'] .= $dateTime.",".$row{'level'}.",";
 				if($defineAlarmFlag){
 					if(strpos($dataArr['alarms'],"defined") !== false){
 						$dataArr['alarms']="";
