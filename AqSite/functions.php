@@ -85,4 +85,47 @@ function sendMail($mail)
 	$headers='From: AquariumControlSystem@from_mail'."\r\n".'X-Mailer:PHP/'.phpversion();
 	mail($mail,$subject,$message,$headers);
 }
+
+function messegeDataSlice($str,$arr,&$i,$stopSign){
+	$tmp="";
+	$i++;
+	for(;$str[$i]!=$stopSign;$i++){
+		$tmp.=$str[$i];
+	}		
+	$i++;
+	array_push($arr,$tmp);
+	return $arr;
+}
+
+
+
+function messegeDataPull($filePath){
+	try{
+		$strLine=file_get_contents();
+
+		$k=array();
+		$value=array();
+		$newArr=array();
+
+    	for($i=0;$i<strlen($strLine);$i++){
+			if("_"==$strLine[$i]){
+				$k=messegeDataSlice($strLine,$k,$i,'_');
+			}
+			if($strLine[$i]=='$'){
+				$value=messegeDataSlice($strLine,$value,$i,'$');
+			}
+		}
+
+		for($i=0;$i<count($k);$i++){
+			$newArr[$k[$i]]=$value[$i];
+		}
+		
+		if(count($newArr)>0){
+			return $newArr;
+		}
+		return false;
+	}catch(Exeption $e){
+		return false;
+	}
+}
 ?>
