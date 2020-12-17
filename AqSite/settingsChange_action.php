@@ -1,7 +1,7 @@
 <?php
 
 require_once('dbClass.php');
-require_once('classMSG.php');
+require_once('TextAndMSG.php');
 require_once('userClass.php');
 require_once('functions.php');
 
@@ -13,11 +13,11 @@ if(isset($_SESSION['user'])){
 }
 
 $sql=new dbClass($user);
-$msg=new MSG();
+$msg=new TextMssg("MessageBank.txt");
 
 function validation($key,$inp){
     if($key=="email"){
-        if(strpos($inp, "@")>=0 && strpos($inp, ".")<strlen($inp)-1)
+        if(strpos($inp, "@")>0 && strpos($inp, ".")<strlen($inp)-1)
            return true;
         return false;
     }
@@ -46,46 +46,54 @@ function validation($key,$inp){
 
 
 $dataArr=array();
-$dataFound=true;
-$notChoosen=false;
+$dataFound=false;
+$notChoosen=true;
 // val is a key for wanted data ex: array('phCheckbox' => "email", 'email' => "alex@mail.com") 
-foreach ($_POST as $key=>$val)
-{
-    if(strpos($key,"Checkbox")){
-        if(strlen($val)>0){
-            $notChoosen=true;
-            if(strlen($_POST[$val])>0){
-                if(($valid=validation($val,$_POST[$val]))&&$dataFound){
-                    $dataArr[$val]=$_POST[$val];
-                    $dataFound=true;
+
+
+    foreach ($_POST as $key=>$val)
+    {
+        if(strpos($key,"Checkbox")){
+            if(strlen($val)>0){
+                $notChoosen=false;
+                if(strlen($_POST[$val])>0){
+                    if(($valid=validation($val,$_POST[$val]))&&$dataFound){
+                        $_SESSION['flag'].="VP";
+                        $dataArr[$val]=$_POST[$val];
+                        $dataFound=true;
+                    }
+                    else if(!$valid){
+                        $_SESSION['flag'].="<br>".$msg->getMessge($val."ChangeBadInput");
+                        $dataFound=false;
+                    }
                 }
-                else if(!$valid){
-                    $_SESSION['flag'].="<br>".$msg->getSettingsBadInp($val);
+                else{
                     $dataFound=false;
-                }
+                    if(!strpos($_SESSION['flag'],"fill")){
+                        $_SESSION['flag'].="<br>".$msg->getMessge("EmptyFieldChangeBadInput");
+                    }
+                }           
             }
-            else{
-                $dataFound=false;
-                if(!strpos($_SESSION['flag'],"fill")){
-                    $_SESSION['flag'].="<br>".$msg->getEmptyField();
-                }
-            }           
         }
     }
-}
-if(!$notChoosen){
-    $_SESSION['flag']=$msg->settingsNotChoosen();
+
+if($notChoosen){
+    $_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");
     header('Location:settChng.php');
 }
 if($dataFound){
+    $_SESSION['flag'].="!!";
     foreach ($dataArr as $key=>$val){
         $sql->change($val,$key);
     }
 }
-if(isset( $_SESSION['flag'])&&!$dataFound)
+if(isset( $_SESSION['flag'])&&!$dataFound){
+    $_SESSION['flag'].="22";
     header('Location:settChng.php');
+}
 else{
-    unset($_SESSION['flag']);
-    header('Location:dataTbl.php');
+    $_SESSION['flag'].="33";
+    //unset($_SESSION['flag']);
+    header('Location:settChng.php');
 }
 ?>

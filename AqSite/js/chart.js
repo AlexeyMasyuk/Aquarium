@@ -77,7 +77,7 @@ function dataToChartFormat(arr){
 function change(){
         var oReq = new XMLHttpRequest(); // New request object
         oReq.onload = function() {
-    
+            
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
         google.setOnLoadCallback(drawChart);

@@ -1,11 +1,11 @@
 <?php
-require_once('functions.php');
+include_once('fileHandler.php');
 //Alexey Masyuk,Yulia Berkovich Aquarium Control Sistem
 class TextMssg{
     private $mssgArr;
 
     public function __construct($filePath){
-        $this->mssgArr=messegeDataPull($filePath);
+        $this->mssgArr=fileHandler::messegePull('MessageBank.txt');
     }
 
 

@@ -14,7 +14,7 @@ class Query
             break;			
 		    case "create":
 		        $query = "CREATE TABLE `$tabelName`
-                ( `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `temp` VARCHAR(5) NOT NULL ,
+                ( `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `Temp` VARCHAR(5) NOT NULL ,
                 `ph` VARCHAR(5) NOT NULL , `level` VARCHAR(5) NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;";
 			break;			
             case "update":

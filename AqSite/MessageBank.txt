@@ -1,9 +1,17 @@
-wrong_<div class='errorMessage'><img onload='openForm()'class='attention' src='images/attention.png ' alt=''><p>No such user or wrong password</p></div>
-userExist_User already exists. Choose diffrent username
-queryError_Cannot save your data. Try again please
-fileFail_Faild to create file. Please try again .
-cannotBeUser_User name  cannot be only a number<br/>choose other one.
-settingsEmptyField_Please fill all the choosen field you want to change .
-settingsNotChoosen_Press on Personal or Aquarium and select settings to update
-setDefaultAlarms_<button type='submit' onclick='defaultAlarm_set.php'>Set to default</button>
-setDefaultAlarms_<button type='submit' onclick='defaultAlarm_set.php'>Set to default</button>
+*messeges*
+_wrong_$<div class='errorMessage'><img onload='openForm()'class='attention' src='images/attention.png ' alt=''><p>No such user or wrong password</p></div>$
+_userExist_$User already exists. Choose diffrent username$
+_queryError_$Cannot save your data. Try again please$
+_fileFail_$Faild to create file. Please try again .$
+_cannotBeUser_$User name  cannot be only a number<br/>choose other one.$
+_settingsEmptyField_$Please fill all the choosen field you want to change .$
+_settingsNotChoosen_$Press on Personal or Aquarium and select settings to update$
+_setDefaultAlarms_$<button type='submit' onclick='defaultAlarm_set.php'>Set to default</button>$
+_fnameChangeBadInput_$First Name must be up to ? characters (contain  letters only)$
+_lnameChangeBadInput_$Last Name must be up to ? characters (contain  letters only)$
+_emailChangeBadInput_$Wrong email format$
+_passChangeBadInput_$Password must be minimum 9 up to 20 signs and contain numbers and letters$
+_phChangeBadInput_$PH must be a number between 6.5 and 8.$
+_tempChangeBadInput_$Temperature must be a number between 15 and 30.$
+_EmptyFieldChangeBadInput_$Please fill all the choosen field you want to change .$
+_NotChoosenChangeBadInput_$Press on Personal or Aquarium and select settings to update.$
