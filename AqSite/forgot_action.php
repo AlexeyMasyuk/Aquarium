@@ -2,11 +2,11 @@
 //Alexey Masyuk,Yulia Berkovich Aquarium Control System
 require_once('dbClass.php');
 require_once('userClass.php');
-require_once('classMSG.php');
+require_once('TextAndMSG.php');
 require_once('functions.php');
 session_start();
 
-$msg=new MSG();    // Creating new object to throw relevant masseges
+$msg=new TextMssg("MessageBank.txt");    // Creating new object to throw relevant masseges
 if(isset($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
 	$user=new User($_POST['uname'],"");
@@ -22,8 +22,8 @@ if(isset($_POST['uname'])) // If entered name is possible (first char not a numb
 	else    // If entered username already exists in DataBase show relevant massege 
 	{      // and redirect back to registration page
 	
-		$_SESSION['flag']=$msg->getUserExist();
-		header('Location:registration.php');
+		$_SESSION['flag']=$msg->getMessge("forgotNoUserMatch");
+		header('Location:forgot.php');
 		exit;
 	}
 }

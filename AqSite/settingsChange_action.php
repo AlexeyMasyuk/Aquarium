@@ -22,9 +22,8 @@ function validation($key,$inp){
         return false;
     }
     else if($key=="fname"||$key=="lname"){
-        if (ctype_alpha(str_replace(' ', '', $inp)) === false)
-            if(strlen($inp)>20)
-                return false;
+        if ((ctype_alpha(str_replace(' ', '', $inp)) === false)||strlen($inp)>20)
+            return false;
         return true;
     }
     else if($key=="tempHigh"||$key=="tempLow"){
@@ -58,7 +57,6 @@ $notChoosen=true;
                 $notChoosen=false;
                 if(strlen($_POST[$val])>0){
                     if(($valid=validation($val,$_POST[$val]))&&$dataFound){
-                        $_SESSION['flag'].="VP";
                         $dataArr[$val]=$_POST[$val];
                         $dataFound=true;
                     }
@@ -80,20 +78,20 @@ $notChoosen=true;
 if($notChoosen){
     $_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");
     header('Location:settChng.php');
+    exit; 
 }
 if($dataFound){
-    $_SESSION['flag'].="!!";
     foreach ($dataArr as $key=>$val){
         $sql->change($val,$key);
     }
 }
 if(isset( $_SESSION['flag'])&&!$dataFound){
-    $_SESSION['flag'].="22";
     header('Location:settChng.php');
+    exit; 
 }
 else{
-    $_SESSION['flag'].="33";
-    //unset($_SESSION['flag']);
-    header('Location:settChng.php');
+    unset($_SESSION['flag']);
+    header('Location:dataTbl.php');
+    exit; 
 }
 ?>

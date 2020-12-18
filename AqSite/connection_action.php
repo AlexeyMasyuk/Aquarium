@@ -2,10 +2,10 @@
 <?php
 require_once('dbClass.php');
 require_once('userClass.php');
-require_once('classMSG.php');
+require_once('TextAndMSG.php');
 session_start();
 
-$msg=new MSG();  // Creating new object to throw relevant masseges
+$msg=new TextMssg("MessageBank.txt");   // Creating new object to throw relevant masseges
 if(isset($_POST['uname'])&&isset($_POST['pword']))
 {
 	$user=new User($_POST['uname'],$_POST['pword']); // Creating new object to save user entered data
@@ -18,7 +18,7 @@ if(isset($_POST['uname'])&&isset($_POST['pword']))
 	}
 	else     // If entered data not exists in DataBase, show relevant massage from Object
 	{
-    	$_SESSION['flag']=$msg->getWrong();
+    	$_SESSION['flag']=$msg->getMessge("Wrong");
     }
 }
 	header('Location:indexAq.php'); // For case POST passed empty or not set

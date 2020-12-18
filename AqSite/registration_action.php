@@ -3,11 +3,11 @@
 //Alexey Masyuk,Yulia Berkovich Aquarium Control System
 require_once('dbClass.php');
 require_once('userClass.php');
-require_once('classMSG.php');
+require_once('TextAndMSG.php');
 require_once('functions.php');
 session_start();
 
-$msg=new MSG();    // Creating new object to throw relevant masseges
+$msg=new TextMssg("MessageBank.txt");    // Creating new object to throw relevant masseges
 if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
 	$user=new User($_POST['uname'],passHash($_POST['pword']),$_POST['fname'],$_POST['lname'],$_POST['email']);
@@ -25,7 +25,7 @@ if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a 
 		else // If entered data not saved in DataBase show relevant massege 
 		{    // and redirect back to registration page
 		
-			$_SESSION['flag']=$msg->getQueryError();
+			$_SESSION['flag']=$msg->getMessge("queryError");
 			header('Location:registration.php');
 			exit;
 		}
@@ -33,7 +33,7 @@ if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a 
 	else    // If entered username already exists in DataBase show relevant massege 
 	{      // and redirect back to registration page
 	
-		$_SESSION['flag']=$msg->getUserExist();
+		$_SESSION['flag']=$msg->getMessge("userExist");
 		header('Location:registration.php');
 		exit;
 	}
@@ -41,7 +41,7 @@ if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a 
 else      // If entered username cannot be a table name in DataBase show relevant massege
 {        // and redirect back to registration page
 
-	$_SESSION['flag']=$msg->getCannotBeUser();
+	$_SESSION['flag']=$msg->getMessge("cannotBeUser");
 	header('Location:registration.php');
 	exit;
 }

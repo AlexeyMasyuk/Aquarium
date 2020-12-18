@@ -51,8 +51,8 @@ class Query
 		switch($insertAction)
 		{
 		       case "user":
-			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`, `temp`, `ph`)
-                    VALUES (?, ?, ?, ?, ?, '', '')";
+			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`, `tempHigh`, `tempLow`, `phHigh`, `phLow`)
+                    VALUES (?, ?, ?, ?, ?, '', '', '', '')";
 				break;
 			    case "sensorData":
 				   $qString=$qrStart."(`temp`, `PH`, `level`) VALUES (?, ?, ?)";

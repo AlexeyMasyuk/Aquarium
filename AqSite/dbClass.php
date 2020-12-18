@@ -79,17 +79,19 @@ class dbClass
 			$this->connect();
 			$stmnt1=Query::TableCreate($this->connection,$this->user->getUserName());
 			$stmnt2=Query::insert($this->connection,"userpass");
-			$stmnt1->execute(array());
-			$stmnt2->execute(
-				array(
-					$this->user->getUserName(),
-					$this->user->getPassword(),
-					$this->user->getFirstName(),
-					$this->user->getLastName(),
-					$this->user->getEmail()
-				)
+			$userArr=array(
+				$this->user->getUserName(),
+				$this->user->getPassword(),
+				$this->user->getFirstName(),
+				$this->user->getLastName(),
+				$this->user->getEmail()
 			);
-			return true;
+			if($stmnt2->execute($userArr))
+			{
+				$stmnt1->execute(array());
+				return true;
+			}
+			return false;
 		}catch(Exception $e){				
 			return false;
 		}
