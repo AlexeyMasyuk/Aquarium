@@ -9,47 +9,6 @@ function nameCheck($name)
 		return false;
 }
 
-function nameGenerator()
-{
-	$fname="Data_tmp_time.txt";
-	if(!file_exists($fname))
-	{
-		return $fname;
-	}
-	else
-	{
-		$name=$fname;
-		for($i=1;file_exists($name);$i+=1)
-		{
-			$name=str_replace(".txt","",$fname).'('.$i.')'.".txt";
-			if(!file_exists($name))
-				return $name;
-		}
-	}
-}
-
-function dataToFile($data)
-//function to create a file and save temperature data for user
-{
-	$name=nameGenerator();
-	$myfile = fopen($name, "w") or die("Unable to open file!");
-	if($myfile)
-	{
-		$txt="Data file\nTemperature  Time\n";
-		foreach($data as $k=>$Kval)
-		{
-			$txt=$txt.$Kval['tmp']."             ".$Kval['time']."\n";
-		}
-		if(fwrite($myfile, $txt))
-		{
-			fclose($myfile);
-			return true;
-		}
-		fclose($myfile);
-		return false;
-	}
-}
-
 function passHash($pass){
 	return password_hash($pass, PASSWORD_DEFAULT);
 }

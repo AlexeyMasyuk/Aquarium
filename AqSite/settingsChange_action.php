@@ -1,5 +1,4 @@
 <?php
-
 require_once('dbClass.php');
 require_once('TextAndMSG.php');
 require_once('userClass.php');
@@ -45,53 +44,49 @@ function validation($key,$inp){
 
 
 $dataArr=array();
-$dataFound=false;
 $notChoosen=true;
-// val is a key for wanted data ex: array('phCheckbox' => "email", 'email' => "alex@mail.com") 
+// val is a key for wanted data ex: array('emailCheckbox' => "email", 'email' => "alex@mail.com") 
+
 
 
     foreach ($_POST as $key=>$val)
     {
         if(strpos($key,"Checkbox")){
-            if(strlen($val)>0){
-                $notChoosen=false;
+			$notChoosen=false;
                 if(strlen($_POST[$val])>0){
-                    if(($valid=validation($val,$_POST[$val]))&&$dataFound){
-                        $dataArr[$val]=$_POST[$val];
-                        $dataFound=true;
+                    if($valid=validation($val,$_POST[$val])){
+                        $dataArr[$val]=$_POST[$val];               
                     }
-                    else if(!$valid){
-                        $_SESSION['flag'].="<br>".$msg->getMessge($val."ChangeBadInput");
-                        $dataFound=false;
+                    if(!$valid){
+                        if(strpos($val,"ph")!==false){
+                            $_SESSION['flag'].="<br>".$msg->getMessge("phChangeBadInput");
+                        }
+                        else if(strpos($val,"temp")!==false){
+                            $_SESSION['flag'].="<br>".$msg->getMessge("tempChangeBadInput");
+                        }
                     }
                 }
                 else{
-                    $dataFound=false;
                     if(!strpos($_SESSION['flag'],"fill")){
                         $_SESSION['flag'].="<br>".$msg->getMessge("EmptyFieldChangeBadInput");
                     }
-                }           
-            }
+                }          
         }
     }
-
 if($notChoosen){
-    $_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");
-    header('Location:settChng.php');
-    exit; 
+	$_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");
+	header('Location:settChng.php');
+	exit;
 }
-if($dataFound){
-    foreach ($dataArr as $key=>$val){
-        $sql->change($val,$key);
-    }
-}
-if(isset( $_SESSION['flag'])&&!$dataFound){
-    header('Location:settChng.php');
-    exit; 
+else if(isset($_SESSION['flag'])){
+	header('Location:settChng.php');
+	exit;
 }
 else{
-    unset($_SESSION['flag']);
-    header('Location:dataTbl.php');
-    exit; 
+	foreach ($dataArr as $key=>$val){
+        $sql->change($val,$key);
+    }
+	header('Location:dataTbl.php');
+	exit;
 }
 ?>
