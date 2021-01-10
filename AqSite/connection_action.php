@@ -13,6 +13,7 @@ if(isset($_POST['uname'])&&isset($_POST['pword']))
 	if($sql->userExists())   // If entered data exists in DataBase
 	{
 		$_SESSION['user']=$user;  // Save user entered data for futer actions
+		$_SESSION['msg']=$msg;
 		header('Location:dataTbl.php');  // Redirect to main page
 		exit;
 	}

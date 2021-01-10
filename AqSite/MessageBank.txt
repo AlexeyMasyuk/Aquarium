@@ -16,3 +16,7 @@ _tempChangeBadInput_$Temperature must be a number between 15 and 30.$
 _EmptyFieldChangeBadInput_$Please fill all the choosen field you want to change .$
 _NotChoosenChangeBadInput_$Press on Personal or Aquarium and select settings to update.$
 _forgotNoUserMatch_$No such user$
+_DBnoAlarms_$Perfect no alarms$
+_DBalarmsNotDefined_$Alarm values not defined.<br><a href='defaultAlarm_set.php'>Set to default$
+_DBalChkTxtArrStrt_$? Alarm Occure at $
+_DBalChkTxtArrMidd_$ and the ? was $

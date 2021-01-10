@@ -1,6 +1,7 @@
 <?php //Alexey Masyuk,Yulia Berkovich Aquarium Control System
 require_once('userClass.php');
 require_once('Querys.php');
+require_once('TextAndMSG.php');
 
 // Class to handle all worck with SQL DataBase
 class dbClass
@@ -141,12 +142,12 @@ class dbClass
 		return $alarm;
 	}
 
-	private function alarmCheck($row,$alarmsArr)
+	private function alarmCheck($row,$alarmsArr,$msg)
 	{
 		$alarmStr="";
 		$phpdate = strtotime( $row{'time'} );
 		$dateTime=date("d.m.y H:i:s",$phpdate);
-		$text=array('start'=>"? Alarm Occure at ",'midd'=>" and the ? was ",'br'=>"<br>");
+		$text=array('start'=>$msg->getMessge("DBalChkTxtArrStrt"),'midd'=>$msg->getMessge("DBalChkTxtArrMidd"),'br'=>"<br>");
 		if(floatval($row['ph'])>floatval($alarmsArr['phHigh']))
 			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
 		else if(floatval($row['ph'])<floatval($alarmsArr['phLow']))
@@ -159,10 +160,10 @@ class dbClass
 		return $alarmStr;
 	}
 
-	public function chartQuery($name)
+	public function chartQuery($name,$msg)
 	{
 		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
-		'alarms'=>"Alarm values not defined.<br><a href='defaultAlarm_set.php'>Set to default",
+		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
 		"limits"=>""
 	    );
 		$defineAlarmFlag=false;			
@@ -188,12 +189,12 @@ class dbClass
 					if(strpos($dataArr['alarms'],"defined") !== false){
 						$dataArr['alarms']="";
 					}
-					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms);					
+					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms,$msg);					
 				}
 			}
 			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
 				if(strpos($dataArr['alarms'],"defined") !== false){
-					$dataArr['alarms'] = "Perfect no alarms";
+					$dataArr['alarms'] = $msg->getMessge("DBnoAlarms");
 				}
 			}
 			return $dataArr;
