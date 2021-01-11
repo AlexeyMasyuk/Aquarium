@@ -1,9 +1,10 @@
 <?php
     define("key_seperatingChar", "_");
     define("value_seperatingChar", "$");
+    define("rulesEqual", "=");
 
 class fileHandler{
-//--------------------------------Messege Func--------------------------------//
+//-------------------------------- Messege Func --------------------------------//
 
     private static function messegeDataSlice($str,$arr,&$i,$stopSign){
         $tmp="";
@@ -15,6 +16,7 @@ class fileHandler{
         array_push($arr,$tmp);
         return $arr;
     }
+
     private static function stringToKeyAndValueArrays($strLine){
         $newArr=array('key'=>array(),'value'=>array());
         for($i=0;$i<strlen($strLine);$i++){
@@ -27,6 +29,7 @@ class fileHandler{
         }
         return $newArr;
     }
+
     public static function messegePull($filePath){
         try{
             $strLine=file_get_contents($filePath);
@@ -47,10 +50,42 @@ class fileHandler{
         }
     }
 
-//--------------------------------Messege Func--------------------------------//
+    //-------------------------------- Messege Func End ----------------------------//
 
+    public static function rulesPull($filePath){
+        try{
+            $strLine=file_get_contents("inputRules.txt");
+            $split=explode(";",$strLine);
+            
+            for($i=0;$i<count($split);$i++){
+                if(strpos($split[$i],"[")!==false&&strpos($split[$i],"]")!==false){
+                    $newLine=explode(PHP_EOL,$split[$i]);
+					foreach($newLine as $val){
+						if(strpos($val,"[")!==false){
+							$tmp=substr($val, 0, -1);  // returns "abcde"
+							$key=substr($tmp, 1);
+						}
+						else if(strpos($val,"=")!==false){
+							$split[$i]=$val;
+						}
+					}                 
+                }else{
+                    $split[$i] = trim(preg_replace('/\s\s+/', ' ', $split[$i]));
+                }
+                $newLine=explode("=",$split[$i]);
+                if(isset($newLine[0])&&isset($newLine[1])){
+                    $rulesArr[$key][$newLine[0]]=floatval($newLine[1]);
+                }
+            }
+            if(count($rulesArr)>0){
+                return $rulesArr;
+            }
+            return false;
+        }catch(Exeption $e){
+            return false;
+        }
+    }
 
 }
-
 
 ?>

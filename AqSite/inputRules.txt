@@ -1,0 +1,11 @@
+[settChgeValidation]
+tempMax=30;
+tempMin=15;
+phMax=8;
+phMin=6.5;
+fnamelnameMaxLen=20;
+[defaultAlarms]
+phHigh=7.5;
+phLow=6.5;
+tempHigh=25;
+tempLow=23;

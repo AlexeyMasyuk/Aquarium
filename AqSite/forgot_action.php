@@ -4,9 +4,14 @@ require_once('dbClass.php');
 require_once('userClass.php');
 require_once('TextAndMSG.php');
 require_once('functions.php');
-session_start();
 
-$msg=new TextMssg("MessageBank.txt");    // Creating new object to throw relevant masseges
+if(session_status() != PHP_SESSION_ACTIVE){
+    session_start();
+}
+if(isset($_SESSION['msg'])){
+    $msg=$_SESSION['msg'];
+}
+
 if(isset($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
 	$user=new User($_POST['uname'],"");

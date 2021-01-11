@@ -1,4 +1,5 @@
 <?php
+include_once('fileHandler.php');
 //Alexey Masyuk,Yulia Berkovich Aquarium Control System
 function nameCheck($name)
 //function for check name(if string not only numbers) ,User name  cannot be only a number
@@ -7,6 +8,35 @@ function nameCheck($name)
 		return true;
 	else
 		return false;
+}
+
+function settChgeValidation($key,$inp,$rulesArr){
+
+    if($key=="email"){
+        if(strpos($inp, "@")>0 && strpos($inp, ".")<strlen($inp)-1)
+           return true;
+        return false;
+    }
+    else if($key=="fname"||$key=="lname"){
+        if ((ctype_alpha(str_replace(' ', '', $inp)) === false)||strlen($inp)>$rulesArr['fnamelnameMaxLen'])
+            return false;
+        return true;
+    }
+    else if($key=="tempHigh"||$key=="tempLow"){
+        if (is_numeric($inp) == true)
+            if(floatval($inp)<=$rulesArr['tempMax'] && floatval($inp)>=$rulesArr['tempMin'])
+                return true;
+    }
+    else if($key=="phHigh"||$key=="phLow"){
+        if (is_numeric( $inp) == true)
+            if(floatval($inp)>=$rulesArr['phMin'] && floatval($inp)<=$rulesArr['phMax'])
+                return true;
+    }
+    else if($key=="pass"){
+        if(preg_match("/[a-z]/i", $inp) && preg_match('/[0-9]/', $inp))
+            return true;
+    }
+    return false;
 }
 
 function passHash($pass){
@@ -30,18 +60,18 @@ function PassGen(){
 function newPass($mail)
 {
 	$pass=PassGen();
-	$subject='Aquarium New Pass!';
+	$subject="Aquarium New Pass!";
 	$message="Hello! You'r new passyord is: ".$pass;
-	$headers='From: AquariumControlSystem@from_mail'."\r\n".'X-Mailer:PHP/'.phpversion();
+	$headers="From: AquariumControlSystem@from_mail";
 	mail($mail,$subject,$message,$headers);
 	return passHash($pass);
 }
 
 function sendMail($mail)
 {
-	$subject='Welcome!';
-	$message='Welcome!Registration completed successfully!';
-	$headers='From: AquariumControlSystem@from_mail'."\r\n".'X-Mailer:PHP/'.phpversion();
+	$subject="Welcome!";
+	$message="Welcome!Registration completed successfully!";
+	$headers="From: AquariumControlSystem@from_mail";
 	mail($mail,$subject,$message,$headers);
 }
 ?>

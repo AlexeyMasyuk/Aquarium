@@ -6,11 +6,11 @@ if(session_status() != PHP_SESSION_ACTIVE){
 }
 if(isset($_SESSION['user'])){
     $user=$_SESSION['user'];
+    $defaultAlarms=$_SESSION['rulesArr']['defaultAlarms'];
 }
 
 $sql=new dbClass($user);
-$alarm=array('phHigh'=>"7.5",'phLow'=>"6.5",'tempHigh'=>"25",'tempLow'=>"23");
-foreach ($alarm as $key=>$val){
+foreach ($defaultAlarms as $key=>$val){
         $sql->change($val,$key);
     }
     header('Location:dataTbl.php');

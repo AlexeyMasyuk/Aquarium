@@ -3,7 +3,11 @@
 require_once('dbClass.php');
 require_once('userClass.php');
 require_once('TextAndMSG.php');
-session_start();
+require_once('fileHandler.php');
+
+if(session_status() != PHP_SESSION_ACTIVE){
+    session_start();
+}
 
 $msg=new TextMssg("MessageBank.txt");   // Creating new object to throw relevant masseges
 if(isset($_POST['uname'])&&isset($_POST['pword']))
@@ -14,6 +18,7 @@ if(isset($_POST['uname'])&&isset($_POST['pword']))
 	{
 		$_SESSION['user']=$user;  // Save user entered data for futer actions
 		$_SESSION['msg']=$msg;
+		$_SESSION['rulesArr']=fileHandler::rulesPull('inputRules.txt');
 		header('Location:dataTbl.php');  // Redirect to main page
 		exit;
 	}
