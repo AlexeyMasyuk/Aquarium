@@ -138,6 +138,7 @@ class dbClass
 			$alarm['phLow']=$row['phLow'];
 			$alarm['tempHigh']=$row['tempHigh'];
 			$alarm['tempLow']=$row['tempLow'];
+			$alarm['feedAlert']=$row['feedAlert'];
 		}
 		return $alarm;
 	}
@@ -160,22 +161,34 @@ class dbClass
 		return $alarmStr;
 	}
 
+	private function TimeFeedingValidation($alarms,$dataArr,&$feedingTime){
+
+	}
+
 	public function chartQuery($name,$msg)
 	{
 		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
 		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
 		"limits"=>""
 	    );
-		$defineAlarmFlag=false;			
+		$defineAlarmFlag=false;
+		$feedingTime=false;			
 		try 
 		{
 			$this->connect();
 			$alarms=$this->alarms($name);
 			
-			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
-				$defineAlarmFlag=true;
-				
+			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0 && strlen($alarms['feedAlert'])>0){
+				$defineAlarmFlag=true;				
 				$dataArr['limits']=implode(',',$alarms);
+
+				$myTime = new DateTime(explode(' ',$alarms['feedAlert'])[1]);
+				$endTime=(new DateTime(explode(' ',$alarms['feedAlert'])[1]))->add(new DateInterval('PT' . 30 . 'M'));
+				$now=new DateTime();
+				if ($now->format('H:i')>=$myTime->format('H:i')&&$now->format('H:i')<$endTime->format('H:i')) {
+					$feedingTime=true;
+					$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
+				}
 			}
 			$stmnt=Query::select($this->connection,$name,"select");
 			$stmnt->execute(array());
@@ -185,14 +198,14 @@ class dbClass
 				$dataArr['Temp'] .= $dateTime.",".$row{'Temp'}.",";
 				$dataArr['PH'] .= $dateTime.",".$row{'ph'}.",";
 				$dataArr['level'] .= $dateTime.",".$row{'level'}.",";
-				if($defineAlarmFlag){
+				if($defineAlarmFlag&&!$feedingTime){
 					if(strpos($dataArr['alarms'],"defined") !== false){
 						$dataArr['alarms']="";
 					}
 					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms,$msg);					
 				}
 			}
-			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0){
+			if($defineAlarmFlag&&!$feedingTime){
 				if(strpos($dataArr['alarms'],"defined") !== false){
 					$dataArr['alarms'] = $msg->getMessge("DBnoAlarms");
 				}

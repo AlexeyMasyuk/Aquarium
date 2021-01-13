@@ -52,7 +52,7 @@ class Query
 		{
 		       case "user":
 			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`, `tempHigh`, `tempLow`, `phHigh`, `phLow`)
-                    VALUES (?, ?, ?, ?, ?, '', '', '', '')";
+                    VALUES (?, ?, ?, ?, ?, '', '', '', '', '')";
 				break;
 			    case "sensorData":
 				   $qString=$qrStart."(`temp`, `PH`, `level`) VALUES (?, ?, ?)";
@@ -95,6 +95,9 @@ class Query
             break;
             case "lname":
                 $qString=$qrStart."`lastName`=? WHERE `username`='$userName'";
+            break;
+            case "feedAlert":
+                $qString=$qrStart."`feedAlert`=? WHERE `username`='$userName'";
             break;
 		}
 		return $qString;

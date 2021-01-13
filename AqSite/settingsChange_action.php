@@ -18,23 +18,34 @@ $sql=new dbClass($user);
 
 $dataArr=array();
 $notChoosen=true;
+
+function feedAlert($chkboxVal){
+    $tmp=$_POST[$chkboxVal."Cycle"]." ";
+    $tmp.=$_POST[$chkboxVal."Time"];
+    
+    $_POST[$chkboxVal]=$tmp; 
+}
+
 // val is a key for wanted data ex: array('emailCheckbox' => "email", 'email' => "alex@mail.com") 
 foreach ($_POST as $key=>$val)
 {
     if(strpos($key,"Checkbox")){
-		$notChoosen=false;
+        $notChoosen=false;
+        if(strpos($key,"feedAlert")!==false){
+            feedAlert($val);
+        }
         if(strlen($_POST[$val])>0){
             if($valid=settChgeValidation($val,$_POST[$val],$rulesArr)){
                 $dataArr[$val]=$_POST[$val];               
             }
             if(!$valid){
-                $messageName=$val."ChangeBadInput";
+                $messageName="ChangeBadInput";
                 if(strpos($val,"ph")!==false)
-                    $_SESSION['flag'].="<br>".$msg->getMessge("phChangeBadInput");
+                    $_SESSION['flag'].="<br>".$msg->getMessge("ph".$messageName);
                 else if(strpos($val,"temp")!==false)
-                    $_SESSION['flag'].="<br>".$msg->getMessge("tempChangeBadInput");
+                    $_SESSION['flag'].="<br>".$msg->getMessge("temp".$messageName);
                 else
-                    $_SESSION['flag'].="<br>".$msg->getMessge($messageName);
+                    $_SESSION['flag'].="<br>".$msg->getMessge($val.$messageName);
              }
         }
         else{
@@ -43,6 +54,7 @@ foreach ($_POST as $key=>$val)
         }     
     }
 }
+
 
 if($notChoosen){
 	$_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");

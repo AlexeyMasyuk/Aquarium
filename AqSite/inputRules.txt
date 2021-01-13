@@ -9,3 +9,4 @@ phHigh=7.5;
 phLow=6.5;
 tempHigh=25;
 tempLow=23;
+feedAlert=1 20:00; // 1 - Day Cycle, 1 = Once every day, 2 = Once every two days.

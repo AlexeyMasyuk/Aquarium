@@ -1,4 +1,6 @@
 <?php
+// Add to setting change, 'set to deafoult'
+// Add Curent alarms view
 require_once('dbClass.php');
 
 if(session_status() != PHP_SESSION_ACTIVE){

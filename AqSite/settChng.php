@@ -31,7 +31,7 @@
       }
       ?>
       <form method='POST' action='settingsChange_action.php'>
-          <div id="personal" style="display: none;">
+        <div id="personal" style="display: none;">
             <label>All Personal Settings</label>
             <input type="checkbox" id="allP" onchange="openAllTextBox(value,'personalInput')" value="allP"><br>
     
@@ -50,9 +50,9 @@
             <label>Last Name</label>
             <input type="checkbox" class="personalInput" name="lnameCheckbox" onchange="openOrClose('lname')" value="lname">
             <input type="text" class="personalInput" id="lname" name="lname" style="display: none;"><br>
-            </div>
+        </div>
     
-            <div id="aqua" class="aqua" style="display: none;">
+        <div id="aqua" class="aqua" style="display: none;">
             <label>All Aqua Settings</label>
             <input type="checkbox" id="allA" onchange="openAllTextBox(value,'aquaInput')" value="allA"><br>
     
@@ -71,7 +71,20 @@
             <label>Temperature Low Level</label>
             <input type="checkbox" class="aquaInput" name="tempLowCheckbox" onchange="openOrClose('tempLow')" value="tempLow">
             <input type="text" class="aquaInput" id="tempLow"  name="tempLow" style="display: none;"><br>
-            </div>
+            
+            <label>Feeding Alert</label>
+            <input type="checkbox" class="aquaInput" name="feedAlertCheckbox" onchange="openOrClose('feedAlert')" value="feedAlert">
+            <p class="aquaInput" name="feedAlert" id="feedAlert" style="display: none;"><br>
+             Once in 
+              <select name="feedAlertCycle">
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+             day/days.
+             <input type="time" name="feedAlertTime">
+            </p>
+            <br><br>
+        </div>
     
             <input type="submit" value="Submit"><br>
     </form>

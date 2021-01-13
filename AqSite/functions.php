@@ -36,6 +36,11 @@ function settChgeValidation($key,$inp,$rulesArr){
         if(preg_match("/[a-z]/i", $inp) && preg_match('/[0-9]/', $inp))
             return true;
     }
+    else if($key=="feedAlert"){
+            if(strpos($inp,":")!==false)
+                return true;
+            return false;
+    }
     return false;
 }
 

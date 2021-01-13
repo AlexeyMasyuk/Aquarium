@@ -52,31 +52,45 @@ class fileHandler{
 
     //-------------------------------- Messege Func End ----------------------------//
 
-    public static function rulesPull($filePath){
+    //----------------------------------- Rules Func -------------------------------//
+
+    private static function NameDataSplit($newLine,&$split){
+        foreach($newLine as $val){
+            if(strpos($val,"[")!==false){
+                $tmp=substr($val, 0, -1);  // returns "abcde"
+                $key=substr($tmp, 1);
+            }
+            else if(strpos($val,"=")!==false){
+                $split=$val;
+            }
+        }
+
+        return $key;
+    }
+    
+    private static function StrToArray($split){
+        for($i=0;$i<count($split);$i++){
+            if(strpos($split[$i],"[")!==false&&strpos($split[$i],"]")!==false){
+                $newLine=explode(PHP_EOL,$split[$i]);
+                if(($tmpSplit=fileHandler::NameDataSplit($newLine,$split[$i]))!==null){
+                    $key=$tmpSplit;
+                }
+            }else{
+                $split[$i] = trim(preg_replace('/\s\s+/', ' ', $split[$i]));
+            }
+            $newLine=explode("=",$split[$i]);
+            if(isset($newLine[0])&&isset($newLine[1])){
+                $rulesArr[$key][$newLine[0]]=$newLine[1];
+            }
+        }
+        return $rulesArr;
+    }
+    
+    public static function rulesPull(){
         try{
             $strLine=file_get_contents("inputRules.txt");
             $split=explode(";",$strLine);
-            
-            for($i=0;$i<count($split);$i++){
-                if(strpos($split[$i],"[")!==false&&strpos($split[$i],"]")!==false){
-                    $newLine=explode(PHP_EOL,$split[$i]);
-					foreach($newLine as $val){
-						if(strpos($val,"[")!==false){
-							$tmp=substr($val, 0, -1);  // returns "abcde"
-							$key=substr($tmp, 1);
-						}
-						else if(strpos($val,"=")!==false){
-							$split[$i]=$val;
-						}
-					}                 
-                }else{
-                    $split[$i] = trim(preg_replace('/\s\s+/', ' ', $split[$i]));
-                }
-                $newLine=explode("=",$split[$i]);
-                if(isset($newLine[0])&&isset($newLine[1])){
-                    $rulesArr[$key][$newLine[0]]=floatval($newLine[1]);
-                }
-            }
+            $rulesArr=fileHandler::StrToArray($split);
             if(count($rulesArr)>0){
                 return $rulesArr;
             }
@@ -85,7 +99,7 @@ class fileHandler{
             return false;
         }
     }
-
+    //--------------------------------- Rules Func Ends -----------------------------//
 }
 
 ?>
