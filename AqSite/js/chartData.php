@@ -9,6 +9,6 @@ if(isset($_SESSION['user'])){
     $msg=$_SESSION['msg'];
 }
 $sql=new dbClass($user);
-$entry=$sql->chartQuery($user->getUserName(),$msg);
+$entry=$sql->chartQuery($user->getUserName(),$msg,$_SESSION['feedAlertSkip']);
 echo json_encode($entry);
 ?> 

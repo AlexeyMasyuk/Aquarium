@@ -165,7 +165,7 @@ class dbClass
 
 	}
 
-	public function chartQuery($name,$msg)
+	public function chartQuery($name,$msg,$feedAlertSkip=false)
 	{
 		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
 		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
@@ -181,13 +181,17 @@ class dbClass
 			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0 && strlen($alarms['feedAlert'])>0){
 				$defineAlarmFlag=true;				
 				$dataArr['limits']=implode(',',$alarms);
-
-				$myTime = new DateTime(explode(' ',$alarms['feedAlert'])[1]);
-				$endTime=(new DateTime(explode(' ',$alarms['feedAlert'])[1]))->add(new DateInterval('PT' . 30 . 'M'));
-				$now=new DateTime();
-				if ($now->format('H:i')>=$myTime->format('H:i')&&$now->format('H:i')<$endTime->format('H:i')) {
-					$feedingTime=true;
-					$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
+				if(!$feedAlertSkip){
+					$feedAlerts=explode(' ',$alarms['feedAlert']);
+					$myTime = new DateTime($feedAlerts[1]);
+					$endTime=(new DateTime($feedAlerts[1]))->add(new DateInterval('PT' . 30 . 'M'));
+					$now=new DateTime();
+					if ($now->format('H:i')>=$myTime->format('H:i')&&$now->format('H:i')<$endTime->format('H:i')) {
+						if($now->format('d')%intval($feedAlerts[0])==$feedAlerts[2]){
+							$feedingTime=true;
+							$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
+						}
+					}
 				}
 			}
 			$stmnt=Query::select($this->connection,$name,"select");

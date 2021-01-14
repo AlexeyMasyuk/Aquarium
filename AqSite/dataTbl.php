@@ -17,7 +17,7 @@
         <nav class="topnav" id="myTopnav">
             <a href="dataTbl.php" class="logo"> <img src="images/logo.png"  alt="Logo" /></a>
    
-            <a href="indexAq.php">sign out</a>
+            <a href="signOut.php">sign out</a>
             <a id="menu" href="#" class="icon">&#9776;</a>
         </nav>
   </header>

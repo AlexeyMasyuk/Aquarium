@@ -22,7 +22,9 @@ $notChoosen=true;
 function feedAlert($chkboxVal){
     $tmp=$_POST[$chkboxVal."Cycle"]." ";
     $tmp.=$_POST[$chkboxVal."Time"];
-    
+    $now=new DateTime();
+
+    $tmp.=" ".($now->format('d')%intval($_POST[$chkboxVal."Cycle"]));
     $_POST[$chkboxVal]=$tmp; 
 }
 

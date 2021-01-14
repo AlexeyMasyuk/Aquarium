@@ -21,4 +21,4 @@ _DBnoAlarms_$Perfect no alarms$
 _DBalarmsNotDefined_$Alarm values not defined.<br><a href='defaultAlarm_set.php'>Set to default/>$
 _DBalChkTxtArrStrt_$? Alarm Occure at $
 _DBalChkTxtArrMidd_$ and the ? was $
-_DBalarmFeedingTime_$ It's feeding time, please feed the fishes $
+_DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='feedAlarmSkip.php'>Return To Alarms</a>$                                                     
