@@ -2,6 +2,7 @@
 require_once('userClass.php');
 require_once('Querys.php');
 require_once('TextAndMSG.php');
+require_once('DB_DataHandler.php');
 
 // Class to handle all worck with SQL DataBase
 class dbClass
@@ -12,7 +13,8 @@ class dbClass
 	private $serverUser;
 	private $user;
 	private $pass;
-	private $querys;           
+	private $querys;
+	private $helpingClass;           
 	private $opt=array(
 	PDO::ATTR_ERRMODE   =>PDO::ERRMODE_EXCEPTION,
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
@@ -25,7 +27,8 @@ class dbClass
 							$this->charset = $charset;
 							$this->serverUser = $serverUser;
 							$this->pass = $pass;
-							$this->user = $userCls;  
+							$this->user = $userCls;
+							$this->helpingClass = new DB_DataHandler();
 						}
 
 	private function connect()  //  Connecting to Data Base
@@ -100,72 +103,19 @@ class dbClass
 			$this->disconnect();
 		}
 	}
-	
-	// Function getting data from DataBase
-	// returning it as an array
-	public function getData($user)
-	{
-		$this->connect();
-		$result = $this->connection->query($this->querys->getDataSelect());
-		$data=array();
-		while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-			array_push($data,$row);
-		}
-		$this->disconnect();
-		return $data;
-	}
-	
-	// Function deleating wanted data from user data table in DataBase
-	public function delData($time)
-	{
-		$this->connect();
-		if($this->connection->exec($this->querys->getDelData($time)))
-		{
-			$this->disconnect();
-			return true;
-		}
-		$this->disconnect();
-		return false;
-	}
 
-	public function alarms($name)
+	public function getUserAlarms()
 	{
 		$alarm=array('phHigh'=>"",'phLow'=>"",'tempHigh'=>"",'tempLow'=>"");
 		$stmnt=Query::select($this->connection,"userpass");
-		$stmnt->execute(array($name));
+		$stmnt->execute(array($this->user->getUserName()));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-			$alarm['phHigh']=$row['phHigh'];
-			$alarm['phLow']=$row['phLow'];
-			$alarm['tempHigh']=$row['tempHigh'];
-			$alarm['tempLow']=$row['tempLow'];
-			$alarm['feedAlert']=$row['feedAlert'];
+			$alarm=$this->helpingClass->UserAlarms_DataArrange($alarm,$row);
 		}
 		return $alarm;
 	}
 
-	private function alarmCheck($row,$alarmsArr,$msg)
-	{
-		$alarmStr="";
-		$phpdate = strtotime( $row{'time'} );
-		$dateTime=date("d.m.y H:i:s",$phpdate);
-		$text=array('start'=>$msg->getMessge("DBalChkTxtArrStrt"),'midd'=>$msg->getMessge("DBalChkTxtArrMidd"),'br'=>"<br>");
-		if(floatval($row['ph'])>floatval($alarmsArr['phHigh']))
-			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
-		else if(floatval($row['ph'])<floatval($alarmsArr['phLow']))
-			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
-		$alarmType="Temperature";
-		if(floatval($row['Temp'])>floatval($alarmsArr['tempHigh']))
-			$alarmStr .= str_replace('?',"Temperature",$text['start']).$dateTime.str_replace('?',"Temp.",$text['midd']).$row['Temp'].$text['br'];
-		else if(floatval($row['Temp'])<floatval($alarmsArr['tempLow']))
-			$alarmStr .= str_replace('?',"Temperature",$text['start']).$dateTime.str_replace('?',"Temp.",$text['midd']).$row['Temp'].$text['br'];
-		return $alarmStr;
-	}
-
-	private function TimeFeedingValidation($alarms,$dataArr,&$feedingTime){
-
-	}
-
-	public function chartQuery($name,$msg,$feedAlertSkip=false)
+	public function chartQuery($msg,$feedAlertSkip=false)
 	{
 		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
 		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
@@ -176,44 +126,16 @@ class dbClass
 		try 
 		{
 			$this->connect();
-			$alarms=$this->alarms($name);
-			
-			if(strlen($alarms['phHigh'])>0 && strlen($alarms['phLow'])>0 && strlen($alarms['tempHigh'])>0 && strlen($alarms['tempLow'])>0 && strlen($alarms['feedAlert'])>0){
-				$defineAlarmFlag=true;				
-				$dataArr['limits']=implode(',',$alarms);
-				if(!$feedAlertSkip){
-					$feedAlerts=explode(' ',$alarms['feedAlert']);
-					$myTime = new DateTime($feedAlerts[1]);
-					$endTime=(new DateTime($feedAlerts[1]))->add(new DateInterval('PT' . 30 . 'M'));
-					$now=new DateTime();
-					if ($now->format('H:i')>=$myTime->format('H:i')&&$now->format('H:i')<$endTime->format('H:i')) {
-						if($now->format('d')%intval($feedAlerts[0])==$feedAlerts[2]){
-							$feedingTime=true;
-							$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
-						}
-					}
-				}
-			}
-			$stmnt=Query::select($this->connection,$name,"select");
+
+			$alarms=$this->getUserAlarms($this->user->getUserName());
+			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTime,$defineAlarmFlag,$msg);
+
+			$stmnt=Query::select($this->connection,$this->user->getUserName(),"select");
 			$stmnt->execute(array());
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-				$phpdate = strtotime( $row{'time'} );
-				$dateTime=date("d.m.y H:i:s",$phpdate);
-				$dataArr['Temp'] .= $dateTime.",".$row{'Temp'}.",";
-				$dataArr['PH'] .= $dateTime.",".$row{'ph'}.",";
-				$dataArr['level'] .= $dateTime.",".$row{'level'}.",";
-				if($defineAlarmFlag&&!$feedingTime){
-					if(strpos($dataArr['alarms'],"defined") !== false){
-						$dataArr['alarms']="";
-					}
-					$dataArr['alarms'] .= $this->alarmCheck($row,$alarms,$msg);					
-				}
+				$dataArr=$this->helpingClass->chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTime,$defineAlarmFlag,$msg);
 			}
-			if($defineAlarmFlag&&!$feedingTime){
-				if(strpos($dataArr['alarms'],"defined") !== false){
-					$dataArr['alarms'] = $msg->getMessge("DBnoAlarms");
-				}
-			}
+			$dataArr=$this->helpingClass->chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTime,$msg);
 			return $dataArr;
 		} catch (Exception $e) {
 			$this->disconnect();
