@@ -32,15 +32,15 @@
 		<section id="signInForm">
 		<img class="closeButton" src="images/closeButton.png " alt="" onclick="closeForm()">
 		
-		<?php  
-			    // Checking if some error flag returned from connection_action.php page
-			       session_start();
-                   if(isset($_SESSION['flag']))
-				   {
-				       echo $_SESSION['flag']; // Print the error ocured
-					   unset($_SESSION['flag']);
-				   }
-				   ?>
+        <?php  
+        require_once('sessionHandler.php');
+		// Checking if some error flag returned from connection_action.php page
+        if($msg=sessionClass::sessionPull(array('flag'),false))
+		{
+		       echo $msg; // Print the error ocured
+			   sessionClass::sessionUnset('flag');
+		}
+		?>
       <form method='POST' action='connection_action.php'>
 	  
         <div>

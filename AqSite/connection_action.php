@@ -4,10 +4,8 @@ require_once('dbClass.php');
 require_once('userClass.php');
 require_once('TextAndMSG.php');
 require_once('fileHandler.php');
-
-if(session_status() != PHP_SESSION_ACTIVE){
-    session_start();
-}
+require_once('functions.php');
+require_once('sessionHandler.php');
 
 $msg=new TextMssg("MessageBank.txt");   // Creating new object to throw relevant masseges
 if(isset($_POST['uname'])&&isset($_POST['pword']))
@@ -16,15 +14,16 @@ if(isset($_POST['uname'])&&isset($_POST['pword']))
 	$sql=new dbClass($user);                         // Creating new object to connect to DataBase 
 	if($sql->userExists())   // If entered data exists in DataBase
 	{
-		$_SESSION['user']=$user;  // Save user entered data for futer actions
-		$_SESSION['msg']=$msg;
-		$_SESSION['rulesArr']=fileHandler::rulesPull('inputRules.txt');
-		header('Location:dataTbl.php');  // Redirect to main page
+		$rulesArr=fileHandler::rulesPull('inputRules.txt');
+
+		sessionClass::sessionPush(array('user'=>$user,'msg'=>$msg,'rulesArr'=>$rulesArr));
+        header('Location:dataTbl.php');
+		// header('Location:dataTbl.php');  // Redirect to main page
 		exit;
 	}
 	else     // If entered data not exists in DataBase, show relevant massage from Object
 	{
-    	$_SESSION['flag']=$msg->getMessge("Wrong");
+		sessionClass::sessionPush(array('flag'=>$msg->getMessge("Wrong")));
     }
 }
 	header('Location:indexAq.php'); // For case POST passed empty or not set

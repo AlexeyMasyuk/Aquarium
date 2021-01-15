@@ -4,17 +4,17 @@ require_once('TextAndMSG.php');
 require_once('userClass.php');
 require_once('functions.php');
 include_once('fileHandler.php');
+require_once('sessionHandler.php');
 
-if(session_status() != PHP_SESSION_ACTIVE){
-    session_start();
-}
-if(isset($_SESSION['user'])&&isset($_SESSION['rulesArr'])&&isset($_SESSION['msg'])){
-    $user=$_SESSION['user'];
-    $rulesArr=$_SESSION['rulesArr']['settChgeValidation'];
-    $msg=$_SESSION['msg'];
-}
+define('wantedSessions', array(
+    'user',
+    'rulesArr',
+    'msg'
+));
+$sessionArr=sessionClass::sessionPull(wantedSessions);
+$settChgeRules=$sessionArr['rulesArr']['settChgeValidation'];
 
-$sql=new dbClass($user);
+$sql=new dbClass($sessionArr['user']);
 
 $dataArr=array();
 $notChoosen=true;
@@ -37,33 +37,35 @@ foreach ($_POST as $key=>$val)
             feedAlert($val);
         }
         if(strlen($_POST[$val])>0){
-            if($valid=settChgeValidation($val,$_POST[$val],$rulesArr)){
+            if($valid=settChgeValidation($val,$_POST[$val],$settChgeRules)){
                 $dataArr[$val]=$_POST[$val];               
             }
             if(!$valid){
                 $messageName="ChangeBadInput";
                 if(strpos($val,"ph")!==false)
-                    $_SESSION['flag'].="<br>".$msg->getMessge("ph".$messageName);
+                    $flagMsg.="<br>".$sessionArr['msg']->getMessge("ph".$messageName);
                 else if(strpos($val,"temp")!==false)
-                    $_SESSION['flag'].="<br>".$msg->getMessge("temp".$messageName);
+                    $flagMsg.="<br>".$sessionArr['msg']->getMessge("temp".$messageName);
                 else
-                    $_SESSION['flag'].="<br>".$msg->getMessge($val.$messageName);
+                    $flagMsg.="<br>".$sessionArr['msg']->getMessge($val.$messageName);
              }
         }
         else{
-            if(!strpos($_SESSION['flag'],"fill"))
-                $_SESSION['flag'].="<br>".$msg->getMessge("EmptyFieldChangeBadInput");           
-        }     
+            if(!strpos($flagMsg,"fill")){
+                $flagMsg.="<br>".$sessionArr['msg']->getMessge("EmptyFieldChangeBadInput");
+            }           
+        }   
     }
 }
 
 
 if($notChoosen){
-	$_SESSION['flag']=$msg->getMessge("NotChoosenChangeBadInput");
+    sessionClass::sessionPush(array('flag'=>"<br>".$sessionArr['msg']->getMessge("NotChoosenChangeBadInput")));  
 	header('Location:settChng.php');
 	exit;
 }
-else if(isset($_SESSION['flag'])){
+else if(isset($flagMsg)){
+    sessionClass::sessionPush(array('flag'=>$flagMsg));  
 	header('Location:settChng.php');
 	exit;
 }

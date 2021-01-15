@@ -2,16 +2,16 @@
 // Add to setting change, 'set to deafoult'
 // Add Curent alarms view
 require_once('dbClass.php');
+require_once('sessionHandler.php');
 
-if(session_status() != PHP_SESSION_ACTIVE){
-    session_start();
-}
-if(isset($_SESSION['user'])){
-    $user=$_SESSION['user'];
-    $defaultAlarms=$_SESSION['rulesArr']['defaultAlarms'];
-}
+define('wantedSessions', array(
+    'user',
+    'rulesArr'
+));
+$sessionArr=sessionClass::sessionPull(wantedSessions);
+$defaultAlarms=$sessionArr['rulesArr']['defaultAlarms'];
 
-$sql=new dbClass($user);
+$sql=new dbClass($sessionArr['user']);
 foreach ($defaultAlarms as $key=>$val){
         $sql->change($val,$key);
     }

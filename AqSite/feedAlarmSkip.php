@@ -1,8 +1,7 @@
 <?php
+require_once('sessionHandler.php');
 
-if(session_status() == PHP_SESSION_NONE){
-    session_start();
-}
-$_SESSION['feedAlertSkip']=true;
+sessionClass::sessionPush(array('feedAlertSkip'=>true));
+
 header('Location:dataTbl.php');
 ?>

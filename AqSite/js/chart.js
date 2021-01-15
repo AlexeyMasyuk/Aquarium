@@ -96,7 +96,7 @@ function change(){
 
         toDiv.innerHTML = alarmData;
         };
-        oReq.open("get", "js/chartData.php", true);
+        oReq.open("get", "chartData.php", true);
         oReq.send();
 }
 

@@ -62,8 +62,7 @@ function PassGen(){
 	return $pass;
 }
 
-function newPass($mail)
-{
+function newPass($mail){
 	$pass=PassGen();
 	$subject="Aquarium New Pass!";
 	$message="Hello! You'r new passyord is: ".$pass;
@@ -72,8 +71,7 @@ function newPass($mail)
 	return passHash($pass);
 }
 
-function sendMail($mail)
-{
+function sendMail($mail){
 	$subject="Welcome!";
 	$message="Welcome!Registration completed successfully!";
 	$headers="From: AquariumControlSystem@from_mail";

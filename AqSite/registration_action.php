@@ -5,13 +5,9 @@ require_once('dbClass.php');
 require_once('userClass.php');
 require_once('TextAndMSG.php');
 require_once('functions.php');
+require_once('sessionHandler.php');
 
-if(session_status() != PHP_SESSION_ACTIVE){
-    session_start();
-}
-if(isset($_SESSION['msg'])){
-    $msg=$_SESSION['msg'];
-}
+$msg=new TextMssg("MessageBank.txt");  
 
 if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
@@ -23,30 +19,26 @@ if(nameCheck($_POST['uname'])) // If entered name is possible (first char not a 
 		if($sql->userCreate())       // dbClass function to enter user data to DataBaes
 		{
 			sendMail($_POST['email']);                // Send mail for secssesful user creation
-			$_SESSION['dataCreate']=$_POST['uname'];  // Save user entered data for generate data in user table
 	    	header('Location:indexAq.php');    // Redirect to data generator file
 	    	exit;   
 		}
 		else // If entered data not saved in DataBase show relevant massege 
 		{    // and redirect back to registration page
-		
-			$_SESSION['flag']=$msg->getMessge("queryError");
+			sessionClass::sessionPush(array('flag'=>$msg->getMessge("queryError")));
 			header('Location:registration.php');
 			exit;
 		}
 	}
 	else    // If entered username already exists in DataBase show relevant massege 
 	{      // and redirect back to registration page
-	
-		$_SESSION['flag']=$msg->getMessge("userExist");
+		sessionClass::sessionPush(array('flag'=>$msg->getMessge("userExist")));
 		header('Location:registration.php');
 		exit;
 	}
 }
 else      // If entered username cannot be a table name in DataBase show relevant massege
 {        // and redirect back to registration page
-
-	$_SESSION['flag']=$msg->getMessge("cannotBeUser");
+	sessionClass::sessionPush(array('flag'=>$msg->getMessge("cannotBeUser")));
 	header('Location:registration.php');
 	exit;
 }

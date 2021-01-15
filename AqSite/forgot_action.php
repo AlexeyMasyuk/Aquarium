@@ -4,13 +4,14 @@ require_once('dbClass.php');
 require_once('userClass.php');
 require_once('TextAndMSG.php');
 require_once('functions.php');
+require_once('sessionHandler.php');
 
-if(session_status() != PHP_SESSION_ACTIVE){
-    session_start();
-}
-if(isset($_SESSION['msg'])){
-    $msg=$_SESSION['msg'];
-}
+define('wantedSessions', array(
+    'msg'
+));
+$sessionArr=sessionClass::sessionPull(wantedSessions);
+
+
 
 if(isset($_POST['uname'])) // If entered name is possible (first char not a number)
 {         // Creating new object to save user entered data
@@ -27,7 +28,7 @@ if(isset($_POST['uname'])) // If entered name is possible (first char not a numb
 	else    // If entered username already exists in DataBase show relevant massege 
 	{      // and redirect back to registration page
 	
-		$_SESSION['flag']=$msg->getMessge("forgotNoUserMatch");
+		sessionClass::sessionPush(array('flag'=>$sessionArr['msg']->getMessge("forgotNoUserMatch")));
 		header('Location:forgot.php');
 		exit;
 	}
