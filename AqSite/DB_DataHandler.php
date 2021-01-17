@@ -1,5 +1,6 @@
 <?php
 require_once('TextAndMSG.php');
+require_once('dateTimeHandler.php');
 class DB_DataHandler
 { 
 	public function UserAlarms_DataArrange($alarm,$row){
@@ -14,8 +15,7 @@ class DB_DataHandler
 	private function risedAlarmCheck($row,$alarmsArr,$msg)
 	{
 		$alarmStr="";
-		$phpdate = strtotime( $row{'time'} );
-		$dateTime=date("d.m.y H:i:s",$phpdate);
+		$dateTime=dateTimeHandler::getTime("d.m.y H:i:s",$row{'time'});
 		$text=array('start'=>$msg->getMessge("DBalChkTxtArrStrt"),'midd'=>$msg->getMessge("DBalChkTxtArrMidd"),'br'=>"<br>");
 		if(floatval($row['ph'])>floatval($alarmsArr['phHigh']))
 			$alarmStr .= str_replace('?',"PH",$text['start']).$dateTime.str_replace('?',"PH",$text['midd']).$row['ph'].$text['br'];
@@ -35,14 +35,8 @@ class DB_DataHandler
 			$dataArr['limits']=implode(',',$alarms);
 			if(!$feedAlertSkip){
 				$feedAlerts=explode(' ',$alarms['feedAlert']);
-				$myTime = new DateTime($feedAlerts[1]);
-				$endTime=(new DateTime($feedAlerts[1]))->add(new DateInterval('PT' . 30 . 'M'));
-				$now=new DateTime();
-				if ($now->format('H:i')>=$myTime->format('H:i')&&$now->format('H:i')<$endTime->format('H:i')) {
-					if($now->format('d')%intval($feedAlerts[0])==$feedAlerts[2]){
-						$feedingTime=true;
-						$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
-					}
+				if($feedingTime=dateTimeHandler::FeedAlertCheck($feedAlerts)){
+					$dataArr['alarms']=$msg->getMessge("DBalarmFeedingTime");
 				}
 			}
 		}
@@ -50,8 +44,7 @@ class DB_DataHandler
 	}
 
 	public function chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTime,$defineAlarmFlag,$msg){
-		$phpdate = strtotime( $row{'time'} );
-		$dateTime=date("d.m.y H:i:s",$phpdate);
+		$dateTime=dateTimeHandler::getTime("d.m.y H:i:s",$row{'time'});
 		$dataArr['Temp'] .= $dateTime.",".$row{'Temp'}.",";
 		$dataArr['PH'] .= $dateTime.",".$row{'ph'}.",";
 		$dataArr['level'] .= $dateTime.",".$row{'level'}.",";

@@ -83,6 +83,7 @@ class fileHandler{
                 $rulesArr[$key][$newLine[0]]=$newLine[1];
             }
         }
+        $rulesArr['defaultAlarms']['feedAlert']=dateTimeHandler::feedingDayParameterCalc($rulesArr['defaultAlarms']['feedAlert']);
         return $rulesArr;
     }
     
