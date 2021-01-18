@@ -18,10 +18,10 @@ class Query
                 `ph` VARCHAR(5) NOT NULL , `level` VARCHAR(5) NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;";
 			break;			
             case "update":
-                $query =Query::updateSelect($insertOrUpdateAct,$userName,$tabelName);
+                $query =self::updateSelect($insertOrUpdateAct,$userName,$tabelName);
             break;           
 		    case "insert":		
-                $query =Query::insertSelect($insertOrUpdateAct,$tabelName);
+                $query =self::insertSelect($insertOrUpdateAct,$tabelName);
             break;
         }
         return $query;
@@ -35,14 +35,14 @@ class Query
 	
     public static function select($dbConn,$tabelName,$allOrWhere="selectWhere")
     {
-        $query=Query::buildQuery( $allOrWhere,$tabelName );
-        return Query::prep($dbConn,$query);
+        $query=self::buildQuery( $allOrWhere,$tabelName );
+        return self::prep($dbConn,$query);
     }
 
     public static function TableCreate($dbConn,$tabelName)
     {
-        $query=Query::buildQuery( "create",$tabelName );
-        return Query::prep($dbConn,$query);
+        $query=self::buildQuery( "create",$tabelName );
+        return self::prep($dbConn,$query);
     }
 
     private function insertSelect($insertAction,$tabelName)
@@ -63,8 +63,8 @@ class Query
 
     public static function insert($dbConn,$tabelName,string $insertAct="user")
     {   
-	    $query=Query::buildQuery( "insert",$tabelName,$insertAct );
-		return Query::prep($dbConn,$query);      
+	    $query=self::buildQuery( "insert",$tabelName,$insertAct );
+		return self::prep($dbConn,$query);      
     }
     
     private function updateSelect($updateAction,$userName,$tabelName)
@@ -105,8 +105,8 @@ class Query
 
 	public static function update($dbConn,$tabelName,$userName,string $updateAct="pass")
     {   
-        $query=Query::buildQuery( "update", $tabelName, $updateAct, $userName );	
-		return Query::prep($dbConn,$query);   
+        $query=self::buildQuery( "update", $tabelName, $updateAct, $userName );	
+		return self::prep($dbConn,$query);   
     }
 }
 ?>

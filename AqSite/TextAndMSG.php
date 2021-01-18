@@ -5,7 +5,7 @@ class TextMssg{
     private $mssgArr;
 
     public function __construct($filePath){
-        $this->mssgArr=fileHandler::messegePull($filePath);
+        $this->mssgArr=fileHandler::messagePull($filePath);
     }
 
 

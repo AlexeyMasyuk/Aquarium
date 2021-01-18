@@ -23,7 +23,7 @@ if(isset($_POST['uname'])&&isset($_POST['pword']))
 	}
 	else     // If entered data not exists in DataBase, show relevant massage from Object
 	{
-		sessionClass::sessionPush(array('flag'=>$msg->getMessge("Wrong")));
+		sessionClass::sessionPush(array('flag'=>$msg->getMessge("wrong")));
     }
 }
 	header('Location:indexAq.php'); // For case POST passed empty or not set

@@ -1,3 +1,7 @@
+<?php  
+        require_once('validAcsses.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,12 +41,11 @@
 		// Checking if some error flag returned from connection_action.php page
         if($msg=sessionClass::sessionPull(array('flag'),false))
 		{
-		       echo $msg; // Print the error ocured
+		       echo $msg['flag']; // Print the error ocured
 			   sessionClass::sessionUnset('flag');
 		}
 		?>
       <form method='POST' action='connection_action.php'>
-	  
         <div>
           <input type="text" name="uname" required="">
           <label>username</label>

@@ -10,14 +10,14 @@ class dateTimeHandler{
             $tmpArr=explode(' ',$feedAlertString);
             $feedCycleVal=$tmpArr[0];
         }
-        $feedAlertString.= " ".dateTimeHandler::getTime('d')%intval($feedCycleVal);
+        $feedAlertString.= " ".self::getTime('d')%intval($feedCycleVal);
         return $feedAlertString;
     }
 
     public static function defaultFeedTimeAlert($chkboxVal,$POST){
         $tmp=$POST[$chkboxVal."Cycle"]." ";
         $tmp.=$POST[$chkboxVal."Time"];
-        $tmp.=dateTimeHandler::feedingDayParameterCalc($feedAlertString,$POST[$chkboxVal."Cycle"]);
+        $tmp.=self::feedingDayParameterCalc($feedAlertString,$POST[$chkboxVal."Cycle"]);
         $POST[$chkboxVal]=$tmp;
         return $POST;
     }
@@ -26,9 +26,9 @@ class dateTimeHandler{
         $TF='H:i'; // Time Format
         $myTime = new DateTime($feedRulesArr[1]);
         $endTime=(new DateTime($feedRulesArr[1]))->add(new DateInterval('PT' . 30 . 'M'));
-        $now=dateTimeHandler::getTime($TF);
+        $now=self::getTime($TF);
         if ($now>=$myTime->format($TF)&&$now<$endTime->format($TF)) {
-            if(dateTimeHandler::getTime('d')%intval($feedRulesArr[0])==$feedRulesArr[2]){
+            if(self::getTime('d')%intval($feedRulesArr[0])==$feedRulesArr[2]){
                 return true;
             }
         }
