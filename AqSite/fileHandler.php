@@ -27,12 +27,12 @@ class fileHandler{
         }
     }
     
-    public static function rulesPull(){
+    public static function Pull($path,$rulesPull=true){
         try{
             $cropClass=self::dataCrop();
-            $strLine=file_get_contents("inputRules.txt");
+            $strLine=file_get_contents($path);
             $split=explode(";",$strLine);
-            $rulesArr=$cropClass->rulesFile_StrToArray($split);
+            $rulesArr=$cropClass->rulesFile_StrToArray($split,$rulesPull);
             if(count($rulesArr)>0){
                 return $rulesArr;
             }

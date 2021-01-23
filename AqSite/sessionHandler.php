@@ -36,13 +36,8 @@ class sessionClass{
     public static function sessionPull($arrToPull,$needAllData=true){
         self::init();
         foreach($arrToPull as $valToPull){
-    
             if(isset($_SESSION[$valToPull])){
                 $sessionArr[$valToPull]=$_SESSION[$valToPull];
-            }
-            else if($needAllData){
-                self::close();
-                return false;
             }
         }
         if(isset($sessionArr)){

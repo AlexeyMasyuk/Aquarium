@@ -1,75 +1,70 @@
 <?php
-require_once('dbClass.php');
-require_once('TextAndMSG.php');
-require_once('userClass.php');
-require_once('functions.php');
-include_once('fileHandler.php');
-require_once('sessionHandler.php');
-require_once('dateTimeHandler.php');
+// Add to setting change, 'set to deafoult'
+// Add Curent alarms view
 
-define('wantedSessions', array(
-    'user',
-    'rulesArr',
-    'msg'
-));
-$sessionArr=sessionClass::sessionPull(wantedSessions);
-$settChgeRules=$sessionArr['rulesArr']['settChgeValidation'];
+require_once("includeNpath.php");
+$tagMap=getIncludeNpathData(basename(__FILE__,".php"),true);
+$T=$tagMap['tagsNstrings'];
 
-$sql=new dbClass($sessionArr['user']);
+$sql=new dbClass($tagMap[$T['sA']][$T['u']]);
 
 $dataArr=array();
 $notChoosen=true;
 
-function badInputMassegeChoose($val,$sessionArr){
-    $messageName="ChangeBadInput";
-    if(strpos($val,"ph")!==false)
-        $flagMsg.="<br>".$sessionArr['msg']->getMessge("ph".$messageName);
-    else if(strpos($val,"temp")!==false)
-        $flagMsg.="<br>".$sessionArr['msg']->getMessge("temp".$messageName);
-    else
-        $flagMsg.="<br>".$sessionArr['msg']->getMessge($val.$messageName);
-    return $flagMsg;
-}
-
 // val is a key for wanted data ex: array('emailCheckbox' => "email", 'email' => "alex@mail.com") 
 foreach ($_POST as $key=>$val)
 {
-    if(strpos($key,"Checkbox")){
+    if(strpos($key,$T['C'])){
         $notChoosen=false;
-        if(strpos($key,"feedAlert")!==false){
+        if(strpos($key,$T['fA'])!==false){
             $_POST=dateTimeHandler::defaultFeedTimeAlert($val,$_POST);
         }
         if(strlen($_POST[$val])>0){
-            if($valid=settChgeValidation($val,$_POST[$val],$settChgeRules)){
+            if($valid=settChgeValidation($val,$_POST[$val],$tagMap[$T['sA']][$T['rA']][$T['sCL']])){
                 $dataArr[$val]=$_POST[$val];               
             }
             if(!$valid){
-                $flagMsg.=badInputMassegeChoose($val,$sessionArr);
+                $flagMsg.=badInputMassegeChoose($val,$tagMap[$T['sA']],$T);
              }
         }
         else{
-            if(!strpos($flagMsg,"fill")){
-                $flagMsg.="<br>".$sessionArr['msg']->getMessge("EmptyFieldChangeBadInput");
+            if(!strpos($flagMsg,$T['fl'])){
+                $flagMsg.=$T['b'].$tagMap[$T['sA']][$T['m']]->getMessge($T['EF']);
             }           
         }   
     }
 }
 
+function badInputMassegeChoose($val,$sessionArr,$T){
+    $messageName="ChangeBadInput";
+    if(strpos($val,$T['p'])!==false)
+        $flagMsg.=$T['b'].$sessionArr[$T['m']]->getMessge($T['p'].$messageName);
+    else if(strpos($val,$T['t'])!==false)
+        $flagMsg.=$T['b'].$sessionArr[$T['m']]->getMessge($T['t'].$messageName);
+    else
+        $flagMsg.=$T['b'].$sessionArr[$T['m']]->getMessge($val.$messageName);
+    return $flagMsg;
+}
+
+// echo "<pre>";
+// print_r($tagMap);
+// print_r(sessionClass::sessionPull(array('u','rulesArr')));
+// echo "<pre>";
 
 if($notChoosen){
-    sessionClass::sessionPush(array('flag'=>"<br>".$sessionArr['msg']->getMessge("NotChoosenChangeBadInput")));  
-	header('Location:settChng.php');
+    sessionClass::sessionPush(array($T['f']=>$T['b'].$tagMap[$T['sA']][$T['m']]->getMessge($T['NC'])));  
+	header($tagMap[$T['h']][$T['a']]);
 	exit;
 }
 else if(isset($flagMsg)){
-    sessionClass::sessionPush(array('flag'=>$flagMsg));  
-	header('Location:settChng.php');
+    sessionClass::sessionPush(array($T['f']=>$flagMsg));  
+	header($tagMap[$T['h']][$T['a']]);
 	exit;
 }
 else{
 	foreach ($dataArr as $key=>$val)
-        $sql->change($val,$key);
-	header('Location:dataTbl.php');
+        $sql->change((strpos('pass',$key)!==false)?$val=passHash($val):$val,$key);
+	header($tagMap[$T['h']][$T['mn']]);
 	exit;
 }
 ?>

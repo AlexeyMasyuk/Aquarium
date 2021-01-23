@@ -1,19 +1,14 @@
 <?php
-// Add to setting change, 'set to deafoult'
-// Add Curent alarms view
-require_once('dbClass.php');
-require_once('sessionHandler.php');
+require_once("includeNpath.php");
+$tagMap=getIncludeNpathData(basename(__FILE__,".php"),true);
+$T=$tagMap['tagsNstrings'];
 
-define('wantedSessions', array(
-    'user',
-    'rulesArr'
-));
-$sessionArr=sessionClass::sessionPull(wantedSessions);
-$defaultAlarms=$sessionArr['rulesArr']['defaultAlarms'];
-
-$sql=new dbClass($sessionArr['user']);
+$defaultAlarms=$tagMap[$T['sA']][$T['rA']][$T['dA']];
+$sql=new dbClass($tagMap[$T['sA']][$T['u']]);
 foreach ($defaultAlarms as $key=>$val){
-        $sql->change($val,$key);
-    }
-    header('Location:dataTbl.php');
+    $sql->change($val,$key);
+}
+
+header($tagMap[$T['h']][$T['mn']]);
+exit;
 ?>

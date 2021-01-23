@@ -1,17 +1,11 @@
 <?php
-require_once('dbClass.php');
-require_once('TextAndMSG.php');
-require_once('sessionHandler.php');
+require_once("includeNpath.php");
+$tagMap=getIncludeNpathData(basename(__FILE__,".php"),true);
+$T=$tagMap['tagsNstrings'];
 
-define('wantedSessions', array(
-    'user',
-    'msg',
-    'feedAlertSkip'
-));
-$sessionArr=sessionClass::sessionPull(wantedSessions,false);
+$sql=new dbClass($tagMap[$T['sA']][$T['u']]);
+$entry=$sql->chartQuery($tagMap[$T['sA']][$T['m']],isset($tagMap[$T['sA']][$T['fAS']])?$tagMap[$T['sA']][$T['fAS']]:null);
 
-
-$sql=new dbClass($sessionArr['user']);
-$entry=$sql->chartQuery($sessionArr['msg'],$sessionArr['feedAlertSkip']);
 echo json_encode($entry);
+exit;
 ?> 

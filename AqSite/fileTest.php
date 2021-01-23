@@ -1,11 +1,17 @@
 <?php
-require_once('sessionHandler.php');
-if(session_status() == PHP_SESSION_NONE){
-	session_start();
-}
-		echo "<pre>";
-		print_r(sessionClass::sessionPull(array('flag'),false)?"true":"false");
-		echo "<br>SESSION<br>";
-		print_r($_SESSION);
-		echo "<pre>";
+require_once("includeNpath.php");
+$tagMap=getIncludeNpathData("chartData",true);
+$T=$tagMap['tagsNstrings'];
+echo "<pre>";
+print_r(array('msg','user','rulesArr'));
+print_r($T);
+print_r($tagMap);
+print_r(sessionClass::sessionPull(array('msg','user','feedAlertSkip')));
+echo "<pre>";
+
+// $sql=new dbClass($tagMap[$T['sA']][$T['u']]);
+// $entry=$sql->chartQuery($tagMap[$T['sA']][$T['m']],isset($tagMap[$T['sA']][$T['fAS']])?$tagMap[$T['sA']][$T['fAS']]:null);
+// echo "<pre>";
+// print_r($tagMap);
+// echo "<pre>";
 ?>

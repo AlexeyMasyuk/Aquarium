@@ -1,31 +1,27 @@
 
 <?php
-require_once('dbClass.php');
-require_once('userClass.php');
-require_once('TextAndMSG.php');
-require_once('fileHandler.php');
-require_once('functions.php');
-require_once('sessionHandler.php');
+require_once('includeNpath.php');
+$tagMap=getIncludeNpathData(basename(__FILE__,".php"));
+$T=$tagMap['tagsNstrings'];
 
-$msg=new TextMssg("MessageBank.txt");   // Creating new object to throw relevant masseges
-if(isset($_POST['uname'])&&isset($_POST['pword']))
+$msg=new TextMssg($tagMap[$T['t']][$T['m']]);   // Creating new object to throw relevant masseges
+if(isset($_POST[$T['p']])&&isset($_POST[$T['un']]))
 {
-	$user=new User($_POST['uname'],$_POST['pword']); // Creating new object to save user entered data
+	$user=new User($_POST[$T['un']],$_POST[$T['p']]); // Creating new object to save user entered data
 	$sql=new dbClass($user);                         // Creating new object to connect to DataBase 
 	if($sql->userExists())   // If entered data exists in DataBase
 	{
-		$rulesArr=fileHandler::rulesPull('inputRules.txt');
+		$rulesArr=fileHandler::Pull($tagMap[$T['t']][$T['r']]);
 
-		sessionClass::sessionPush(array('user'=>$user,'msg'=>$msg,'rulesArr'=>$rulesArr));
-        header('Location:dataTbl.php');
-		// header('Location:dataTbl.php');  // Redirect to main page
+		sessionClass::sessionPush(array($T['u']=>$user,$T['m']=>$msg,$T['rA']=>$rulesArr));
+		header($tagMap[$T['h']][$T['mn']]);
 		exit;
 	}
 	else     // If entered data not exists in DataBase, show relevant massage from Object
 	{
-		sessionClass::sessionPush(array('flag'=>$msg->getMessge("wrong")));
+		sessionClass::sessionPush(array($T['f']=>$msg->getMessge($T['w'])));
     }
 }
-	header('Location:indexAq.php'); // For case POST passed empty or not set
+	header($tagMap[$T['h']][$T['b']]); // For case POST passed empty or not set
 	exit; 
 ?>

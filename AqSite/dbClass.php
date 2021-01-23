@@ -13,14 +13,13 @@ class dbClass
 	private $serverUser;
 	private $user;
 	private $pass;
-	private $querys;
 	private $helpingClass;           
 	private $opt=array(
 	PDO::ATTR_ERRMODE   =>PDO::ERRMODE_EXCEPTION,
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
 	private $connection;
 	
-	public function __construct($userCls,string $host="localhost", string $db = "php_prj",string $charset="utf8", string $serverUser = "root", string $pass = "")
+	public function __construct($userCls,string $host="localhost", string $db = "test",string $charset="utf8", string $serverUser = "root", string $pass = "")
 						{
 							$this->host = $host;
 							$this->db = $db;

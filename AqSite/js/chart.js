@@ -80,6 +80,7 @@ function change(){
             
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
+        // alert(arr);
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var options = {

@@ -1,4 +1,4 @@
-[settChgeValidation]
+[settChgeLimits]
 tempMax=30;
 tempMin=15;
 phMax=8;

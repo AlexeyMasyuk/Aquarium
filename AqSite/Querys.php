@@ -2,7 +2,7 @@
       // Prepare and returns Wanted SQL query.
 class Query
 {
-    private function buildQuery( $querySelect,$tabelName,string $insertOrUpdateAct="",string $userName="" ) 
+    private static function buildQuery( $querySelect,$tabelName,string $insertOrUpdateAct="",string $userName="" ) 
     {
         switch($querySelect)
         {
@@ -45,14 +45,14 @@ class Query
         return self::prep($dbConn,$query);
     }
 
-    private function insertSelect($insertAction,$tabelName)
+    private static function insertSelect($insertAction,$tabelName)
 	{
         $qrStart="INSERT INTO `$tabelName` ";
 		switch($insertAction)
 		{
 		       case "user":
-			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`, `tempHigh`, `tempLow`, `phHigh`, `phLow`)
-                    VALUES (?, ?, ?, ?, ?, '', '', '', '', '')";
+			      $qString=$qrStart."(`username`, `password`, `firstName`, `lastName`, `email`)
+                    VALUES (?, ?, ?, ?, ?)";
 				break;
 			    case "sensorData":
 				   $qString=$qrStart."(`temp`, `PH`, `level`) VALUES (?, ?, ?)";
@@ -67,7 +67,7 @@ class Query
 		return self::prep($dbConn,$query);      
     }
     
-    private function updateSelect($updateAction,$userName,$tabelName)
+    private static function updateSelect($updateAction,$userName,$tabelName)
 	{
         $qrStart="UPDATE `$tabelName` SET ";
 		switch($updateAction)
