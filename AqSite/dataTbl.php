@@ -41,7 +41,7 @@
     <input type="text" id="wantedDate">
     <input type="submit" value="Submit">
     </form>
-    <a class="forgot" href="settChng.php">Settings Change</a>
+    <a class="forgot" onclick="limitsToSettChngData()" href="settChng.php">Settings Change</a>
 	
 	
 	 

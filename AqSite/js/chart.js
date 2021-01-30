@@ -1,3 +1,25 @@
+var settings = "";
+
+function limitsToSettChngData(){
+    localStorage.setItem("settings",settings);
+}
+
+function dataCropToSettChng(arr){
+    var found=false;
+    var j=0;
+    for(var i=0;i<arr.length;i++){
+        if(arr[i]=="personal"||found==true){
+            found=true;
+            settings+=arr[i];
+        }
+    }
+    settings+=arr[19];
+    // if("personal"=="personal"){
+        console.log(arr);
+    // }
+    console.log(settings);
+}
+
 function dataFilter(arr,wantedDate){
     var newArr="";
     var spitedArr=arr.split(',');
@@ -80,8 +102,10 @@ function change(){
             
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
-        // alert(arr);
+        dataCropToSettChng(arr);
+        
         google.setOnLoadCallback(drawChart);
+
         function drawChart() {
             var options = {
                 title: 'Aquarium',

@@ -37,13 +37,7 @@
 		<img class="closeButton" src="images/closeButton.png " alt="" onclick="closeForm()">
 		
         <?php  
-        require_once('sessionHandler.php');
-		// Checking if some error flag returned from connection_action.php page
-        if($msg=sessionClass::sessionPull(array('flag'),false))
-		{
-		       echo $msg['flag']; // Print the error ocured
-			   sessionClass::sessionUnset('flag');
-		}
+        require_once('AlertOnHTML.php');
 		?>
       <form method='POST' action='connection_action.php'>
         <div>

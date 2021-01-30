@@ -2,14 +2,15 @@
 headers=main-dataTbl,back-indexAq;
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions;
 txt=msg-MessageBank,rules-inputRules;
-tagsNstrings=t-txt,un-uname,m-msg,p-pword,r-rules,u-user,rA-rulesArr,h-headers,mn-main,f-flag,w-wrong,b-back;
+tagsNstrings=t-txt,un-uname,m-msg,p-pword,r-rules,u-user,h-headers,mn-main,f-flag,w-wrong,b-back;
 [settingsChange_action]
 headers=main-dataTbl,agn-settChng;
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions,dateTimeHandler;
-wantedSess=user,rulesArr,msg;
+wantedSess=user,msg;
 tagsNstrings=inc-includeNpath.php,pd-.php,sA-sessArr,u-user,C-Checkbox,
-fA-feedAlert,rA-rulesArr,sCL-settChgeLimits,m-msg,EF-EmptyFieldChangeBadInput,
+fA-feedAlert,m-msg,EF-EmptyFieldChangeBadInput,r-rules,
 NC-NotChoosenChangeBadInput,h-headers,mn-main,a-agn,f-flag,fl-fill,b-<br>,p-ph,t-temp;
+rules=tempMax-30,tempMin-15,phMax-8,phMin-6.5,fnamelnameMaxLen-20;
 [chartData]
 include=dbClass,TextAndMSG,sessionHandler;
 wantedSess=user,msg,feedAlertSkip;
@@ -17,8 +18,9 @@ tagsNstrings=u-user,m-msg,fAS-feedAlertSkip,sA-sessArr;
 [defaultAlarm_set]
 headers=main-dataTbl;
 include=dbClass,sessionHandler;
-wantedSess=user,rulesArr;
-tagsNstrings=rA-rulesArr,dA-defaultAlarms,u-user,sA-sessArr,h-headers,mn-main;
+wantedSess=user;
+tagsNstrings=u-user,sA-sessArr,h-headers,mn-main,r-rules;
+rules=phHigh-7.5,phLow-6.5,tempHigh-25,tempLow-23,feedAlert-2 20:00;
 [forgot_action]
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions;
 txt=msg-MessageBank;

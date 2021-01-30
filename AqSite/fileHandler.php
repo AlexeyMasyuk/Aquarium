@@ -31,8 +31,7 @@ class fileHandler{
         try{
             $cropClass=self::dataCrop();
             $strLine=file_get_contents($path);
-            $split=explode(";",$strLine);
-            $rulesArr=$cropClass->rulesFile_StrToArray($split,$rulesPull);
+            $rulesArr=$cropClass->rulesFile_StrToArray($strLine);
             if(count($rulesArr)>0){
                 return $rulesArr;
             }

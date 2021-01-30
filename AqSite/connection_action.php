@@ -13,7 +13,7 @@ if(isset($_POST[$T['p']])&&isset($_POST[$T['un']]))
 	{
 		$rulesArr=fileHandler::Pull($tagMap[$T['t']][$T['r']]);
 
-		sessionClass::sessionPush(array($T['u']=>$user,$T['m']=>$msg,$T['rA']=>$rulesArr));
+		sessionClass::sessionPush(array($T['u']=>$user,$T['m']=>$msg));
 		header($tagMap[$T['h']][$T['mn']]);
 		exit;
 	}
@@ -22,6 +22,9 @@ if(isset($_POST[$T['p']])&&isset($_POST[$T['un']]))
 		sessionClass::sessionPush(array($T['f']=>$msg->getMessge($T['w'])));
     }
 }
+// echo "<pre>";
+// print_r($tagMap);
+// echo "<pre>";
 	header($tagMap[$T['h']][$T['b']]); // For case POST passed empty or not set
 	exit; 
 ?>

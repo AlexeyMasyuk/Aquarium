@@ -20,7 +20,7 @@ foreach ($_POST as $key=>$val)
             $_POST=dateTimeHandler::defaultFeedTimeAlert($val,$_POST);
         }
         if(strlen($_POST[$val])>0){
-            if($valid=settChgeValidation($val,$_POST[$val],$tagMap[$T['sA']][$T['rA']][$T['sCL']])){
+            if($valid=settChgeValidation($val,$_POST[$val],$tagMap[$T['r']])){ 
                 $dataArr[$val]=$_POST[$val];               
             }
             if(!$valid){
@@ -45,11 +45,6 @@ function badInputMassegeChoose($val,$sessionArr,$T){
         $flagMsg.=$T['b'].$sessionArr[$T['m']]->getMessge($val.$messageName);
     return $flagMsg;
 }
-
-// echo "<pre>";
-// print_r($tagMap);
-// print_r(sessionClass::sessionPull(array('u','rulesArr')));
-// echo "<pre>";
 
 if($notChoosen){
     sessionClass::sessionPush(array($T['f']=>$T['b'].$tagMap[$T['sA']][$T['m']]->getMessge($T['NC'])));  

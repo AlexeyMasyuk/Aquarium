@@ -27,13 +27,7 @@
       <input type="Submit"  value="Sign in">
     </form>
     <?php
-      if(session_status() == PHP_SESSION_NONE){
-        session_start();
-      }
-      if(isset( $_SESSION['flag'])){
-          echo $_SESSION['flag'];
-          unset($_SESSION['flag']);
-      }
+      require_once('AlertOnHTML.php');
       ?>
     </body>
 </html>

@@ -118,7 +118,8 @@ class dbClass
 	{
 		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
 		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
-		"limits"=>""
+		"limits"=>"",
+		"personal"=>""
 	    );
 		$defineAlarmFlag=false;
 		$feedingTime=false;			
@@ -127,6 +128,8 @@ class dbClass
 			$this->connect();
 
 			$alarms=$this->getUserAlarms($this->user->getUserName());
+			$dataArr['personal']=implode(',',$alarms['personal']);
+			unset($alarms['personal']);
 			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTime,$defineAlarmFlag,$msg);
 
 			$stmnt=Query::select($this->connection,$this->user->getUserName(),"select");

@@ -8,7 +8,7 @@
 </head>
 
 
-    <body>
+<body onload="currentSettings()">
         <header>
             <nav class="topnav" id="myTopnav">
                 <a href="dataTbl.php" class="logo"> <img src="images/logo.png"  alt="Logo" /></a>
@@ -18,17 +18,24 @@
             </nav>
       </header>
       <h1>Change Your Settings</h1>
+      <div>
+      <label>Personal: </label>
+      <label class='userSettigs'>FirstName-</label>
+      <label class='userSettigs'>,LastName-</label>
+      <label class='userSettigs'>,UserName-</label>
+      <label class='userSettigs'>,Email-</label>
+      <label> ,Aquarium Settings: </label>
+      <label class='userSettigs'>PH High-</label>
+      <label class='userSettigs'>,PH Low-</label>
+      <label class='userSettigs'>,Temp. High-</label>
+      <label class='userSettigs'>,Temp. Low-</label>
+      <label >Feeding Time Alert</label>
+      </div>
       <button type="button" onclick="openOrClose('personal')">Personal</button>
       <button type="button" onclick="openOrClose('aqua')">Aquarium</button><br>
 
       <?php
-      if(session_status() == PHP_SESSION_NONE){
-        session_start();
-      }
-      if(isset( $_SESSION['flag'])){
-          echo $_SESSION['flag'];
-          unset($_SESSION['flag']);
-      }
+      require_once('AlertOnHTML.php');
       ?>
       <form method='POST' action='settingsChange_action.php'>
         <div id="personal" style="display: none;">

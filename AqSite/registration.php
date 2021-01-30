@@ -37,12 +37,7 @@
             </div>
 			<br/><?php  //Alexey Masyuk,Yulia Berkovich Aquarium Control System
 			       // Checking if some error flag returned from connection_action.php page
-			       session_start();
-                   if(isset($_SESSION['flag']))
-				   {
-				       echo $_SESSION['flag'];   // Print the error ocured
-					   unset($_SESSION['flag']);
-				   }
+			       require_once('AlertOnHTML.php');
 			 ?><br/>
             <div class="column">
                 <form method='POST' action='registration_action.php'>

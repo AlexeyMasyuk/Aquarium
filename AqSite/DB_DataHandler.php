@@ -36,6 +36,12 @@ class DB_DataHandler
 		$alarm[self::$tH]=$row[self::$tH];
 		$alarm[self::$tL]=$row[self::$tL];
 		$alarm[self::$fA]=$row[self::$fA];
+
+		$alarm["personal"]["fname"]=$row["firstName"];
+		$alarm["personal"]["lname"]=$row["lastName"];
+		$alarm["personal"]["uname"]=$row["username"];
+		$alarm["personal"]["email"]=$row["email"];
+		
 		return $alarm;
 	}
 
