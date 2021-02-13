@@ -15,8 +15,8 @@ rules=tempMax-30,tempMin-15,phMax-8,phMin-6.5,fnamelnameMaxLen-20;
 include=dbClass,TextAndMSG,sessionHandler;
 wantedSess=user,msg,feedAlertSkip;
 tagsNstrings=u-user,m-msg,fAS-feedAlertSkip,sA-sessArr;
-[defaultAlarm_set]
-headers=main-dataTbl;
+[defaultAlarms]
+headers=main-../dataTbl;
 include=dbClass,sessionHandler;
 wantedSess=user;
 tagsNstrings=u-user,sA-sessArr,h-headers,mn-main,r-rules;

@@ -103,7 +103,6 @@ function change(){
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
         dataCropToSettChng(arr);
-        
         google.setOnLoadCallback(drawChart);
 
         function drawChart() {
@@ -121,7 +120,7 @@ function change(){
 
         toDiv.innerHTML = alarmData;
         };
-        oReq.open("get", "chartData.php", true);
+        oReq.open("get", "chartDataPHP/chartData.php", true);
         oReq.send();
 }
 
