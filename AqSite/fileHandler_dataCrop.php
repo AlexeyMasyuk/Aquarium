@@ -14,6 +14,10 @@ class fileHandler_dataCrop{
             $tmp.=$str[$i];
         }		
         $i++;
+        if ( strpos("//",$tmp)!==false )
+        {
+          $tmp=str_replace( '//','/',$tmp );
+        }  
         array_push($arr,$tmp);
         return $arr;
     }
@@ -44,15 +48,15 @@ class fileHandler_dataCrop{
                 {
                     if(strpos($dataName,"headers")!==false)
                     {
-                        $pageData[$fileName][$dataName][$tagName]="Location:".$val.".php";
+                        $pageData[$fileName][$dataName][$tagName]="Location:../".$val.".php";
                     }
                     else if(strpos($dataName,"include")!==false)
                     {
-                        $pageData[$fileName][$dataName][$tagName]=$val.".php";
+                        $pageData[$fileName][$dataName][$tagName]="../".$val.".php";
                     }
                     else if(strpos($dataName,"txt")!==false)
                     {
-                        $pageData[$fileName][$dataName][$tagName]=$val.".txt";
+                        $pageData[$fileName][$dataName][$tagName]="../".$val.".txt";
                     }
                     else if(strpos($dataName,"rules")!==false)
                     {

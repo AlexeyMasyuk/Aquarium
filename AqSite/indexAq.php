@@ -39,7 +39,7 @@
         <?php  
         require_once('AlertOnHTML.php');
 		?>
-      <form method='POST' action='connection_action.php'>
+      <form method='POST' action='Connection/connection_action.php'>
         <div>
           <input type="text" name="uname" required="">
           <label>username</label>
