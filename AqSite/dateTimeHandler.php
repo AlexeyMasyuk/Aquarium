@@ -17,7 +17,7 @@ class dateTimeHandler{
     public static function defaultFeedTimeAlert($chkboxVal,$POST){
         $tmp=$POST[$chkboxVal."Cycle"]." ";
         $tmp.=$POST[$chkboxVal."Time"];
-        $tmp.=self::feedingDayParameterCalc($feedAlertString,$POST[$chkboxVal."Cycle"]);
+        $tmp.=self::feedingDayParameterCalc("",$POST[$chkboxVal."Cycle"]);
         $POST[$chkboxVal]=$tmp;
         return $POST;
     }

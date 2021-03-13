@@ -36,7 +36,7 @@ foreach ($_POST as $key=>$val)
 }
 
 function badInputMassegeChoose($val,$sessionArr,$T){
-    $messageName="ChangeBadInput";
+    $messageName="BadInput";
     if(strpos($val,$T['p'])!==false)
         $flagMsg.=$T['b'].$sessionArr[$T['m']]->getMessge($T['p'].$messageName);
     else if(strpos($val,$T['t'])!==false)

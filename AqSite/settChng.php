@@ -37,14 +37,14 @@
       <?php
       require_once('AlertOnHTML.php');
       ?>
-      <form method='POST' action='settingsChange_action.php'>
+      <form method='POST' action='SettingsChange/SettingsChange.php'>
         <div id="personal" style="display: none;">
             <label>All Personal Settings</label>
             <input type="checkbox" id="allP" onchange="openAllTextBox(value,'personalInput')" value="allP"><br>
     
             <label>email</label>
             <input type="checkbox" class="personalInput" name="emailCheckbox" onclick="openOrClose('email')" value="email">
-            <input type="text" class="personalInput" id="email" name="email" style="display: none;"><br>
+            <input type="email" class="personalInput" id="email" name="email" style="display: none;"><br>
     
             <label>Password</label>
             <input type="checkbox" class="personalInput" name="passCheckbox" onchange="openOrClose('pass')" value="pass">

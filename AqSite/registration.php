@@ -40,7 +40,7 @@
 			       require_once('AlertOnHTML.php');
 			 ?><br/>
             <div class="column">
-                <form method='POST' action='Registration/registration_action.php'>
+                <form method='POST' action='Registration/Registration.php'>
                     <label for="fname">First Name</label>
                     <input type="text" id="fname" name="fname" placeholder="Your name.." required="">
                     <label for="lname">Last Name</label>
@@ -50,7 +50,7 @@
                     <label>Username</label>
                     <input type="text" name="uname" placeholder="Your username.." required="">
 					 <label>Password</label>
-                    <input type="text" name="pword" placeholder="Your password.." required="">
+                    <input type="text" name="pass" placeholder="Your password.." required="">
                     <input type="submit" value="Submit">
                 </form>
             </div>
