@@ -25,4 +25,6 @@ class Connection extends Page{
         $this->MoveTo($tm[$t['h']][$t['b']]);
     }
 }
+$con=new Connection(basename(__FILE__,".php"));
+$con->ConnectionValidation()
 ?>

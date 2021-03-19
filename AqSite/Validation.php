@@ -10,7 +10,7 @@ class Validation
             return self::aquaParamCheck($key,$inp,$msg,$rulesArr);
         }
         else if($key=="fname" || $key=="lname"){
-            if ((ctype_alpha(str_replace(' ', '', $inp)) === false) || !(strlen($inp) > $rulesArr['fnamelnameMaxLen']))
+            if ((ctype_alpha(str_replace(' ', '', $inp)) !== true) || (strlen($inp) > $rulesArr['fnamelnameMaxLen']))
                 return $msg->getMessge($key)."<br>";
         }
         else if($key == "pass"){

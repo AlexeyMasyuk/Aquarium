@@ -11,4 +11,6 @@ class DefaultAlarms extends Page{
         $this->MoveTo($tm[$t['h']][$t['mn']]);
     }
 }
+$defaultAlarms=new DefaultAlarms(basename(__FILE__,".php"));
+$defaultAlarms->DefaultAlarmsSet();
 ?>

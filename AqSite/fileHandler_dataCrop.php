@@ -37,50 +37,59 @@ class fileHandler_dataCrop{
 
     //-------------------------------- Messege Func End ----------------------------//
 
-    //----------------------------------- Rules Func -------------------------------//
+    //--------------------------------- PageTagMap Func ----------------------------//
+
+    private function DataRules($dataArr,$fileName,$pageData,$dataName){
+        foreach($dataArr as $tagName=>$val)
+        {
+            if(strpos($dataName,"headers")!==false)
+            {
+                $pageData[$fileName][$dataName][$tagName]="Location:../".$val.".php";
+            }
+            else if(strpos($dataName,"include")!==false)
+            {
+                $pageData[$fileName][$dataName][$tagName]="../".$val.".php";
+            }
+            else if(strpos($dataName,"txt")!==false)
+            {
+                $pageData[$fileName][$dataName][$tagName]="../".$val.".txt";
+            }
+            else if(strpos($dataName,"rules")!==false)
+            {
+                if(strpos($dataName,"feedAlert")!==false)
+                {
+                    $pageData[$fileName][$dataName][$tagName]=dateTimeHandler::feedingDayParameterCalc($val);
+                } 
+            }
+        }
+        return $pageData;
+    }
 
     private function rulesFile_preNpostTagAdd($pageData){
         foreach($pageData as $fileName=>$pageDataArr)
         {
             foreach($pageDataArr as $dataName=>$dataArr)
             {
-                foreach($dataArr as $tagName=>$val)
-                {
-                    if(strpos($dataName,"headers")!==false)
-                    {
-                        $pageData[$fileName][$dataName][$tagName]="Location:../".$val.".php";
-                    }
-                    else if(strpos($dataName,"include")!==false)
-                    {
-                        $pageData[$fileName][$dataName][$tagName]="../".$val.".php";
-                    }
-                    else if(strpos($dataName,"txt")!==false)
-                    {
-                        $pageData[$fileName][$dataName][$tagName]="../".$val.".txt";
-                    }
-                    else if(strpos($dataName,"rules")!==false)
-                    {
-                        if(strpos($dataName,"feedAlert")!==false)
-                        {
-                            $pageData[$fileName][$dataName][$tagName]=dateTimeHandler::feedingDayParameterCalc($val);
-                        }
-                        
-                    }
-                }
+                $pageData=$this->DataRules($dataArr,$fileName,$pageData,$dataName);
             }
         }
         return $pageData;
     }
-    
+
+    public function HeaderSplit($val,&$key)
+    {
+        $pageNamesSplit=explode(']',$val);	
+        $key=substr($pageNamesSplit[0], strpos($pageNamesSplit[0],"[")+1,strlen($pageNamesSplit[0])-1);
+        return $pageNamesSplit[1];
+    }
+
     public function rulesFile_StrToArray($read){
         $firstSplit=explode(';',$read);
         foreach($firstSplit as $val)
         {
             if(strpos($val,'[')!==false)
             {
-                $pageNamesSplit=explode(']',$val);	
-                $key=substr($pageNamesSplit[0], strpos($pageNamesSplit[0],"[")+1,strlen($pageNamesSplit[0])-1);
-                $val=$pageNamesSplit[1];
+                $val=$this->HeaderSplit($val,$key);
             }
             if(strpos($val,'=')!==false)
             {

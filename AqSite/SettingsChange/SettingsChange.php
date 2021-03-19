@@ -1,7 +1,6 @@
 <?php
 require_once('../Page/Page.php');
 class SettingsChange extends Page{
-    private $sql;
 
     public function SettingsChangeAct($postArr){
         $tm=$this->tagMap;
@@ -11,7 +10,6 @@ class SettingsChange extends Page{
 
         $notChoosen=true;
         $failStr="";
-        print_r($postArr);
         foreach ($postArr as $key=>$val)
         {
             if(strpos($key,$t['C'])){
@@ -20,32 +18,32 @@ class SettingsChange extends Page{
                     $postArr=dateTimeHandler::defaultFeedTimeAlert($val,$postArr);
                 }
                 $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$r,$msg,true))!==true)?$tmp:"";
-                print_r(gettype($failStr));
                 if($failStr===""){
                     $dataArr[$val]=$postArr[$val];
                 }
             }
         }
-
-        if (isset($dataArr)){
-            self::ChangeSettings($dataArr);
+        if (isset($dataArr)&&!$notChoosen){
+            $this->ChangeSettings($dataArr,$tm,$t);
         }
-        self::BadInp($failStr,$notChoosen,$msg);
+        $this->BadInp($failStr,$notChoosen,$msg,$tm,$t);
         
     }
 
-    public function ChangeSettings($dataArr){     
+    public function ChangeSettings($dataArr,$tm,$t){    
+        $sql=new dbClass($tm[$t['sA']][$t['u']]);
         foreach ($dataArr as $key=>$val)
-             $sql->change((strpos('pass',$key)!==false)?$val=passHash($val):$val,$key);
-        self::MoveTo($tm[$t['h']][$t['mn']]);
+            $sql->change((strpos('pass',$key)!==false)?$val=passHash($val):$val,$key);
+        $this->MoveTo($tm[$t['h']][$t['mn']]);
     }
 
-    public function BadInp($failStr,$notChoosen,$msg){     
+    public function BadInp($failStr,$notChoosen,$msg,$tm,$t){
+
         if($notChoosen){
             $failStr=$msg->getMessge("NC");
         }
         sessionClass::sessionPush(array($t['f']=>$failStr));
-        self::MoveTo($tm[$t['h']][$t['mn']]);
+        $this->MoveTo($tm[$t['h']][$t['a']]);
     }
 }
 $stCng=new SettingsChange(basename(__FILE__,".php"));

@@ -1,4 +1,4 @@
-[connection_action]
+[Connection]
 headers=main-dataTbl,back-indexAq;
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions;
 txt=msg-MessageBank,rules-inputRules;
@@ -7,8 +7,7 @@ tagsNstrings=t-txt,un-uname,m-msg,p-pword,r-rules,u-user,h-headers,mn-main,f-fla
 headers=main-dataTbl,agn-settChng;
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions,dateTimeHandler,Validation;
 wantedSess=user,msg;
-tagsNstrings=inc-includeNpath.php,pd-.php,sA-sessArr,u-user,C-Checkbox,
-fA-feedAlert,m-msg,EF-EmptyField,r-rules,
+tagsNstrings=sA-sessArr,u-user,C-Checkbox,fA-feedAlert,m-msg,EF-EmptyField,r-rules,
 NC-NotChoosen,h-headers,mn-main,a-agn,f-flag,fl-fill,b-<br>,p-ph,t-temp;
 rules=tempMax-30,tempMin-15,phMax-8,phMin-6.5,fnamelnameMaxLen-20;
 [chartData]
@@ -21,7 +20,7 @@ include=dbClass,sessionHandler;
 wantedSess=user;
 tagsNstrings=u-user,sA-sessArr,h-headers,mn-main,r-rules;
 rules=phHigh-7.5,phLow-6.5,tempHigh-25,tempLow-23,feedAlert-2 20:00;
-[forgot_action]
+[Forget]
 include=dbClass,TextAndMSG,sessionHandler,userClass,functions;
 txt=msg-MessageBank;
 headers=agn-forgot,back-indexAq;
