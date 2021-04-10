@@ -48,11 +48,11 @@ class fileHandler_dataCrop{
             }
             else if(strpos($dataName,"include")!==false)
             {
-                $pageData[$fileName][$dataName][$tagName]="../".$val.".php";
+                $pageData[$fileName][$dataName][$tagName]="../Classes/".$val.".php";
             }
             else if(strpos($dataName,"txt")!==false)
             {
-                $pageData[$fileName][$dataName][$tagName]="../".$val.".txt";
+                $pageData[$fileName][$dataName][$tagName]="../TextData/".$val.".txt";
             }
             else if(strpos($dataName,"rules")!==false)
             {

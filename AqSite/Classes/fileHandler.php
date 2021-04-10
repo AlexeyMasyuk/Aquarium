@@ -27,7 +27,7 @@ class fileHandler{
         }
     }
     
-    public static function Pull($path,$rulesPull=true){
+    public static function Pull($path){
         try{
             $cropClass=self::dataCrop();
             $strLine=file_get_contents($path);

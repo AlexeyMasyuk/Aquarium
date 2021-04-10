@@ -37,7 +37,7 @@
       <?php
       require_once('AlertOnHTML.php');
       ?>
-      <form method='POST' action='SettingsChange/SettingsChange.php'>
+      <form method='POST' action='PageActClasses/SettingsChange.php'>
         <div id="personal" style="display: none;">
             <label>All Personal Settings</label>
             <input type="checkbox" id="allP" onchange="openAllTextBox(value,'personalInput')" value="allP"><br>

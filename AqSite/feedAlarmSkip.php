@@ -1,5 +1,5 @@
 <?php
-require_once('sessionHandler.php');
+require_once('Classes/sessionHandler.php');
 
 sessionClass::sessionPush(array('feedAlertSkip'=>true));
 

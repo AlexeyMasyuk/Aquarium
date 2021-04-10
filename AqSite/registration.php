@@ -40,7 +40,7 @@
 			       require_once('AlertOnHTML.php');
 			 ?><br/>
             <div class="column">
-                <form method='POST' action='Registration/Registration.php'>
+                <form method='POST' action='PageActClasses/Registration.php'>
                     <label for="fname">First Name</label>
                     <input type="text" id="fname" name="fname" placeholder="Your name.." required="">
                     <label for="lname">Last Name</label>

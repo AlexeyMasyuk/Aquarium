@@ -1,5 +1,5 @@
 <?php
-require_once('../Page/Page.php');
+require_once('ActWrap.php');
 class DefaultAlarms extends Page{
     public function DefaultAlarmsSet(){
         $tm=$this->tagMap;

@@ -6,7 +6,7 @@ _fileFail_$Faild to create file. Please try again .$
 _uname_$User name  cannot start with a number, choose other one.$
 _settingsEmptyField_$Please fill all the choosen field you want to change .$
 _settingsNotChoosen_$Press on Personal or Aquarium and select settings to update$
-_setDefaultAlarms_$<button type='submit' onclick='DefaultAlarms/defaultAlarm.php'>Set to default</button>$
+_setDefaultAlarms_$<button type='submit' onclick='PageActClasses/defaultAlarm.php'>Set to default</button>$
 _fname_$First Name must be up to 20 characters (contain  letters only)$
 _lname_$Last Name must be up to 20 characters (contain  letters only)$
 _email_$Wrong email format$
@@ -18,7 +18,7 @@ _EmptyField_$Please fill all the choosen field you want to change .$
 _NotChoosen_$Press on Personal or Aquarium and select settings to update.$
 _forgotNoUserMatch_$No such user$
 _DBnoAlarms_$Perfect no alarms$
-_DBalarmsNotDefined_$<p>Alarm values not defined.<br><a href='DefaultAlarms\defaultAlarms.php'>Setto default<a><p>$
+_DBalarmsNotDefined_$<p>Alarm values not defined.<br><a href='PageActClasses\defaultAlarms.php'>Setto default<a><p>$
 _DBalChkTxtArrStrt_$? Alarm Occure at $
 _DBalChkTxtArrMidd_$ and the ? was $
 _DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='feedAlarmSkip.php'>Return To Alarms</a>$                                                     

@@ -1,5 +1,5 @@
 <?php
-require_once('../Page/Page.php');
+require_once('ActWrap.php');
 class SettingsChange extends Page{
 
     public function SettingsChangeAct($postArr){
@@ -7,7 +7,7 @@ class SettingsChange extends Page{
         $t=$this->T;
         $msg=$tm[$t['sA']][$t['m']]; 
         $r=$tm[$t['r']];
-
+        
         $notChoosen=true;
         $failStr="";
         foreach ($postArr as $key=>$val)
@@ -19,11 +19,13 @@ class SettingsChange extends Page{
                 }
                 $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$r,$msg,true))!==true)?$tmp:"";
                 if($failStr===""){
+
                     $dataArr[$val]=$postArr[$val];
                 }
             }
         }
-        if (isset($dataArr)&&!$notChoosen){
+
+        if (isset($dataArr)&&!$notChoosen&&$failStr===""){
             $this->ChangeSettings($dataArr,$tm,$t);
         }
         $this->BadInp($failStr,$notChoosen,$msg,$tm,$t);
@@ -33,7 +35,7 @@ class SettingsChange extends Page{
     public function ChangeSettings($dataArr,$tm,$t){    
         $sql=new dbClass($tm[$t['sA']][$t['u']]);
         foreach ($dataArr as $key=>$val)
-            $sql->change((strpos('pass',$key)!==false)?$val=passHash($val):$val,$key);
+            $sql->change((strpos('pass',$key)!==false)?$val=PnM::passHash($val):$val,$key);
         $this->MoveTo($tm[$t['h']][$t['mn']]);
     }
 

@@ -14,10 +14,6 @@ function dataCropToSettChng(arr){
         }
     }
     settings+=arr[19];
-    // if("personal"=="personal"){
-        console.log(arr);
-    // }
-    console.log(settings);
 }
 
 function dataFilter(arr,wantedDate){
@@ -102,6 +98,7 @@ function change(){
             
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText.split('"');
+        alert(arr);
         dataCropToSettChng(arr);
         google.setOnLoadCallback(drawChart);
 
@@ -120,7 +117,7 @@ function change(){
 
         toDiv.innerHTML = alarmData;
         };
-        oReq.open("get", "chartDataPHP/chartData.php", true);
+        oReq.open("get", "PageActClasses/chartData.php", true);
         oReq.send();
 }
 

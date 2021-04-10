@@ -1,7 +1,3 @@
-<?php  
-        require_once('validAcsses.php');
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +35,7 @@
         <?php  
         require_once('AlertOnHTML.php');
 		?>
-      <form method='POST' action='Connection/Connection.php'>
+      <form method='POST' action='PageActClasses/Connection.php'>
         <div>
           <input type="text" name="uname" required="">
           <label>username</label>

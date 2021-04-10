@@ -1,5 +1,5 @@
 <?php
-require_once('../Page/Page.php');
+require_once('ActWrap.php');
 class Connection extends Page{
 	public function ConnectionValidation()
 	{   
@@ -10,10 +10,9 @@ class Connection extends Page{
         {
             $user=new User($_POST[$t['un']],$_POST[$t['p']]); // Creating new object to save user entered data
             $sql=new dbClass($user);                         // Creating new object to connect to DataBase 
-            if($sql->userExists())   // If entered data exists in DataBase
-            {
-                // $rulesArr=fileHandler::Pull($tagMap[$t['t']][$t['r']]);
-        
+
+            if($sql->userExists($t['up']))   // If entered data exists in DataBase
+            {       
                 sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
                 $this->MoveTo($tm[$t['h']][$t['mn']]);
             }

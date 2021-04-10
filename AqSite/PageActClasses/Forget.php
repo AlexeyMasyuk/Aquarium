@@ -1,5 +1,5 @@
 <?php
-require_once('../Page/Page.php');
+require_once('ActWrap.php');
 class Forget extends Page{
 	public function ForgetAct()
 	{   
@@ -14,7 +14,7 @@ class Forget extends Page{
           
           if($mail=$sql->userExists($t['ft'])) // If entered username NOT exists in DataBase
           {
-                $sql->change(newPass($mail),$t['p']);
+                $sql->change(PnM::newPass($mail),$t['p']);
                 $this->MoveTo($tm[$t['h']][$t['b']]);
           }
           else    // If entered username already exists in DataBase show relevant massege 

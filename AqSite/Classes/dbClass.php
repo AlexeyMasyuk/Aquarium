@@ -1,9 +1,7 @@
 <?php //Alexey Masyuk,Yulia Berkovich Aquarium Control System
-require_once('userClass.php');
-require_once('Querys.php');
-require_once('TextAndMSG.php');
-require_once('DB_DataHandler.php');
-
+require_once('extractData.php');
+global $extracted;
+$extracted = Init(basename(__FILE__,".php"));
 // Class to handle all worck with SQL DataBase
 class dbClass
 {
@@ -13,52 +11,64 @@ class dbClass
 	private $serverUser;
 	private $user;
 	private $pass;
-	private $helpingClass;           
+	private $helpingClass;
+	private $tagsNstrings;          
 	private $opt=array(
 	PDO::ATTR_ERRMODE   =>PDO::ERRMODE_EXCEPTION,
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
 	private $connection;
 	
-	public function __construct($userCls,string $host="localhost", string $db = "test",string $charset="utf8", string $serverUser = "root", string $pass = "")
-						{
-							$this->host = $host;
-							$this->db = $db;
-							$this->charset = $charset;
-							$this->serverUser = $serverUser;
-							$this->pass = $pass;
-							$this->user = $userCls;
-							$this->helpingClass = new DB_DataHandler();
-						}
+	public function __construct($userCls)
+		{
+			global $extracted;
+			$this->tagsNstrings = $t = $extracted['tagsNstrings'];
+			$cred=$extracted[$t['c']];
+			unset($extracted);
+			$this->host = $cred[$t['h']];
+			$this->db = $cred[$t['d']];
+			$this->charset = $cred[$t['ch']];
+			$this->serverUser = $cred[$t['su']];
+			$this->pass = $cred[$t['p']];
+			$this->user = $userCls;
+			$this->helpingClass = new DB_DataHandler();					
+		}
 
 	private function connect()  //  Connecting to Data Base
 	{
-	$dns = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
-	$this->connection = new PDO($dns, $this->serverUser, $this->pass, $this->opt);
+		$dns = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
+		$this->connection = new PDO($dns, $this->serverUser, $this->pass, $this->opt);
 	}
 
 	public function disconnect()
 	{
-	$this->connection = null;
+		$this->connection = null;
+	}
+
+	private function init(){
+		$this->connect();
+		return $this->tagsNstrings;
 	}
 
     // Function checking if given user Object username is exists in DataBase.
 	// Can check if only username exists if onlyUser string given
     // or username and password if no string sended
 	// Returning true or false 
-	public function userExists(String $act="userAndPass")
+	public function userExists($act)
 	{
 		try
 		{
-			$this->connect();
-			$stmnt=Query::select($this->connection,"userpass");
+			$t = $this->init();
+
+			$stmnt=Query::select($this->connection,$t['up']);
 			$stmnt->execute(array($this->user->getUserName()));
+
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-				if($act=="userAndPass"&&$row["username"]==$this->user->getUserName()&&password_verify($this->user->getPassword(),$row["password"]))						    
+				if($act==$t['uap']&&$row[$t['u']]==$this->user->getUserName()&&password_verify($this->user->getPassword(),$row[$t['ps']]))						    
 					return $row;
-				else if($act=="onlyUser"&&$row["username"]==$this->user->getUserName())				
+				else if($act==$t['ou']&&$row[$t['u']]==$this->user->getUserName())				
 					return true;
-				else if($act=="forgot"&&$row["username"]==$this->user->getUserName())				
-					return $row["email"];
+				else if($act==$t['f']&&$row[$t['u']]==$this->user->getUserName())				
+					return $row[$t['e']];
 			}			
 			return false;
 		}catch(Exception $e){
@@ -79,9 +89,10 @@ class dbClass
 	{
 		try
 		{
-			$this->connect();
+			$t = $this->init();
+
 			$stmnt1=Query::TableCreate($this->connection,$this->user->getUserName());
-			$stmnt2=Query::insert($this->connection,"userpass");
+			$stmnt2=Query::insert($this->connection,$t['up']);
 			$userArr=array(
 				$this->user->getUserName(),
 				$this->user->getPassword(),
@@ -103,10 +114,10 @@ class dbClass
 		}
 	}
 
-	public function getUserAlarms()
+	public function getUserAlarms($t)
 	{
-		$alarm=array('phHigh'=>"",'phLow'=>"",'tempHigh'=>"",'tempLow'=>"");
-		$stmnt=Query::select($this->connection,"userpass");
+		$alarm=array($t['ph']=>"",$t['pl']=>"",$t['th']=>"",$t['tl']=>"");
+		$stmnt=Query::select($this->connection,$t['up']);
 		$stmnt->execute(array($this->user->getUserName()));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
 			$alarm=$this->helpingClass->UserAlarms_DataArrange($alarm,$row);
@@ -116,23 +127,21 @@ class dbClass
 
 	public function chartQuery($msg,$feedAlertSkip=false)
 	{
-		$dataArr=array('Temp'=>"",'PH'=>"",'level'=>"",
-		'alarms'=>$msg->getMessge("DBalarmsNotDefined"),
-		"limits"=>"",
-		"personal"=>""
-	    );
 		$defineAlarmFlag=false;
 		$feedingTime=false;			
 		try 
 		{
-			$this->connect();
+			$t = $this->init();
 
-			$alarms=$this->getUserAlarms($this->user->getUserName());
-			$dataArr['personal']=implode(',',$alarms['personal']);
-			unset($alarms['personal']);
+			$dataArr=array($t['T']=>"",$t['P']=>"",$t['l']=>"",
+			$t['a']=>$msg->getMessge($t['nd']),$t['lt']=>"",$t['pr']=>"");
+
+			$alarms=$this->getUserAlarms($t);
+			$dataArr[$t['pr']]=implode(',',$alarms[$t['pr']]);
+			unset($alarms[$t['pr']]);
 			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTime,$defineAlarmFlag,$msg);
 
-			$stmnt=Query::select($this->connection,$this->user->getUserName(),"select");
+			$stmnt=Query::select($this->connection,$this->user->getUserName(),$t['s']);
 			$stmnt->execute(array());
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
 				$dataArr=$this->helpingClass->chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTime,$defineAlarmFlag,$msg);
@@ -150,8 +159,8 @@ class dbClass
 	{
 		try
 	    {
-			$this->connect();
-			$stmnt=Query::update($this->connection,"userpass",$this->user->getUserName(),$whatToChange);
+			$t = $this->init();
+			$stmnt=Query::update($this->connection,$t['up'],$this->user->getUserName(),$whatToChange);
 			$stmnt->execute(array($data));
 			return true;
 	    } catch (Exception $e) {

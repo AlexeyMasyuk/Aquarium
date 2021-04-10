@@ -19,7 +19,7 @@
             <a id="menu" href="#" class="icon">&#9776;</a>
         </nav>
     </header>
-    <form style="margin-top:20%;" method='POST' action='Forget/Forget.php'>	  
+    <form style="margin-top:20%;" method='POST' action='PageActClasses/Forget.php'>	  
       <div>
         <label>username</label>
         <input type="text" name="uname" required="">

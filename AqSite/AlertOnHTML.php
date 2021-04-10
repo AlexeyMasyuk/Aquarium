@@ -1,5 +1,5 @@
 <?php
-require_once('sessionHandler.php');
+require_once('Classes/sessionHandler.php');
 // Checking if some error flag returned from connection_action.php page
 if($msg=sessionClass::sessionPull(array('flag'),false))
 {
