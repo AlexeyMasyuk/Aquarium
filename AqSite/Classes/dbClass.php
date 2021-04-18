@@ -2,6 +2,7 @@
 require_once('extractData.php');
 global $extracted;
 $extracted = Init(basename(__FILE__,".php"));
+
 // Class to handle all worck with SQL DataBase
 class dbClass
 {
@@ -21,6 +22,7 @@ class dbClass
 	public function __construct($userCls)
 		{
 			global $extracted;
+
 			$this->tagsNstrings = $t = $extracted['tagsNstrings'];
 			$cred=$extracted[$t['c']];
 			unset($extracted);

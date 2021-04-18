@@ -5,34 +5,28 @@ class dateTimeHandler{
         return $thpTime->format($formatTagStr);
     }
 
-    public static function feedingDayParameterCalc($feedAlertString,$feedCycleVal=null){
-        if($feedCycleVal==null){
-            $tmpArr=explode(' ',$feedAlertString);
-            $feedCycleVal=$tmpArr[0];
-        }
-        $feedAlertString.= " ".self::getTime('d')%intval($feedCycleVal);
-        return $feedAlertString;
+    public static function feedingAlarmSet($feedCycleParam){
+		$thpTime=new DateTime();
+		$feedStr=$thpTime->format('d-m-Y').' '.$feedCycleParam;
+        return $feedStr;
+		
     }
 
-    public static function defaultFeedTimeAlert($chkboxVal,$POST){
-        $tmp=$POST[$chkboxVal."Cycle"]." ";
-        $tmp.=$POST[$chkboxVal."Time"];
-        $tmp.=self::feedingDayParameterCalc("",$POST[$chkboxVal."Cycle"]);
-        $POST[$chkboxVal]=$tmp;
-        return $POST;
-    }
-
-    public static function FeedAlertCheck($feedRulesArr){
-        $TF='H:i'; // Time Format
-        $myTime = new DateTime($feedRulesArr[1]);
-        $endTime=(new DateTime($feedRulesArr[1]))->add(new DateInterval('PT' . 30 . 'M'));
-        $now=self::getTime($TF);
-        if ($now>=$myTime->format($TF)&&$now<$endTime->format($TF)) {
-            if(self::getTime('d')%intval($feedRulesArr[0])==$feedRulesArr[2]){
-                return true;
-            }
-        }
-        return false;
-    }
+    public static function FAC($feedAlertStr){
+		$FAS=explode(' ',$feedAlertStr);
+		if(isset($FAS[1])){
+			if($FAS[1]=='1'){
+				return true;
+			}
+			$now = new DateTime();
+			$stored = new DateTime(explode(' ',$feedAlertStr)[0]);
+	
+			$diff=$now->diff($stored);
+			if(intval($diff->format("%a")%2==0)){
+				return true;
+			}
+		}
+	return false;		
+	}
 }
 ?>

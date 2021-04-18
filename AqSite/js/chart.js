@@ -114,8 +114,9 @@ function change(){
         }
         var toDiv = document.getElementById('alarms_div');
         var alarmData = arr[15];
+        alarmDiv=alarmData.replace(/\\/g, "");
 
-        toDiv.innerHTML = alarmData;
+        toDiv.innerHTML = alarmDiv;
         };
         oReq.open("get", "PageActClasses/chartData.php", true);
         oReq.send();

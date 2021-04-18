@@ -12,7 +12,8 @@ class Connection extends Page{
             $sql=new dbClass($user);                         // Creating new object to connect to DataBase 
 
             if($sql->userExists($t['up']))   // If entered data exists in DataBase
-            {       
+            {   
+                $user->PassDel(); 
                 sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
                 $this->MoveTo($tm[$t['h']][$t['mn']]);
             }

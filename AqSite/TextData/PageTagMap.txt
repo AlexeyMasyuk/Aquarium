@@ -20,13 +20,13 @@ include=dbClass,TextAndMSG,sessionHandler;
 wantedSess=user,msg,feedAlertSkip;
 tagsNstrings=u-user,m-msg,fAS-feedAlertSkip,sA-sessArr;
 
-[defaultAlarms]
+[da]
 
-headers=main-../dataTbl;
+headers=main-dataTbl;
 include=dbClass,sessionHandler;
 wantedSess=user;
 tagsNstrings=u-user,sA-sessArr,h-headers,mn-main,r-rules;
-rules=phHigh-7.5,phLow-6.5,tempHigh-25,tempLow-23,feedAlert-2 20:00;
+rules=phHigh-7.5,phLow-6.5,tempHigh-25,tempLow-23,feedAlert-2;
 
 [Forget]
 

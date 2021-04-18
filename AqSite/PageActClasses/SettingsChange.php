@@ -10,12 +10,14 @@ class SettingsChange extends Page{
         
         $notChoosen=true;
         $failStr="";
+        
         foreach ($postArr as $key=>$val)
         {
             if(strpos($key,$t['C'])){
                 $notChoosen=false;
                 if(strpos($key,$t['fA'])!==false){
-                    $postArr=dateTimeHandler::defaultFeedTimeAlert($val,$postArr);
+                    $tmp=dateTimeHandler::feedingAlarmSet($postArr[$val]);
+                    $postArr[$val]=$tmp;
                 }
                 $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$r,$msg,true))!==true)?$tmp:"";
                 if($failStr===""){
@@ -24,7 +26,6 @@ class SettingsChange extends Page{
                 }
             }
         }
-
         if (isset($dataArr)&&!$notChoosen&&$failStr===""){
             $this->ChangeSettings($dataArr,$tm,$t);
         }
@@ -35,7 +36,9 @@ class SettingsChange extends Page{
     public function ChangeSettings($dataArr,$tm,$t){    
         $sql=new dbClass($tm[$t['sA']][$t['u']]);
         foreach ($dataArr as $key=>$val)
-            $sql->change((strpos('pass',$key)!==false)?$val=PnM::passHash($val):$val,$key);
+            {
+                $sql->change((strpos('pass',$key)!==false)?$val=PnM::passHash($val):$val,$key);
+            }
         $this->MoveTo($tm[$t['h']][$t['mn']]);
     }
 

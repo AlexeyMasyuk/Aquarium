@@ -55,10 +55,10 @@ class fileHandler_dataCrop{
                 $pageData[$fileName][$dataName][$tagName]="../TextData/".$val.".txt";
             }
             else if(strpos($dataName,"rules")!==false)
-            {
-                if(strpos($dataName,"feedAlert")!==false)
+            {      
+                if(strpos($tagName,"feedAlert")!==false)
                 {
-                    $pageData[$fileName][$dataName][$tagName]=dateTimeHandler::feedingDayParameterCalc($val);
+                    $pageData[$fileName][$dataName][$tagName]=dateTimeHandler::feedingAlarmSet($val);
                 } 
             }
         }

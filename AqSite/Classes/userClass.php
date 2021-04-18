@@ -24,6 +24,11 @@ class User
 	public function getUserName(){return $this->userName;}
 	public function getPassword(){return $this->password;}
 	public function getEmail(){return $this->email;}
+
+	public function PassDel(){
+		$this->password = null;
+		unset($this->password);
+	}
 	
 }
 ?>					
