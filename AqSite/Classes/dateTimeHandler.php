@@ -13,19 +13,24 @@ class dateTimeHandler{
     }
 
     public static function FAC($feedAlertStr){
-		$FAS=explode(' ',$feedAlertStr);
-		if(isset($FAS[1])){
-			if($FAS[1]=='1'){
-				return true;
+		try{
+			$FAS=explode(' ',$feedAlertStr);
+			if(isset($FAS[1])){
+				if($FAS[1]=='1'){
+					return true;
+				}
+				$now = new DateTime();
+				$stored = new DateTime(explode(' ',$feedAlertStr)[0]);
+		
+				$diff=$now->diff($stored);
+				if(intval($diff->format("%a")%2==0)){
+					return true;
+				}
 			}
-			$now = new DateTime();
-			$stored = new DateTime(explode(' ',$feedAlertStr)[0]);
-	
-			$diff=$now->diff($stored);
-			if(intval($diff->format("%a")%2==0)){
-				return true;
-			}
+		}catch(Exception $e){
+			return false;
 		}
+
 	return false;		
 	}
 }

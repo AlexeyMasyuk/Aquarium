@@ -97,8 +97,13 @@ function change(){
         oReq.onload = function() {
             
         google.load("visualization", "1", {packages:["corechart"]});
-        var arr = this.responseText.split('"');
-        alert(arr);
+        var arr = this.responseText;
+        
+        if(arr.includes("Fatal error")){
+            //alert(arr);
+            window.location.replace("indexAq.php");
+        }
+        arr = this.responseText.split('"');
         dataCropToSettChng(arr);
         google.setOnLoadCallback(drawChart);
 

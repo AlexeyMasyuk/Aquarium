@@ -44,10 +44,13 @@ class DB_DataHandler extends extractData
 
 	public function chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,&$feedingTime,&$defineAlarmFlag,$msg){
 		$t = $this->ClassData['tagsNstrings'];
+	
 		if(strlen($alarms[$t['ph']])>0 && strlen($alarms[$t['pl']])>0 && strlen($alarms[$t['th']])>0 && strlen($alarms[$t['tl']])>0 && strlen($alarms[$t['fA']])>0){
 			$defineAlarmFlag=true;				
 			$dataArr[$t['lt']]=implode(',',$alarms);
+
 			if(!$feedAlertSkip){
+
 				if($feedingTime=dateTimeHandler::FAC($alarms[$t['fA']])){
 					$dataArr[$t['a']]=$msg->getMessge($t['ft']);
 				}

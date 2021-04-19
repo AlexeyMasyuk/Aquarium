@@ -133,6 +133,7 @@ class dbClass
 		$feedingTime=false;			
 		try 
 		{
+
 			$t = $this->init();
 
 			$dataArr=array($t['T']=>"",$t['P']=>"",$t['l']=>"",
@@ -141,6 +142,7 @@ class dbClass
 			$alarms=$this->getUserAlarms($t);
 			$dataArr[$t['pr']]=implode(',',$alarms[$t['pr']]);
 			unset($alarms[$t['pr']]);
+
 			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTime,$defineAlarmFlag,$msg);
 
 			$stmnt=Query::select($this->connection,$this->user->getUserName(),$t['s']);
@@ -149,6 +151,7 @@ class dbClass
 				$dataArr=$this->helpingClass->chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTime,$defineAlarmFlag,$msg);
 			}
 			$dataArr=$this->helpingClass->chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTime,$msg);
+
 			return $dataArr;
 		} catch (Exception $e) {
 			$this->disconnect();
