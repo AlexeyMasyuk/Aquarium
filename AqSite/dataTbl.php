@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="styles/st_dataTbl.css">
  </head>
  
- <body onload="change()">
+ <body onload="openSelection('week')">
   <header>
         <nav class="topnav" id="myTopnav">
             <a href="dataTbl.php" class="logo"> <img src="images/logo.png"  alt="Logo" /></a>
@@ -31,16 +31,20 @@
       <option name="select" value="level">Level</option>
     </select>
     <select id="chartFilter" onchange="openSelection(value)" >
+      <option name="select" value="week">Last week</option>
       <option name="select" value="all">All Collected</option>
       <option name="select" value="day">Day</option>
       <option name="select" value="month">Month</option>
     </select>
+    
     <p id="day" class="dayMonth" style="display: none;">Enter DD.MM.YY day format</p>
     <p id="month" class="dayMonth" style="display: none;">Enter MM.YY month format</p>
+    
     <form class="dayMonth" id="dayMonthForm" onsubmit="dateFormatValidation(); return false;" style="display: none;">
     <input type="text" id="wantedDate">
     <input type="submit" value="Submit">
     </form>
+    
     <a class="forgot" onclick="limitsToSettChngData()" href="settChng.php">Settings Change</a>
 	
 	

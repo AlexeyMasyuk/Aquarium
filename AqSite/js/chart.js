@@ -16,6 +16,38 @@ function dataCropToSettChng(arr){
     settings+=arr[19];
 }
 
+function weekFilter(arr){
+    function rev(arrToRev)
+    {
+        var str="";
+    var arrLen=arrToRev.length;
+    for(i=0;i<arrLen;i++) {str+=(arrToRev.pop());}
+    return str;
+}
+    function Union(arrToUnite){
+        var newArr=[];
+        for(i=0;i<arrToUnite.length;i++){
+            newArr.push(arrToUnite[i++]+','+arrToUnite[i]);
+        }
+        return newArr;
+    }
+    
+    var spitedArr=Union(arr.split(','));
+    var tmpArr=[];
+    var daySplit=spitedArr[spitedArr.length-2].split(' ')[0];
+    
+    try{
+    for(i=spitedArr.length-2,j=0;j<7;j++){        
+        for(;spitedArr[i].includes(daySplit);i--){           
+            tmpArr.push(spitedArr[i]+',');       
+        }
+        daySplit=spitedArr[i].split(' ')[0];              
+    }}catch(err){      
+        return rev(tmpArr);
+    }
+    return rev(tmpArr);
+}
+
 function dataFilter(arr,wantedDate){
     var newArr="";
     var spitedArr=arr.split(',');
@@ -27,14 +59,18 @@ function dataFilter(arr,wantedDate){
     return newArr;
 }
 
-function sort(arr){
+function sort(arr,week){
     
     var wantedDate = document.getElementById("wantedDate").value;
-    var newArr="";
-                  
+    var newArr="";        
     if(wantedDate.length==0){
-        newArr=arr;
-    }else{           
+        if(week){
+            newArr=weekFilter(arr);
+        }else{
+            newArr=arr;
+        }
+    }
+    else{           
         newArr=dataFilter(arr,wantedDate);
     }  
     return newArr;
@@ -76,23 +112,23 @@ function strToTableArr(arr,wantedChart,limitsArr){
     return noLimitsChart(data,newArr);
 }
 
-function dataToChartFormat(arr){
+function dataToChartFormat(arr,week){
     var wantedChart = document.getElementById('chart').value;
     var data;
     if (wantedChart == 'PH') {
-        data = strToTableArr(sort(arr[7]),wantedChart,arr[19]);
+        data = strToTableArr(sort(arr[7],week),wantedChart,arr[19]);
     }
     else if (wantedChart == 'Temp') {
-        data = strToTableArr(sort(arr[3]),wantedChart,arr[19]);
+        data = strToTableArr(sort(arr[3],week),wantedChart,arr[19]);
         
     }
     else if (wantedChart == 'level') {
-        data = strToTableArr(sort(arr[11]),wantedChart,arr[19]);
+        data = strToTableArr(sort(arr[11],week),wantedChart,arr[19]);
     }
     return data;
 }
 
-function change(){
+function change(week=false){
         var oReq = new XMLHttpRequest(); // New request object
         oReq.onload = function() {
             
@@ -115,7 +151,7 @@ function change(){
             };
     
              var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-             chart.draw(dataToChartFormat(arr), options);
+             chart.draw(dataToChartFormat(arr,week), options);
         }
         var toDiv = document.getElementById('alarms_div');
         var alarmData = arr[15];
@@ -136,10 +172,16 @@ function closAll(){
 }
 
 function openSelection(val){
+    if(val=="week"){
+        closAll();
+        
+        change(true);
+    }
     if(val=="all"){
         closAll();
         change();
-    }else{
+    }
+    else{
         dayMonth(val);
     }
 }
@@ -147,7 +189,7 @@ function openSelection(val){
 function dayMonth(val){
     closAll();
     document.getElementById(val).style.display="inline";
-    document.getElementById("dayMonthForm").style.display="inline"
+    document.getElementById("dayMonthForm").style.display="inline";
 }
 
 function lineSeperatorsAndAmountCheck(wantedDate,wantedSeperator){
