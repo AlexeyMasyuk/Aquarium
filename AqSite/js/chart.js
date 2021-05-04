@@ -172,12 +172,13 @@ function closAll(){
 }
 
 function openSelection(val){
+    
     if(val=="week"){
         closAll();
         
         change(true);
     }
-    if(val=="all"){
+    else if(val=="all"){
         closAll();
         change();
     }

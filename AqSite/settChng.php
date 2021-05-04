@@ -29,7 +29,7 @@
       <label class='userSettigs'>,PH Low-</label>
       <label class='userSettigs'>,Temp. High-</label>
       <label class='userSettigs'>,Temp. Low-</label>
-      <label >Feeding Time Alert</label>
+      <label class='userSettigs'>,Feeding Time Alert </label>
       </div>
       <button type="button" onclick="openOrClose('personal')">Personal</button>
       <button type="button" onclick="openOrClose('aqua')">Aquarium</button><br>

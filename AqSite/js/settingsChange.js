@@ -1,28 +1,32 @@
 function currentSettings(){
     var settings=localStorage.getItem("settings");
+    alert(settings);
     settings=personalDataCrop(settings);
     var p=document.getElementsByClassName('userSettigs')
     for(var i=0;i<settings.length;i++){
-        console.log(p[i]);
         if(typeof p[i]!="undefined"){
             p[i].innerHTML+=settings[i];
         }
     }
+}
 
-    // var arr=settings.split(',');
-    // document.getElementById("high").innerHTML=settings;
-    // alert(settings);
-    console.log(settings);
-
+function alertFreq(personalData){
+    var spliteDate=personalData.split(',');
+    var splitAlert=spliteDate[spliteDate.length-1].split(' ');
+    
+    if(splitAlert[1]=='2'){
+        spliteDate[spliteDate.length-1]="Every Two Days"; 
+        return spliteDate;
+    }
+    spliteDate[spliteDate.length-1]="Every Day";
+    return spliteDate;
 }
 
 function personalDataCrop(personalData){
     personalData=personalData.replace('}',',');
     personalData=personalData.replace('personal:','');
-    personalData=personalData.slice(0,personalData.length-2);
-    // personalData=personalData.replace(personalData.length-1,'');
-    console.log(personalData[personalData.length-1]);
-    return personalData.split(',');
+    personalData=alertFreq(personalData);
+    return personalData;
     
 }
 
