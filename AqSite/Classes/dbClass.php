@@ -160,6 +160,13 @@ class dbClass
 		$this->disconnect();
 	}
 
+	public function alreadyFed(){
+		$this->connect();
+		$stmnt=Query::update($this->connection,'update',$this->user->getUserName(),"feedAlertOFF");
+		$stmnt->execute(array('1'));
+		$this->disconnect();
+	}
+
 	public function change($data,$whatToChange)
 	{
 		try

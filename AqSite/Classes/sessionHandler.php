@@ -11,15 +11,15 @@ class sessionClass{
 
         // Disallow session passing as a GET parameter.
         // Requires PHP 4.3.0
-        if (ini_set('session.use_only_cookies', 1) === false) {
-            throw new Exception();
-        }
+        // if (ini_set('session.use_only_cookies', 1) === false) {
+        //     throw new Exception();
+        // }
 
         // Mark the cookie as accessible only through the HTTP protocol.
         // Requires PHP 5.2.0
-        if (ini_set('session.cookie_httponly', 1) === false) {
-            throw new Exception();
-        }
+        // if (ini_set('session.cookie_httponly', 1) === false) {
+        //     throw new Exception();
+        // }
         if(session_status() == PHP_SESSION_NONE){
             return session_start();
         }

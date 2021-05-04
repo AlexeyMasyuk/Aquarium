@@ -34,6 +34,7 @@ function weekFilter(arr){
     
     var spitedArr=Union(arr.split(','));
     var tmpArr=[];
+    alert(spitedArr);
     var daySplit=spitedArr[spitedArr.length-2].split(' ')[0];
     
     try{
@@ -134,7 +135,7 @@ function change(week=false){
             
         google.load("visualization", "1", {packages:["corechart"]});
         var arr = this.responseText;
-        
+        alert(arr);
         if(arr.includes("Fatal error")){
             //alert(arr);
             window.location.replace("indexAq.php");

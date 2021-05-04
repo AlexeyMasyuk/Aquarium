@@ -20,4 +20,5 @@ _DBnoAlarms_$Perfect no alarms$
 _DBalChkTxtArrStrt_$? Alarm Occure at $
 _DBalChkTxtArrMidd_$ and the ? was $
 _DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='feedAlarmSkip.php'>Return To Alarms</a>$
+_DBalarmFeedingTimeOFF_$<br><a href='feedAlarmSkip.php?OFF=1'>Already fed today</a>$
 _DBalarmsNotDefined_$No alarms not defined<a href='PageActClasses/da.php'>Set to D</a>$

@@ -99,6 +99,9 @@ class Query
             case "feedAlert":
                 $qString=$qrStart."`feedAlert`=? WHERE `username`='$userName'";
             break;
+            case "feedAlertOFF":
+                $qString=$qrStart."`feedAlert`=`feedAlert`+' '+? WHERE `username`='$userName'";
+            break;
 		}
 		return $qString;
 	}

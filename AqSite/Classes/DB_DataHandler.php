@@ -50,9 +50,8 @@ class DB_DataHandler extends extractData
 			$dataArr[$t['lt']]=implode(',',$alarms);
 
 			if(!$feedAlertSkip){
-
 				if($feedingTime=dateTimeHandler::FAC($alarms[$t['fA']])){
-					$dataArr[$t['a']]=$msg->getMessge($t['ft']);
+					$dataArr[$t['a']]=$msg->getMessge($t['ft']).$msg->getMessge($t['ftF']);
 				}
 			}
 		}
