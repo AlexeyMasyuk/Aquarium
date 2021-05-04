@@ -8,7 +8,6 @@
     <title>Registration</title>
     <link rel="icon" href="fish.png" type="image/x-icon">
     <link rel="stylesheet" href="styles/st_registration.css">
-   
     <link href="https://fonts.googleapis.com/css?family=Cinzel|Montserrat|Permanent+Marker|Quicksand" rel="stylesheet">
 </head>
 
