@@ -1,9 +1,21 @@
-<?php //Alexey Masyuk,Yulia Berkovich Aquarium Control System
+<?php 
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+/*
+    Class that handling all sqlDB itaration,
+	using DB_DataHandler for data format adjustment.
+    ------------------------------------------------------
+	Using 'extractData' wrapper that contains all needed  
+	includes, strings and sqlDB credential for the class.
+	** Lines 12-14 unwrapind class data and store it
+	   in $extracted parameter. Data pulled and stored, in 
+	   $tagsNstrings via class constructor.
+	------------------------------------------------------
+*/
+
 require_once('extractData.php');
 global $extracted;
-$extracted = Init(basename(__FILE__,".php"));
+$extracted = Init(basename(__FILE__,".php"));    // Getting data from wraping class.
 
-// Class to handle all worck with SQL DataBase
 class dbClass
 {
 	private $host;
@@ -19,13 +31,18 @@ class dbClass
 	PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC);
 	private $connection;
 	
+	// Cunstractor, initializing all needed parameeters for sqlDB connection
+	// and helping Class object (DB_DataHandler).
+	// after pulling unwraped class data ia global variable. 
+	// Unsseting sqlDB credential after initialization.
+	// Need User object for construction. 
 	public function __construct($userCls)
 		{
 			global $extracted;
-
 			$this->tagsNstrings = $t = $extracted['tagsNstrings'];
 			$cred=$extracted[$t['c']];
 			unset($extracted);
+
 			$this->host = $cred[$t['h']];
 			$this->db = $cred[$t['d']];
 			$this->charset = $cred[$t['ch']];
@@ -35,26 +52,28 @@ class dbClass
 			$this->helpingClass = new DB_DataHandler();					
 		}
 
-	private function connect()  //  Connecting to Data Base
+	private function connect()    //  Connecting to Data Base
 	{
 		$dns = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
 		$this->connection = new PDO($dns, $this->serverUser, $this->pass, $this->opt);
 	}
 
-	public function disconnect()
+	public function disconnect()  //  Disconnect to Data Base
 	{
 		$this->connection = null;
 	}
 
-	private function init(){
-		$this->connect();
+	// Connecting to sqlDB and returning all tags and strings array.
+	private function init(){      
+		$this->connect();       
 		return $this->tagsNstrings;
 	}
 
-    // Function checking if given user Object username is exists in DataBase.
-	// Can check if only username exists if onlyUser string given
-    // or username and password if no string sended
-	// Returning true or false 
+    // Function checking if '$this->user' exists in sqlDB.
+	// Can check if only username exists,
+	// returning sql row for arduinoUserValidation() use,
+    // or username and password, returning true/false, 
+	// or same as first but returning user email for foreget password action
 	public function userExists($act)
 	{
 		try
@@ -82,10 +101,8 @@ class dbClass
 	}
 	
 
-	// Function to write new user in user table and new user table in DataBase 
-	// or delete user from user table and delete user data table
-	// If act is create handlerDecide func will generate needed query to create user and users table
-    // else querys to delete users data from DataBase returned and querys activated
+	// Function to write new user in user table and new user table in sqlDB
+	// using data stored in user class object given on construction.
 	// return true or false depends if querys seccsed
 	public function userCreate()
 	{
@@ -116,57 +133,59 @@ class dbClass
 		}
 	}
 
-	public function getUserAlarms($t)
+	// Function pulling user data from sqlDB,
+	// alarms limits and personal data.
+	// $tbl -> table name for userData.
+	// Returning aranged data stored in $userData
+	public function getUserData($tbl)
 	{
-		$alarm=array($t['ph']=>"",$t['pl']=>"",$t['th']=>"",$t['tl']=>"");
-		$stmnt=Query::select($this->connection,$t['up']);
+		$userData=array();
+		$stmnt=Query::select($this->connection,$tbl);
 		$stmnt->execute(array($this->user->getUserName()));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-			$alarm=$this->helpingClass->UserAlarms_DataArrange($alarm,$row);
+			$this->helpingClass->UserAlarmsAndPersonal_DataArrange($userData,$row);
 		}
-		return $alarm;
+		return $userData;
 	}
 
+	// Function pulling all needed data for JS Chart and setting change display.
+	// Needs Message class object, Optionally skips alert if flag rised.
+	// Using helpingClass functions for data crop and manipulation.
+	// Returning all data stored in $dataArr or false if exception thrown.
 	public function chartQuery($msg,$feedAlertSkip=false)
 	{
 		$defineAlarmFlag=false;
-		$feedingTime=false;			
+		$feedingTimeFlag=false;			
 		try 
 		{
-
 			$t = $this->init();
 
-			$dataArr=array($t['T']=>"",$t['P']=>"",$t['l']=>"",
-			$t['a']=>$msg->getMessge($t['nd']),$t['lt']=>"",$t['pr']=>"");
-
-			$alarms=$this->getUserAlarms($t);
-			$dataArr[$t['pr']]=implode(',',$alarms[$t['pr']]);
-			unset($alarms[$t['pr']]);
-
-			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTime,$defineAlarmFlag,$msg);
+			$alarms=$this->getUserData($t['up']);
+			$dataArr=$this->helpingClass->UserDataInit($msg,$alarms);
+			$dataArr=$this->helpingClass->chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,$feedingTimeFlag,$defineAlarmFlag,$msg);
 
 			$stmnt=Query::select($this->connection,$this->user->getUserName(),$t['s']);
 			$stmnt->execute(array());
 			while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
-				$dataArr=$this->helpingClass->chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTime,$defineAlarmFlag,$msg);
+				$dataArr=$this->helpingClass->chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTimeFlag,$defineAlarmFlag,$msg);
 			}
-			$dataArr=$this->helpingClass->chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTime,$msg);
+			
+			$dataArr=$this->helpingClass->chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTimeFlag,$msg);
 
 			return $dataArr;
 		} catch (Exception $e) {
 			$this->disconnect();
 			return false;
 		}
-		$this->disconnect();
+		finally{
+			$this->disconnect();
+		}
 	}
 
-	public function alreadyFed(){
-		$this->connect();
-		$stmnt=Query::update($this->connection,'update',$this->user->getUserName(),"feedAlertOFF");
-		$stmnt->execute(array('1'));
-		$this->disconnect();
-	}
-
+	// Function changing user alarms limits and/or credential,
+	// depenting on $whatToChange parameter,
+	// sqlBD user data will be changed to parameter stored in $data.
+	// ** Updating one cell per iteration.
 	public function change($data,$whatToChange)
 	{
 		try
@@ -183,6 +202,7 @@ class dbClass
 		}
 	}
 
+	// Function for validating connection between the arduino and the sqlDB.
 	public function arduinoUserValidation()
 	{
 		$st = "<NFU>"; // not found user

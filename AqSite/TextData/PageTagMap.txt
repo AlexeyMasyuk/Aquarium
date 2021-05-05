@@ -41,5 +41,5 @@ headers=agn-registration,back-indexAq;
 include=dbClass,TextAndMSG,sessionHandler,userClass,passNmail,Validation;
 txt=msg-MessageBank;
 rules=fnamelnameMaxLen-20,pasMin-9,pasMax-15,userMax-15;
-tagsNstrings=t-txt,un-uname,fn-fname,ln-lname,e-email,oU-onlyUser,up-pass,f-flag,m-msg,
+tagsNstrings=t-txt,un-uname,fn-fname,ln-lname,e-email,oU-onlyUser,up-pass,f-flag,m-msg,tce-tableCreatErro,
 qA-queryError,uE-userExist,cBU-cannotBeUser,h-headers,b-back,a-agn,r-rules,EF-EmptyField;

@@ -4,6 +4,7 @@
     Wrapping class - for all helping classes used in the Site (all classes in the folder).
     Can be initiated in two methods, 1st method is via constructor,
     2nd is via Init($location) function for static classes.
+    The location parameter that needed, need to be without file extension (.php)
 
     1. Using fileHandler class for reading all needed data 
        from dedicated DataFile (ClassWrapData.txt).

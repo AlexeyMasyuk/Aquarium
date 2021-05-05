@@ -10,8 +10,13 @@ include=TextAndMSG,dateTimeHandler;
 tagsNstrings=p-ph,P-PH,ph-phHigh,pl-phLow,t-Temp,T-Temperature,th-tempHigh,tl-tempLow,a-alarms,fA-feedAlert,l-level,
 lt-limits,tm-time,TF-d.m.y H:i:s,s-start,m-midd,b-<br>,df-defined,pr-personal,f-fname,ln-lname,u-uname,e-email,
 fN-firstName,lN-lastName,un-username,md-DBalChkTxtArrMidd,st-DBalChkTxtArrStrt,ft-DBalarmFeedingTime,na-DBnoAlarms,
-ftF-DBalarmFeedingTimeOFF;
+ftF-DBalarmFeedingTimeOFF,l-level,nd-DBalarmsNotDefined,up-userpass;
 
 [Validation]
 tagsNstrings=p-ph,t-temp,f-feed,ln-lname,fn-fname,b-<br>,ml-fnamelnameMaxLen,ps-pass,pm-pasMax,u-uname,um-userMax,
 ef-EmptyField,th-tempHigh,tl-tempLow,tx-tempMax,tn-tempMin,ph-phHigh,pl-phLow,px-phMax,pn-phMin,fA-feedAlert;
+
+[passNmail]
+tagsNstrings=newPasSubject-Aquarium New Pass,newPasMsg-Hello You'r new passyord is: ,header-From: AquariumControlSystem@from_mail,
+sendMailSubject-Welcome,sendMailMsg-Welcome Registration completed successfully,nps-newPasSubject,npm-newPasMsg,h-header,
+sms-sendMailSubject,smm-sendMailMsg;

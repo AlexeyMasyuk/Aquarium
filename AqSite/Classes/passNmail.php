@@ -1,7 +1,18 @@
 <?php
 //Alexey Masyuk,Yulia Berkovich Aquarium Control System
-class PnM
+
+require_once('extractData.php');
+global $extractedPnM;
+$extractedPnM = Init(basename(__FILE__,".php"));
+
+class PnM extends extractData
 {
+    private static function GetPageData(){
+        global $extractedPnM;
+        $tagsNstrings=$extractedPnM['tagsNstrings'];
+        return $tagsNstrings;
+    }
+
 	public static function passHash($pass){
 		return password_hash($pass, PASSWORD_DEFAULT);
 	}
@@ -21,18 +32,22 @@ class PnM
 	}
 	
 	public static function newPass($mail){
+		$t = self::GetPageData();
+
 		$pass=self::PassGen();
-		$subject="Aquarium New Pass!";
-		$message="Hello! You'r new passyord is: ".$pass;
-		$headers="From: AquariumControlSystem@from_mail";
+		$subject=$t[$t['nps']];
+		$message=$t[$t['npm']].$pass;
+		$headers=$t[$t['h']];
 		mail($mail,$subject,$message,$headers);
 		return self::passHash($pass);
 	}
 	
 	public static function sendMail($mail){
-		$subject="Welcome!";
-		$message="Welcome!Registration completed successfully!";
-		$headers="From: AquariumControlSystem@from_mail";
+		$t = self::GetPageData();
+
+		$subject=$t[$t['sms']];
+		$message=$t[$t['smm']];
+		$headers=$t[$t['h']];
 		mail($mail,$subject,$message,$headers);
 	}
 }

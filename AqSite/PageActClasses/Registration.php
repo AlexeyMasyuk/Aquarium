@@ -28,9 +28,13 @@ class Registration extends Page{
 
         if($failStr==='')
         {
-            $this->sql->userCreate();
-            PnM::sendMail($_POST[$t['e']]);
-            $this->MoveTo($tm[$t['h']][$t['b']]);
+            if($this->sql->userCreate()){
+                PnM::sendMail($_POST[$t['e']]);
+                $this->MoveTo($tm[$t['h']][$t['b']]);
+            }
+            sessionClass::sessionPush(array($t['f']=>$msg->getMessge($t['tce'])));
+            $this->MoveTo($tm[$t['h']][$t['a']]);
+            
         }
         
         sessionClass::sessionPush(array($t['f']=>$failStr));

@@ -8,7 +8,9 @@ class chartData extends Page{
         
         $sql=new dbClass($tagData[$t['sA']][$t['u']]);
         $entry=$sql->chartQuery($tagData[$t['sA']][$t['m']],isset($tagData[$t['sA']][$t['fAS']])?$tagData[$t['sA']][$t['fAS']]:null);
-        echo json_encode($entry);
+        if($entry!==false){
+            echo json_encode($entry);
+        }
         exit;
     }
 }

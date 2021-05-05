@@ -41,8 +41,8 @@ class dateTimeHandler{
 		
 				$diff=$now->diff($stored);                              // calculating the diffrance
 				// ->format("%a"): Total number of days as a result of a DateTime::diff()
-				if(intval($diff->format("%a")%2==0)){                   // Total number of days as a result of a DateTime::diff()
-					return true;                            // If the Modulo of the diffrance (total number) and 2 are 0, Alert!
+				if(intval($diff->format("%a")%2==0)){                   // If the Modulo of the diffrance (total number) and 2 are 0, Alert!
+					return true;
 				}
 			}
 		}catch(Exception $e){

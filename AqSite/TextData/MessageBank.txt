@@ -1,8 +1,7 @@
 *messeges*
 _wrong_$<div class='errorMessage'><img onload='openForm()'class='attention' src='images/attention.png ' alt=''><p>No such user or wrong password</p></div>$
 _userExist_$User already exists. Choose diffrent username$
-_queryError_$Cannot save your data. Try again please$
-_fileFail_$Faild to create file. Please try again .$
+_tableCreatErro_$Cannot creaet user, please try later$
 _uname_$User name  cannot start with a number, choose other one.$
 _settingsEmptyField_$Please fill all the choosen field you want to change .$
 _settingsNotChoosen_$Press on Personal or Aquarium and select settings to update$
