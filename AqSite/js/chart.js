@@ -249,10 +249,12 @@ function dateFormatValidation(){
 
 function ContentSwich(){
     var DayOrMotnh=document.getElementById("chartFilter").value;
-    if(DayOrMotnh!="all"){
-        dateFormatValidation();
+    if(DayOrMotnh=="all"){
+        change();
+    }else if(DayOrMotnh=="week"){
+        change(true);
     }
     else{
-        change();
+        dateFormatValidation();
     }
 }

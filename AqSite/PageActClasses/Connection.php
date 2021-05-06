@@ -1,23 +1,46 @@
 <?php
-require_once('ActWrap.php');
-class Connection extends Page{
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+/*
+    HTML page action Class handling user connection to the site 
+    --------------------------------------------------------------
+	Using 'Wrapper' that contains all needed  
+	includes, session name, headers to move to,
+    strings and rules.
+	** On lines 17-18 unwraping stored data to variables for 
+       more simpler use.
+	--------------------------------------------------------------
+*/
+require_once('Wrapper.php');
+class Connection extends WrappingClass{
+
+    // Function activated on successful connection,
+    // Need tags, data, messages to be given ($tm,$t,$msg).
+    // Deleting not hashed password, storing in session needed data
+    // and moving to main page.
+    private function seccesfullyConnected($user,$tm,$t,$msg){
+        $user->PassDel(); 
+        sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
+        $this->MoveTo($tm[$t['h']][$t['mn']]);
+    }
+
+    // Main class function checking if password and username match,
+    // storing relevant data on match for main page use
+    // or throwing relevan message.
 	public function ConnectionValidation()
 	{   
-        $tm=$this->tagMap;
+        $tm=$this->tagMap;  // unpacking data
         $t=$this->T;
-        $msg=new TextMssg($tm[$t['t']][$t['m']]);   // Creating new object to throw relevant masseges
+
+        $msg=new TextMssg();   
         if(isset($_POST[$t['p']])&&isset($_POST[$t['un']]))
         {
-            $user=new User($_POST[$t['un']],$_POST[$t['p']]); // Creating new object to save user entered data
-            $sql=new dbClass($user);                         // Creating new object to connect to DataBase 
-
-            if($sql->userExists($t['up']))   // If entered data exists in DataBase
+            $user=new User($_POST[$t['un']],$_POST[$t['p']]); 
+            $sql=new dbClass($user);                         
+            if($sql->userExists($t['up']))   
             {   
-                $user->PassDel(); 
-                sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
-                $this->MoveTo($tm[$t['h']][$t['mn']]);
+                $this->seccesfullyConnected($user,$tm,$t,$msg);
             }
-            else     // If entered data not exists in DataBase, show relevant massage from Object
+            else     
             {
                 sessionClass::sessionPush(array($t['f']=>$msg->getMessge($t['w'])));
             }
@@ -25,6 +48,8 @@ class Connection extends Page{
         $this->MoveTo($tm[$t['h']][$t['b']]);
     }
 }
+
+// Connection Activation.
 $con=new Connection(basename(__FILE__,".php"));
 $con->ConnectionValidation()
 ?>

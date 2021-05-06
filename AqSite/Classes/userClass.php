@@ -1,6 +1,10 @@
 <?php
-//Alexey Masyuk,Yulia Berkovich Aquarium Control Sistem
-//class for storing user data
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+/*
+    Class for storing and pulling when needed all user data.
+	** Used for and after connectoin to the site.
+	   PassDel() used to delete unhashed password after connection.
+*/
 class User
 {
 	private $firstName;
@@ -25,6 +29,7 @@ class User
 	public function getPassword(){return $this->password;}
 	public function getEmail(){return $this->email;}
 
+	// Function used to delete unhashed password after connection.
 	public function PassDel(){
 		$this->password = null;
 		unset($this->password);

@@ -10,18 +10,15 @@ require_once('dateTimeHandler.php');
 // define RULES for reading data.
 define("key_seperatingChar", "_");   // Message tag seperator
 define("value_seperatingChar", "$"); // Message seperator
-
-define("rulesEqual", "=");           // Data file tag from data seperator
+define("rulesEqual", "=");
 define("endOfTagedData", ";");
 define("betweenDataNtagSep", ",");
 define("dataNtagSep", "-");
 define("pageTagStart", "[");
 define("pageTagEnd", "]");
-
 // frequently used
 define("k", "key");
 define("v", "value");
-
 // Tags for DataRules()
 define("h", "headers");
 define("l", "Location:../");
@@ -33,6 +30,11 @@ define("td", ".txt");
 define("TD", "../TextData/");
 define("r", "rules");
 define("f", "feedAlert");
+
+// Used for Validation
+define("az",'/[a-z]/i');
+define("zn",'/[0-9]/');
+define("tNs",'tagsNstrings');
 
 class fileHandler_dataCrop{
 //-------------------------------- Messege Func --------------------------------//

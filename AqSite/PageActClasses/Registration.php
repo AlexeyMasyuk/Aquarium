@@ -1,12 +1,12 @@
 <?php
-require_once('ActWrap.php');
-class Registration extends Page{
+require_once('Wrapper.php');
+class Registration extends WrappingClass{
     private $sql;
 
     private function validation($postArr,$msg,$t,$tm)
     {
         foreach($postArr as $key=>$val){
-            $failStr.=(($tmp=Validation::userParamValidation($key,$val,$tm[$t['r']],$msg))!==true)?$tmp:null;
+            $failStr.=(($tmp=Validation::userParamValidation($key,$val,$msg))!==true)?$tmp:null;
         }
         $user=new User($postArr[$t['un']],PnM::passHash($postArr[$t['up']]),$postArr[$t['fn']],$postArr[$t['ln']],$postArr[$t['e']]);
 
@@ -22,7 +22,7 @@ class Registration extends Page{
 	{   
         $tm=$this->tagMap;
         $t=$this->T;
-        $msg=new TextMssg($tm[$t['t']][$t['m']]);  
+        $msg=new TextMssg();  
 
         $failStr=self::validation($postArr,$msg,$t,$tm);
 

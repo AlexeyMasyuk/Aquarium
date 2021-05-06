@@ -1,12 +1,12 @@
 <?php
-require_once('ActWrap.php');
-class SettingsChange extends Page{
+require_once('Wrapper.php');
+class SettingsChange extends WrappingClass{
 
     public function SettingsChangeAct($postArr){
         $tm=$this->tagMap;
         $t=$this->T;
         $msg=$tm[$t['sA']][$t['m']]; 
-        $r=$tm[$t['r']];
+        // $r=$tm[$t['r']];
         
         $notChoosen=true;
         $failStr="";
@@ -19,7 +19,7 @@ class SettingsChange extends Page{
                     $tmp=dateTimeHandler::feedingAlarmSet($postArr[$val]);
                     $postArr[$val]=$tmp;
                 }
-                $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$r,$msg,true))!==true)?$tmp:"";
+                $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$msg,true))!==true)?$tmp:"";
                 if($failStr===""){
 
                     $dataArr[$val]=$postArr[$val];
@@ -37,7 +37,7 @@ class SettingsChange extends Page{
         $sql=new dbClass($tm[$t['sA']][$t['u']]);
         foreach ($dataArr as $key=>$val)
             {
-                $sql->change((strpos('pass',$key)!==false)?$val=PnM::passHash($val):$val,$key);
+                $sql->change((strpos($t['ps'],$key)!==false)?$val=PnM::passHash($val):$val,$key);
             }
         $this->MoveTo($tm[$t['h']][$t['mn']]);
     }

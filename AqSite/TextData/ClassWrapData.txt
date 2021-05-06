@@ -13,10 +13,14 @@ fN-firstName,lN-lastName,un-username,md-DBalChkTxtArrMidd,st-DBalChkTxtArrStrt,f
 ftF-DBalarmFeedingTimeOFF,l-level,nd-DBalarmsNotDefined,up-userpass;
 
 [Validation]
-tagsNstrings=p-ph,t-temp,f-feed,ln-lname,fn-fname,b-<br>,ml-fnamelnameMaxLen,ps-pass,pm-pasMax,u-uname,um-userMax,
+tagsNstrings=p-ph,t-temp,f-feed,ln-lname,fn-fname,b-<br>,ml-fnamelnameMaxLen,ps-pass,pm-pasMax,pn-pasMin,u-uname,um-userMax,
 ef-EmptyField,th-tempHigh,tl-tempLow,tx-tempMax,tn-tempMin,ph-phHigh,pl-phLow,px-phMax,pn-phMin,fA-feedAlert;
+rules=tempMax-30,tempMin-15,phMax-8,phMin-6.5,fnamelnameMaxLen-20,pasMin-9,pasMax-15,userMax-15;
 
 [passNmail]
-tagsNstrings=newPasSubject-Aquarium New Pass,newPasMsg-Hello You'r new passyord is: ,header-From: AquariumControlSystem@from_mail,
-sendMailSubject-Welcome,sendMailMsg-Welcome Registration completed successfully,nps-newPasSubject,npm-newPasMsg,h-header,
-sms-sendMailSubject,smm-sendMailMsg;
+tagsNstrings=newPasSubject-Aquarium New Pass,
+newPasMsg-Hello You'r new passyord is: ,
+header-From: AquariumControlSystem@from_mail,
+sendMailSubject-Welcome,
+sendMailMsg-Welcome Registration completed successfully,
+nps-newPasSubject,npm-newPasMsg,h-header,sms-sendMailSubject,smm-sendMailMsg;

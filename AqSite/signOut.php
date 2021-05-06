@@ -1,42 +1,37 @@
 <?php
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+/*
+   Page used to sign out the site.
+   Destroing the session and unsetting the globals parameter.
+*/
 require_once('Classes/sessionHandler.php');
 sessionClass::sessionDestroy();
 
+// Function used to evoid recursivly loop,
+// returning varieble name fromg globals , if exists, 
+// and returning varible name as string.
 function print_var_name($var) {
     foreach($GLOBALS as $var_name => $value) {
         if ($value === $var) {
             return $var_name;
         }
     }
-
     return '!';
 }
-
-function recUnset(&$array){
+// Function unsetting all global varibles
+function globalsUnset(&$array){
     if(!isset($array)){
         return;
     }
     foreach($array as &$val){
         if ( is_array($val) && print_var_name($val)!='GLOBALS') {
-            recUnset($val);
+            $val=null;
+            unset($val);
         }
-        $val=null;
-        unset($val);
     }
 }
+globalsUnset($GLOBALS);
 
-// if (isset($_SERVER['HTTP_COOKIE'])) {
-//     $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
-//     foreach($cookies as $cookie) {
-//         $parts = explode('=', $cookie);
-//         $name = trim($parts[0]);
-//         setcookie($name, '', time()-1000);
-//         setcookie($name, '', time()-1000, '/');
-//     }
-// }
-
-recUnset($GLOBALS);
-//recUnset($_COOKIE);
-
+// moving back to index
 header('Location:indexAq.php');
 ?>

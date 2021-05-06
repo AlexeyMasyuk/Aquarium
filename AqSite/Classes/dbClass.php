@@ -7,8 +7,8 @@
 	Using 'extractData' wrapper that contains all needed  
 	includes, strings and sqlDB credential for the class.
 	** Lines 12-14 unwrapind class data and store it
-	   in $extracted parameter. Data pulled and stored, in 
-	   $tagsNstrings via class constructor.
+	   in $extracted parameter. Data pulled and stored in 
+	   $tagsNstrings via class constructor using global.
 	------------------------------------------------------
 */
 

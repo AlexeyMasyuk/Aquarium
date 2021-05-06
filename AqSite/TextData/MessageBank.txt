@@ -2,7 +2,7 @@
 _wrong_$<div class='errorMessage'><img onload='openForm()'class='attention' src='images/attention.png ' alt=''><p>No such user or wrong password</p></div>$
 _userExist_$User already exists. Choose diffrent username$
 _tableCreatErro_$Cannot creaet user, please try later$
-_uname_$User name  cannot start with a number, choose other one.$
+_uname_$User name  cannot start with a number or contain blank spaces, choose other one.$
 _settingsEmptyField_$Please fill all the choosen field you want to change .$
 _settingsNotChoosen_$Press on Personal or Aquarium and select settings to update$
 _fname_$First Name must be up to 20 characters (contain  letters only)$
@@ -20,4 +20,4 @@ _DBalChkTxtArrStrt_$? Alarm Occure at $
 _DBalChkTxtArrMidd_$ and the ? was $
 _DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='feedAlarmSkip.php'>Return To Alarms</a>$
 _DBalarmFeedingTimeOFF_$<br><a href='feedAlarmSkip.php?OFF=1'>Already fed today</a>$
-_DBalarmsNotDefined_$No alarms not defined<a href='PageActClasses/da.php'>Set to D</a>$
+_DBalarmsNotDefined_$No alarms not defined <a href='PageActClasses/da.php'>Set to Default</a>$
