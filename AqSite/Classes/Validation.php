@@ -46,7 +46,7 @@ class Validation
             return self::aquaParamCheck($key,$inp,$msg,$r);
         }
         else if($key==$t['fn'] || $key==$t['ln']){
-            if ((strpos($inp,' ')!==false && ctype_alpha($inp) !== true) || (strlen($inp) > $r[$t['ml']])  )
+            if ((strpos($inp,' ')!==false || ctype_alpha($inp) !== true) || (strlen($inp) > $r[$t['ml']])  )
                 return $msg->getMessge($key).$t['b'];
         }
         else if($key == $t['ps']){

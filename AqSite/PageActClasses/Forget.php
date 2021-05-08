@@ -6,26 +6,12 @@
 	  Using 'Wrapper' that contains all needed  
 	  includes, session name, headers to move to,
     strings and rules.
-	  ** On lines 17-18 unwraping stored data to variables for 
+	  ** On lines 21-22 unwrapping stored data to variables for 
        more simpler use.
 	--------------------------------------------------------------
 */
 require_once('Wrapper.php');
 class Forget extends WrappingClass{
-
-  // Function used if entered username no found.
-  // Showing relebvant message and reloading the page. 
-  private function UserNotMatch($tm,$t,$msg){
-    sessionClass::sessionPush(array($t['f']=>$msg->getMessge($t['fNUM'])));
-    $this->MoveTo($tm[$t['h']][$t['a']]);
-  }
-
-  // Function used if entered username founded in sqlDB.
-  // sending new generated new password via mail to saved mail in sqlDB
-  private function UserMatch($tm,$t,$sql,$mail){
-    $sql->change(PnM::newPassAction($mail),$t['p']);
-    $this->MoveTo($tm[$t['h']][$t['b']]);
-  }
 
   // Main class function checking if username exist,
   // sending new generated new password via mail
@@ -48,6 +34,20 @@ class Forget extends WrappingClass{
         $this->UserNotMatch($tm,$t,$msg);
       }
     }
+  }
+
+  // Function used if entered username no found.
+  // Showing relebvant message and reloading the page. 
+  private function UserNotMatch($tm,$t,$msg){
+    sessionClass::sessionPush(array($t['f']=>$msg->getMessge($t['fNUM'])));
+    $this->MoveTo($tm[$t['h']][$t['a']]);
+  }
+
+  // Function used if entered username founded in sqlDB.
+  // sending new generated new password via mail to saved mail in sqlDB
+  private function UserMatch($tm,$t,$sql,$mail){
+    $sql->change(PnM::newPassAction($mail),$t['p']);
+    $this->MoveTo($tm[$t['h']][$t['b']]);
   }
 }
 

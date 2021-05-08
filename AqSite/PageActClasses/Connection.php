@@ -6,22 +6,12 @@
 	Using 'Wrapper' that contains all needed  
 	includes, session name, headers to move to,
     strings and rules.
-	** On lines 17-18 unwraping stored data to variables for 
+	** On lines 21-22 unwrapping stored data to variables for 
        more simpler use.
 	--------------------------------------------------------------
 */
 require_once('Wrapper.php');
 class Connection extends WrappingClass{
-
-    // Function activated on successful connection,
-    // Need tags, data, messages to be given ($tm,$t,$msg).
-    // Deleting not hashed password, storing in session needed data
-    // and moving to main page.
-    private function seccesfullyConnected($user,$tm,$t,$msg){
-        $user->PassDel(); 
-        sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
-        $this->MoveTo($tm[$t['h']][$t['mn']]);
-    }
 
     // Main class function checking if password and username match,
     // storing relevant data on match for main page use
@@ -47,9 +37,19 @@ class Connection extends WrappingClass{
         }
         $this->MoveTo($tm[$t['h']][$t['b']]);
     }
+
+    // Function activated on successful connection,
+    // Need tags, data, messages to be given ($tm,$t,$msg).
+    // Deleting not hashed password, storing in session needed data
+    // and moving to main page.
+    private function seccesfullyConnected($user,$tm,$t,$msg){
+        $user->PassDel(); 
+        sessionClass::sessionPush(array($t['u']=>$user,$t['m']=>$msg));
+        $this->MoveTo($tm[$t['h']][$t['mn']]);
+    }
 }
 
 // Connection Activation.
-$con=new Connection(basename(__FILE__,".php"));
+$con=new Connection(basename(__FILE__,p));
 $con->ConnectionValidation()
 ?>

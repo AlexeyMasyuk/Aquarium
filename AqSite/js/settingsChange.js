@@ -1,61 +1,95 @@
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+// Scripts handling settings change JS manipulation,
+// Revealing and hidding relevant input fields and displaying personal and aquarium credential and limits.
+
+var i="inline";
+var n="none";
+
+// Parameter name to be pollen from chart.js containing personal data and credentials.
+var s="settings";
+
+// user settings container class name
+var us='userSettigs';
+var u="undefined";
+
+var cm=',';
+var tw='2';
+var bl=' ';
+var ed="Every Day";
+var etd="Every Two Days"; 
+
+var br='}';
+var per='personal:';
+
+// pulling current user settings sended from chart.js
+// displaying it in relevant container.
 function currentSettings(){
-    var settings=localStorage.getItem("settings");
+    var settings=localStorage.getItem(s);
     alert(settings);
     settings=personalDataCrop(settings);
-    var p=document.getElementsByClassName('userSettigs')
+    var p=document.getElementsByClassName(us)
     for(var i=0;i<settings.length;i++){
-        if(typeof p[i]!="undefined"){
+        if(typeof p[i]!=u){
             p[i].innerHTML+=settings[i];
         }
     }
 }
 
+// Function handling feeding alert data crop and adjustment,
+// as displaying current settings
 function alertFreq(personalData){
-    var spliteDate=personalData.split(',');
-    var splitAlert=spliteDate[spliteDate.length-1].split(' ');
+    var spliteDate=personalData.split(cm);
+    var splitAlert=spliteDate[spliteDate.length-1].split(bl);
     
-    if(splitAlert[1]=='2'){
-        spliteDate[spliteDate.length-1]="Every Two Days"; 
+    if(splitAlert[1]==tw){
+        spliteDate[spliteDate.length-1]=etd; 
         return spliteDate;
     }
-    spliteDate[spliteDate.length-1]="Every Day";
+    spliteDate[spliteDate.length-1]=ed;
     return spliteDate;
 }
 
+// Function handling personal data crop and adjustment,
+// as displaying current settings
 function personalDataCrop(personalData){
-    personalData=personalData.replace('}',',');
-    personalData=personalData.replace('personal:','');
+    personalData=personalData.replace(br,cm);
+    personalData=personalData.replace(rp,'');
     personalData=alertFreq(personalData);
     return personalData;
     
 }
 
-function changeCycle(elementsToChange,stateToChange){
-            
+// Function openning or closing input fields and handling checkbox status
+// acording to elementsToChange,stateToChange parameters.
+function changeCycle(elementsToChange,stateToChange){       
     for(var i=1;i<elementsToChange.length;i+=2)
         {
             elementsToChange[i].style.display=stateToChange;
             elementsToChange[i-1].checked=false;
-			if(stateToChange=="inline")
+			if(stateToChange==i)
 				elementsToChange[i-1].checked=true;
         }
 }
 
+// Function open all personal or aquarium input.
+// acording to idToCheck,nameToOpen parameters.
 function openAllTextBox(idToCheck,nameToOpen){
     if(document.getElementById(idToCheck).checked==true){
-        changeCycle(document.getElementsByClassName(nameToOpen),"inline");
+        changeCycle(document.getElementsByClassName(nameToOpen),i);
     }                
    else{
-    changeCycle(document.getElementsByClassName(nameToOpen),"none");
+    changeCycle(document.getElementsByClassName(nameToOpen),n);
     }
 }
 
+// Function controling button Personal,Aquarium click,
+// to open checkboxes of input field control
 function openOrClose(name){                
-   if(document.getElementById(name).style.display=="none"){
-       document.getElementById(name).style.display = "inline";
+   if(document.getElementById(name).style.display==n){
+       document.getElementById(name).style.display = i;
    }
    else{
-       document.getElementById(name).style.display="none";
+       document.getElementById(name).style.display=n;
        document.getElementById(name).value="";
    }
 }

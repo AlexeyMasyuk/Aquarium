@@ -6,6 +6,10 @@
 	** Need fileHandler as messages readed from text file.
        MessageBank.txt path defined below.
 	------------------------------------------------------
+    Message stored in MessageBank example:
+    _email_$ Wrong email format.$ 
+     '$' - seperating message.
+     '_' - seperating message name.
 */
 
 include_once('fileHandler.php');

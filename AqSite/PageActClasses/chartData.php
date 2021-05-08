@@ -7,7 +7,7 @@
 	Using 'Wrapper' that contains all needed  
 	includes, session name, headers to move to,
     strings and rules.
-	** On lines 16-17 unwraping stored data to variables for 
+	** On lines 16-17 unwrapping stored data to variables for 
        more simpler use.
 	--------------------------------------------------------------
 */

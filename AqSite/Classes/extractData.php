@@ -10,6 +10,10 @@
        from dedicated DataFile (ClassWrapData.txt).
     2. If 'include' found among the data needed, require the needed files.
     3. If 'rules' found among the data needed, convert strings to floats.
+
+    [Validation] - class file name of stored data below.
+    tagsNstrings=p-ph,t-temp,f-feed,ln-lname,fn-fname,b-<br>,ml-fnamelnameMaxLen,ps-pass,pm-pasMax,pn-pasMin;
+    rules=tempMax-30,tempMin-15,phMax-8,phMin-6.5,fnamelnameMaxLen-20,pasMin-9,pasMax-15,userMax-15;
 */
 define("FH",'fileHandler.php');                   // Class for reading DataFile, 
 define("Path",'../TextData/ClassWrapData.txt');   // DataFile path

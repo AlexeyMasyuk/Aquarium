@@ -9,6 +9,14 @@
     3. If 'wantedSess' found among the data needed,
       getting the needed data from session.
     4. MoveTo($moveToPage) used by all page actions classes.
+
+    Data stored in PageTagMap example:
+
+    [chartData] - class file name of stored data below.
+
+    include=dbClass,TextAndMSG,sessionHandler;
+    wantedSess=user,msg,feedAlertSkip;
+    tagsNstrings=u-user,m-msg,fAS-feedAlertSkip,sA-sessArr;    
 */
 define("fileHandlerPath",'../Classes/fileHandler.php');
 define("dataFilePath",'../TextData/PageTagMap.txt');

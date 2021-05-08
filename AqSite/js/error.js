@@ -1,3 +1,5 @@
+// Alexey Masyuk & Yulia Berkovich Aquarium Monitoring Site.
+// 404 ERROR PAGE
 "use strict";
 
 gsap.set("svg", {
