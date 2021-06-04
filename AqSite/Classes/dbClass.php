@@ -205,11 +205,18 @@ class dbClass
 	// Function for validating connection between the arduino and the sqlDB.
 	public function arduinoUserValidation()
 	{
-		$st = "<NFU>"; // not found user
-		if($row=$this->userExists()){
-			$st="<OKEY".$row['temp'].",".$row['ph']."\n>";
+		$st = "<NUF>"; // not found user
+		$row=$this->userExists("userAndPass");
+		if(isset($row)&&$row!=null){
+			$st="<OKEY!>";
 		}
 		return $st;
+	}
+
+	public function arduinoPush($data){
+		$t = $this->init();
+		$stmnt=Query::insert($this->connection,$this->user->getUserName(),$t['sD']);
+		$stmnt->execute(array($data));
 	}
 }
 ?>

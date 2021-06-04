@@ -13,18 +13,20 @@
  </head>
  
  <body onload="openSelection('week')">
+ <div class="content">
   <header>
-        <nav class="topnav" id="myTopnav">
+         <nav class="topnav" id="myTopnav">
             <a href="dataTbl.php" class="logo"> <img src="images/logo.png"  alt="Logo" /></a>
-   
-            <a href="signOut.php">sign out</a>
-            <a id="menu" href="#" class="icon">&#9776;</a>
+                <a href="dataTbl.php">my aquarium</a>
+				<a onclick="limitsToSettChngData()" href="settChng.php">settings</a>
+                <a href="indexAq.php">sign out</a>
+                <a id="menu" href="#" class="icon">&#9776;</a>
         </nav>
   </header>
 	  <h1>Your aquarium</h1>
-    <div id="alarms_div" style="width: 100%; height: 20%; text-align: center; overflow-y:scroll;"></div>
-    
-    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+      <div id="alarms_div"></div>
+      <div id="chart_div"></div>
+	
     <select id="chart" onchange="ContentSwich()">
       <option name="select" value="Temp">Temp</option>
       <option name="select" value="PH">PH</option>
@@ -47,8 +49,14 @@
     
     <a class="forgot" onclick="limitsToSettChngData()" href="settChng.php">Settings Change</a>
 	
+	 <video loop muted autoplay poster="video/ClearWater.mp4" class="BgVideo">
+                        <source src="video/ClearWater.mp4" type="video/mp4">
+                 </video > 
 	
-	 
+	</div>			 
+	 <footer >
+    &#9990; +97277777777 &#9993; y.b.doar@gmail.com 
+    </footer> 
 	
   </body>
 </html>	

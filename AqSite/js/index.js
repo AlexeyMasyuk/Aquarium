@@ -9,18 +9,18 @@ var v="visible";
 
 // Containers name
 var sif="signInForm";
-var h="heading";
-var bt="signInForm";
+var hd="heading";
+var bt="button";
 
 
 function openForm() {
   document.getElementById(sif).style.display = b;
-  document.getElementById(g).style.visibility=h;
+  document.getElementById(hd).style.visibility=h;
    document.getElementById(bt).style.display=n;
 }
 
 function closeForm() {
   document.getElementById(sif).style.display = n;
-   document.getElementById(h).style.visibility=v;
-   document.getElementById(b).style.display=b;
+   document.getElementById(hd).style.visibility=v;
+   document.getElementById(bt).style.display=b;
 }

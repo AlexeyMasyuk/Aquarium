@@ -83,7 +83,7 @@ namespace ComputerToArduino
                 PortsBox.Enabled = false;
                 return Port.IsOpen;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 PortsBox.Enabled = true ;
                 return false;
@@ -105,7 +105,7 @@ namespace ComputerToArduino
                 string data_rx = "";
                 while (true)
                 {
-                    if (now > prev.AddSeconds(10))
+                    if (now > prev.AddSeconds(20))
                         throw new Exception(MAT.NoAns());
                     try
                     {

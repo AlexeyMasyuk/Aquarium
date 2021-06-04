@@ -25,6 +25,7 @@ class DB_DataHandler extends extractData
 	// and storing it in given array $userData for later JS Chart and setting change use.
 	public function UserAlarmsAndPersonal_DataArrange(&$userData,$row){
 		$t = $this->ClassData['tagsNstrings'];
+
 		$personal=5;
 		$tg=array($t['ph'],$t['pl'],$t['th'],$t['tl'],$t['fA'],$t['pr'],$t['f'],$t['fN'],$t['ln'],$t['lN'],$t['u'],$t['un'],$t['e']);
 
@@ -35,18 +36,6 @@ class DB_DataHandler extends extractData
 			$userData[$tg[$personal]][$tg[$i++]]=$row[$tg[$i]];
 			$i==(count($tg)-2)?$userData[$tg[$personal]][$tg[++$i]]=$row[$tg[$i]]:null;
 		}
-
-
-		// $alarm[$t['ph']]=$row[$t['ph']];
-		// $alarm[$t['pl']]=$row[$t['pl']];
-		// $alarm[$t['th']]=$row[$t['th']];
-		// $alarm[$t['tl']]=$row[$t['tl']];
-		// $alarm[$t['fA']]=$row[$t['fA']];
-
-		// $alarm[$t['pr']][$t['f']]=$row[$t['fN']];
-		// $alarm[$t['pr']][$t['ln']]=$row[$t['lN']];
-		// $alarm[$t['pr']][$t['u']]=$row[$t['un']];
-		// $alarm[$t['pr']][$t['e']]=$row[$t['e']];
 	}
 
 	// Function for initiating all needed parameters for JS Chart.
@@ -157,5 +146,6 @@ class DB_DataHandler extends extractData
 		}
 		return $dataArr;
 	}
+
 }
 ?>

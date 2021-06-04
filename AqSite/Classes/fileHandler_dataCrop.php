@@ -144,6 +144,7 @@ class fileHandler_dataCrop{
             if(strpos($val,rulesEqual)!==false)
             {
                 $val=trim(preg_replace('/\s\s+/', '', $val));
+                $val=str_replace("\n", '', $val);
                 $pageNamesSplit=explode(rulesEqual,$val);
                 $pageDataSplit=explode(betweenDataNtagSep,$pageNamesSplit[1]);
                 if(strpos($pageDataSplit[0],dataNtagSep)!==false)

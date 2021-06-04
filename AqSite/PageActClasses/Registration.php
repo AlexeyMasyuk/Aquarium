@@ -28,7 +28,7 @@ class Registration extends WrappingClass{
 
         if($failStr==='')
         {
-            UserInit($postArr,$t,$tm);
+            $this->UserInit($postArr,$t,$tm);
 
             // if UserInit fail.
             $this->badInp(array($t['f']=>$msg->getMessge($t['tce'])),$tm[$t['h']][$t['a']]);

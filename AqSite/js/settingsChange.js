@@ -21,13 +21,16 @@ var etd="Every Two Days";
 var br='}';
 var per='personal:';
 
+var sub="applyButton";
 // pulling current user settings sended from chart.js
 // displaying it in relevant container.
 function currentSettings(){
     var settings=localStorage.getItem(s);
-    alert(settings);
     settings=personalDataCrop(settings);
-    var p=document.getElementsByClassName(us)
+    var p=document.getElementsByClassName(us);
+    alert(settings.length);
+    console.log(settings);
+
     for(var i=0;i<settings.length;i++){
         if(typeof p[i]!=u){
             p[i].innerHTML+=settings[i];
@@ -53,7 +56,10 @@ function alertFreq(personalData){
 // as displaying current settings
 function personalDataCrop(personalData){
     personalData=personalData.replace(br,cm);
-    personalData=personalData.replace(rp,'');
+    personalData=personalData.replace('}',cm);
+    personalData=personalData.replace(per,'');
+    alert(personalData);
+    
     personalData=alertFreq(personalData);
     return personalData;
     
@@ -84,12 +90,21 @@ function openAllTextBox(idToCheck,nameToOpen){
 
 // Function controling button Personal,Aquarium click,
 // to open checkboxes of input field control
-function openOrClose(name){                
-   if(document.getElementById(name).style.display==n){
-       document.getElementById(name).style.display = i;
+
+
+   
+   function openOrClose(name1,name2){                
+   if(document.getElementById(name1).style.display==n){
+       document.getElementById(name1).style.display = i;
+	   document.getElementById(sub).style.display=i;
    }
    else{
-       document.getElementById(name).style.display=n;
-       document.getElementById(name).value="";
+       document.getElementById(name1).style.display=n;
+       document.getElementById(name1).value="";
    }
-}
+  
+  if((document.getElementById(name1).style.display==n)&&(document.getElementById(name2).style.display==n))
+		document.getElementById(sub).style.display=n;
+	
+	
+} 

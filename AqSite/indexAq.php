@@ -17,6 +17,7 @@
         <nav class="topnav" id="myTopnav">
             <a href="indexAq.php" class="logo"> <img src="images/logo.png"  alt="Logo" /></a>
             <a href="indexAq.php">home</a>
+			<a href="#info">about us</a>
             <a href="registration.php">sign up</a>
             <a id="menu" href="#" class="icon">&#9776;</a>
         </nav>
@@ -46,7 +47,7 @@
         </div>
         <input type="Submit"  value="Sign in">
 		<a class="create" href="registration.php">new user?</a>
-        <a class="create" href="forgot.php">Forgot Pass</a>
+        <a class="create" href="forgot.php">forgot password?</a>
       </form>
     </section>
 		
@@ -73,7 +74,7 @@
 	 <main class="container">
 	<p id="info">___________</p>
         <h1>Information</h1>
-       <img src="images/info1.jpg " alt="#">
+       
     <div class="grid-container">
     <div class="block">
         <h3>Lorem ipsum dolor sit amet</h3>
