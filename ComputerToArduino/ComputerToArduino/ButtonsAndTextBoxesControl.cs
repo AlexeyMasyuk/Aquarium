@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
+// Class controlling all button text and clickable ability.
+// Need Button and TextBox objects to manipulate parameters within the object.
+
 namespace ComputerToArduino
 {
     public class ButtonsAndTextBoxesControl
@@ -14,6 +17,7 @@ namespace ComputerToArduino
         private TextBox userName;
         private TextBox userPass;
 
+        // Class constructor, initiallizing object parameters,
         public ButtonsAndTextBoxesControl
             (Button connectBtn, Button refreshBtn, Button writeBtn,
                 TextBox wifiPassBox, TextBox userNameBox, TextBox userPassBox)
@@ -23,10 +27,10 @@ namespace ComputerToArduino
             WriteBtn = writeBtn;
             WifiPassBox = wifiPassBox;
             UserNameBox = userNameBox;
-            UserPassBox = userPassBox;
-            DisableOrEnableAll(false);
+            UserPassBox = userPassBox;       
         }
 
+        // Get/Set Methods
         public Button ConnectBtn
         {
             get
@@ -94,14 +98,16 @@ namespace ComputerToArduino
             }
         }
 
-        public void DisableOrEnableAll(bool state)
-        {           
-            WriteBtn.Enabled = state;
+        // Changing control state text boxes to be filled by user.
+        public void UserBoxesAndBtnStateControll(bool state)
+        {
             WifiPassBox.Enabled = state;
             UserNameBox.Enabled = state;
             UserPassBox.Enabled = state;
+            ConnectDisconnect_Switch();
         }
 
+        // Clearing text boxes.
         public void textClear()
         {
             WifiPassBox.Text = "";
@@ -109,6 +115,7 @@ namespace ComputerToArduino
             UserPassBox.Text = "";
         }
 
+        // Validating text boxes not empty.
         public bool textValidation()
         {
             if (WifiPassBox.Text.Length > 0 && UserNameBox.Text.Length > 0 && UserPassBox.Text.Length > 0)
@@ -116,14 +123,13 @@ namespace ComputerToArduino
             return false;
         }
 
+        // Swiching Connect button to given state in "swichCondition"
         public void ConnectBtnStatusSwitch(bool swichCondition)
         {
-            if (swichCondition)
-                ConnectBtn.Enabled = true;
-            else
-                ConnectBtn.Enabled = false;
+            ConnectBtn.Enabled = swichCondition;
         }
 
+        // Changing connect button text to relevant text
         public void ConnectDisconnect_Switch()
         {
             if (ConnectBtn.Text.ToString() == "Connect")
@@ -132,6 +138,10 @@ namespace ComputerToArduino
                 ConnectBtn.Text = "Connect";
         }
 
+        // Creating string to be sent to arduino,
+        // containing OKEY as validation sign and wifi name and paswword, 
+        // username, pasword for aqua site and EOL/'\n' as closer sign.
+        // Returning the string
         public string ComunicationString(string wifiName)
         {
             string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString() };
@@ -152,9 +162,10 @@ namespace ComputerToArduino
             return str.ToString();
         }
 
-        public void writeBtnVision(bool isConnected,int wifiItemsCount)
+        // Contrilling write buttton depending on presence of needed data to send.
+        public void writeBtnVision(bool isConnected,int wifiSelectedItemsCount)
         {
-            if (textValidation() && isConnected && wifiItemsCount > 0)
+            if (textValidation() && isConnected && wifiSelectedItemsCount > 0)
                 WriteBtn.Enabled = true;
             else
                 WriteBtn.Enabled = false;

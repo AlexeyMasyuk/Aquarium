@@ -2,14 +2,17 @@
 #include <ESP8266WiFi.h>
 
 typedef struct {
-  String userData[7];
+  String userData[4];
 } userData_type;
-userData_type data = {"", "", "", ""};
-// {"HOTBOX 4-4618", "00548048023", "ar", "qweqwe123", "", "", ""};
+userData_type data = {     ""    , "" , "", ""};
+// [      [0]              [1]                 [2]                 [3]         ]
+// {     "SSID"    , "SSID Password" , "AquaSite UserName", "AquaSite Password"};
+// {"HOTBOX 4-4618",  "00548048023"  ,        "ar"        ,     "qweqwe123"    };
 
 String input = "";         // a string to hold incoming data
 boolean strComplete = false;  // whether the string is complete
 boolean pushData = false;
+boolean WIFIorPHPfail[2]={false,false};
 
 WiFiClient client;
 String server = "192.168.1.45";
@@ -17,45 +20,54 @@ void(* resetFunc)(void) = 0;
 
 void setup() {
   Serial.begin(9600);
-//WiFi.disconnect();
-//   mmRead();
-//   Serial.println(data.userData[0]);
-//   Serial.println(data.userData[1]);
-//   Serial.println(data.userData[2]);
-
-//  if (Serial) {
-//    if (serialAndDataHandlerEvent()) {
-//      if (phpEvantHandler()) {
-//        mmWrite();
-//        Serial.print("OKEY");
-//      }
-//      else {
-//        Serial.print("FALSE");
-//      }
-//    }
-//    else {
-//      Serial.print("FALSE");
-//    }
+  
+// Serial.println("--SetupStart--");
+// WiFi.disconnect();
+// mmWrite();
 //
-//    unsigned long currentMillis = millis();
-//    unsigned long previousMillis = currentMillis;
-//    int interval = 8000;
-//    while (true) {
-//
-//      if (currentMillis - previousMillis > interval) {
-//        break;
-//      }
-//      currentMillis = millis();
-//      delay(1000);
-//    }
-//  }
-//  else {
-//    mmRead();
-//    if (wifiConnect()) {
-//      pushData = true;
-//    }
-//  }
+  //  mmRead();
+  //  Serial.println(data.userData[0]);
+  //  Serial.println(data.userData[1]);
+  //  Serial.println(data.userData[2]);
+  //  Serial.println(data.userData[3]);
 
+  if (Serial) {
+    delay(550);
+    if (serialAndDataHandlerEvent()) {
+      if (phpEvantHandler()) {
+        mmWrite();
+        Serial.print("OKEY");
+      }
+      else {
+        if(WIFIorPHPfail[0]){
+          Serial.print("FALSEwifi");
+        }else{
+          Serial.print("FALSEuser");
+        }
+      }
+    }
+    else {
+      Serial.print("FALSEser");
+    }
+
+    unsigned long currentMillis = millis();
+    unsigned long previousMillis = currentMillis;
+    int interval = 8000;
+    while (true) {
+
+      if (currentMillis - previousMillis > interval) {
+        break;
+      }
+      currentMillis = millis();
+      delay(1000);
+    }
+  }
+  else {
+    mmRead();
+    if (wifiConnect()) {
+      pushData = true;
+    }
+  }
 }
 
 
@@ -63,27 +75,16 @@ void setup() {
 void loop() {
   if (pushData) {
     phpReq(DataToPHPreq(0));
-           delay(50);
+    delay(5000);
   }
   if (!wifiConnect()) {
     resetFunc();
   }
-  //  if (data.userData[0].length() != 0)
-  //  {
-  //           Serial.println(data.userData[0]);
-  //            Serial.println(data.userData[1]);
-  //            Serial.println(data.userData[2]);
-  //            Serial.println(data.userData[3]);
-  //           Serial.println(data.userData[4]);
-  //             Serial.println(data.userData[5]);
-  //             Serial.println(data.userData[6]);
-  //  }
-  //resetFunc();
 }
 
 //--------------------------- FUNCTIONS ------------------------//
 String DataToSQL() {
-  return "26,0.7,500" + data.userData[0];
+  return "push=26,0.7,500," + data.userData[2];
 }
 
 
@@ -120,7 +121,7 @@ boolean toStructCheck(int count, int startIndex)
 
 void serialEvent()
 {
-  while (Serial.available()) {
+  while (Serial.available()&&!strComplete) {
     delay(20);
     char inChar = (char)Serial.read();
     input += inChar;
@@ -133,10 +134,10 @@ void serialEvent()
 boolean serialAndDataHandlerEvent()
 {
   if (Serial) {
-    while (!strComplete) {
+    delay(100);
       serialEvent();
       delay(50);
-    }
+
     if (validInp()) {
       dataToStruct(4, 0);
     }
@@ -179,13 +180,8 @@ boolean phpEvantHandler()
   if (wifiConnect()) {
     if (phpReq(DataToPHPreq(1))) {
       if (phpAns()) {
-        //dataToStruct(3, 4);
         Serial.println("After phpAns");
         return true;
-        //        if (toStructCheck(3, 4)) {
-        //          Serial.println("After toStructCheck");
-        //
-        //        }
       }
     }
   }
@@ -194,15 +190,18 @@ boolean phpEvantHandler()
 }
 
 String DataToPHPreq(int act) {
+  String post;
   if (act == 1) {
-    String post = "data=";
+    post = "data=";
     post.concat(data.userData[2]);
     post.concat(",");
     post.concat(data.userData[3]);
-    return post;
-  } else {
 
+  } else {
+    post = DataToSQL();
   }
+  Serial.println(post);
+  return post;
 }
 
 boolean phpReq(String post)
@@ -262,8 +261,12 @@ boolean phpAns()
   client.stop();  //stop connection
   if (input.length() > 0)
   {
-    Serial.println("input:");
-    Serial.println(input);
+    if(input.indexOf("NUF") >= 0){
+      Serial.println("NUF");
+      WIFIorPHPfail[1]=true;
+      return false;
+    }
+    WIFIorPHPfail[1]=false;
     return true;
   }
   return false;
@@ -287,8 +290,10 @@ boolean wifiConnect()
   }
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("true");
+    WIFIorPHPfail[0]=false;
     return true;
   }
+  WIFIorPHPfail[0]=true;
   return false;
 }
 //*********************************************************//

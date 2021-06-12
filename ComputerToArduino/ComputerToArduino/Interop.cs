@@ -9,9 +9,6 @@ using System.ComponentModel;
 
 namespace NativeWifi
 {
-	// TODO: Separate the functions and the structs/enums. Many of the structs/enums should remain public
-	//       (since they're reused in the OOP interfaces) -- the rest (including all P/Invoke function mappings)
-	//       should become internal.
 
 	// All structures which native methods rely on should be kept in the Wlan class.
 	// Only change the layout of those structures if it matches the native API documentation.

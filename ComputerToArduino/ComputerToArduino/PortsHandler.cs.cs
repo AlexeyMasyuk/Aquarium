@@ -4,6 +4,8 @@ using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
 
+// Class handling all interactions with COM/Serial Ports
+
 namespace ComputerToArduino
 {
     public class PortsHandler
@@ -11,7 +13,9 @@ namespace ComputerToArduino
         private string[] portsNames;
         private SerialPort port;
         private ComboBox portsBox;
-
+        private static int PortBoundRate = 9600;
+        private static int arduinoAnswerWaitingTime = 20;
+        // Cunstructor need ComboBox for adding the scaned ports to display
         public PortsHandler(ComboBox portsBox)
         {
             PortsBox = portsBox;
@@ -19,7 +23,7 @@ namespace ComputerToArduino
             portsToBox();           
         }
 
-        public string[] PortsNames
+        public string[] PortsNames // Store all scaned ports names
         {
             get
             {
@@ -31,7 +35,7 @@ namespace ComputerToArduino
                     portsNames = value;
             }
         }
-        public ComboBox PortsBox
+        public ComboBox PortsBox // ComboBox to display and select from ports
         {
             get
             {
@@ -42,7 +46,7 @@ namespace ComputerToArduino
                 portsBox = value;
             }
         }
-        public SerialPort Port
+        public SerialPort Port // Port to be connected to
         {
             get
             {
@@ -54,6 +58,7 @@ namespace ComputerToArduino
             }
         }
 
+        // Function adding all scaned ports name to ComboBoxs
         private void portsToBox()
         {
             foreach (string port in PortsNames)
@@ -64,6 +69,8 @@ namespace ComputerToArduino
             }
         }
 
+        // Function deleating last scanned ports
+        // and scanning again
         public void PortsRefresh()
         {
             PortsNames = null;
@@ -73,12 +80,14 @@ namespace ComputerToArduino
             portsToBox();
         }
 
-
+        // Function connectin to given port in "portName".
+        // PortBoundRate initialized as static class int 
+        // Function enabling/disabling Ports ComboBox depending on connection success
         public bool connectToPort(string portName)
         {
             try
             {
-                Port = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
+                Port = new SerialPort(portName, PortBoundRate, Parity.None, 8, StopBits.One);
                 Port.Open();
                 PortsBox.Enabled = false;
                 return Port.IsOpen;
@@ -90,11 +99,17 @@ namespace ComputerToArduino
             }
         }
 
+        // Function disconnecting from connected port
         public void disconnectFromPort()
         {
             Port.Close();
         }
 
+        // Function reading answer from arduino.
+        // If data_rx get "OKEY" from connected port (arduino) -> arduino seccesfuly connected to WIFI and get validation from DB
+        // If data_rx get "FALSE" arduino -> failed to connect
+        // If "arduinoAnswerWaitingTime" (20) passed -> no anser from arduino
+        // All the cases stop the reading loop
         private void AnsRead()
         {
             if (Port.IsOpen)
@@ -103,14 +118,14 @@ namespace ComputerToArduino
                 DateTime now = DateTime.Now;
                 DateTime prev = now;
                 string data_rx = "";
-                while (true)
+                while (true)           // reading loop
                 {
-                    if (now > prev.AddSeconds(20))
+                    System.Threading.Thread.Sleep(200);
+                    if (now > prev.AddSeconds(arduinoAnswerWaitingTime))
                         throw new Exception(MAT.NoAns());
                     try
                     {
                         data_rx = Port.ReadExisting();
-
                     }
                     catch (Exception)
                     {
@@ -118,8 +133,12 @@ namespace ComputerToArduino
                     }
                     if (data_rx.Contains("OKEY"))
                         break;
-                    else if (data_rx.Contains("FALSE"))
+                    else if (data_rx.Contains("FALSEser"))
                         throw new Exception(MAT.WrFail());
+                    else if (data_rx.Contains("FALSEwifi"))
+                        throw new Exception(MAT.WIFIfaile());
+                    else if (data_rx.Contains("FALSEuser"))
+                        throw new Exception(MAT.USERfaile());
                     now = DateTime.Now;
                 }
                 MAT.Secssed();
@@ -130,6 +149,9 @@ namespace ComputerToArduino
             }
         }
 
+        // Function writing to connected port given massege "MessageToWrite"
+        // waiting 2 sec and trying to read an answer from the port,
+        // AnsRead() on failer trowing an exception with needed massege.
         public bool writeToPort(string MessageToWrite)
         {
             try

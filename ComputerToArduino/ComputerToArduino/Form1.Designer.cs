@@ -70,6 +70,7 @@
             // 
             // wifiPassTextBox
             // 
+            this.wifiPassTextBox.Enabled = false;
             this.wifiPassTextBox.Location = new System.Drawing.Point(4, 31);
             this.wifiPassTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.wifiPassTextBox.Multiline = true;
@@ -118,6 +119,7 @@
             // 
             // userNameTextBox
             // 
+            this.userNameTextBox.Enabled = false;
             this.userNameTextBox.Location = new System.Drawing.Point(22, 32);
             this.userNameTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.userNameTextBox.Multiline = true;
@@ -181,6 +183,7 @@
             // 
             // userPassTextBox
             // 
+            this.userPassTextBox.Enabled = false;
             this.userPassTextBox.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.userPassTextBox.Location = new System.Drawing.Point(22, 58);
             this.userPassTextBox.Margin = new System.Windows.Forms.Padding(2);
@@ -193,6 +196,7 @@
             // 
             // writeBtn
             // 
+            this.writeBtn.Enabled = false;
             this.writeBtn.Location = new System.Drawing.Point(130, 431);
             this.writeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.writeBtn.Name = "writeBtn";

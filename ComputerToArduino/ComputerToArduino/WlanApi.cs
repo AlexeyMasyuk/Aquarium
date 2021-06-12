@@ -7,6 +7,8 @@ using System.Threading;
 using System.Text;
 using System.Windows.Forms;
 
+// Class handling WIFI reading
+
 namespace NativeWifi
 {
 	/// <summary>
