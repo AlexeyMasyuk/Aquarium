@@ -34,7 +34,7 @@
 		<img class="closeButton" src="images/closeButton.png " alt="" onclick="closeForm()">
 		
         <?php  
-        require_once('AlertOnHTML.php');
+        require_once('PageActClasses/AFS.php');
 		?>
       <form method='POST' action='PageActClasses/Connection.php'>
         <div>

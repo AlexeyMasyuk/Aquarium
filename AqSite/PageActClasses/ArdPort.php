@@ -1,25 +1,38 @@
 <?php
-require_once("../Classes/userClass.php");
-require_once("../Classes/dbClass.php");
+require_once('Wrapper.php');
 
-if(isset($_POST["data"])){
-    $data = $_POST["data"];
-    //$data = "ar,qweqwe123123";
+class AFS extends WrappingClass
+{
+
+	public ArduinoValidation($postArr){
+		$t=$this->T;
+
+		$data = $postArr[$t['d']];
 	
-	$pieces = explode(",", $data);
-    $user=new User($pieces[0],$pieces[1]);
-    $sql = new dbClass($user);
+		$pieces = explode(",", $data);
+		$user=new User($pieces[0],$pieces[1]);
+		$sql = new dbClass($user);
+	
+		if($validation=$sql->arduinoUserValidation())
+		{
+			echo $validation;
+		}
+	}
 
-	if($validation=$sql->arduinoUserValidation())
-	{
-		echo $validation;
+	public ArduinoToDB($postArr){
+		$t=$this->T;
+		$sp=explode(',',$postArr[$t['p']]);
+		$user=new User($sp[count($sp)-1],"");
+		unset($sp[count($sp)-1]);
+		$sql = new dbClass($user);
+		$sql->arduinoPush($sp);
 	}
 }
-else if(isset($_POST["push"])){
-	$sp=explode(',',$_POST["push"]);
-	$user=new User($sp[count()-1],"");
-	unset($sp[count()-1]);
-    $sql = new dbClass($user);
-	$sql->arduinoPush($data);
+$ard=new AFS(basename(__FILE__,p));
+if(isset($_POST[d])){
+	$ard->ArduinoValidation($_POST);
+}
+else if(isset($_POST[ps])){
+	$ard->ArduinoToDB($_POST);
 }
 ?>

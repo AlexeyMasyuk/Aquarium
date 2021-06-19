@@ -90,12 +90,11 @@
             <input type="checkbox" class="aquaInput" name="feedAlertCheckbox" onchange="openOrClose('feedAlert')" value="feedAlert">
             <p class="aquaInput" name="feedAlert" id="feedAlert" style="display: none;"><br>
              Once in 
-              <select name="feedAlertCycle">
+              <select name="feedAlert">
                 <option value="1">1</option>
                 <option value="2">2</option>
               </select>
              day/days.
-             <input type="time" name="feedAlertTime">
             </p>
             <br><br>
         </div>

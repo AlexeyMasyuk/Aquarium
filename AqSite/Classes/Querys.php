@@ -55,7 +55,7 @@ class Query
                     VALUES (?, ?, ?, ?, ?)";
 				break;
 			    case "sensorData":
-				   $qString=$qrStart."(`temp`, `PH`, `level`) VALUES (?, ?, ?)";
+				   $qString=$qrStart."(`Temp`, `ph`, `level`) VALUES (?, ?, ?)";
 				break;
 		}
 		return $qString;

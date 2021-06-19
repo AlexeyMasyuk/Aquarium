@@ -24,7 +24,7 @@ class SettingsChange extends WrappingClass{
         
         $notChoosen=true;
         $failStr="";
-        
+
         foreach ($postArr as $key=>$val)
         {
             $failStr.=$this->ValidateAndSave($dataArr,$postArr,$msg,$tm,$t,$notChoosen,$key,$val);
@@ -42,12 +42,14 @@ class SettingsChange extends WrappingClass{
     public function ValidateAndSave(&$dataArr,$postArr,$msg,$tm,$t,&$notChoosen,$key,$val){
         if(strpos($key,$t['C'])){  // checking if checkbox chosen, value contain the neede input tag 
             $notChoosen=false;
-            if(strpos($key,$t['fA'])!==false){           // if feeding alert choosen adjust the data (current date saved) 
+            if(strpos($key,$t['fA'])!==false){           // if feeding alert choosen adjust the data (current date saved)
+                
                 $tmp=dateTimeHandler::feedingAlarmSet($postArr[$val]);
                 $postArr[$val]=$tmp;
             }
             // validating user input and geting needed fail message.
             $failStr.=(($tmp=Validation::userParamValidation($val,$postArr[$val],$msg,true))!==true)?$tmp:"";
+
             if($failStr===""){
                 $dataArr[$val]=$postArr[$val];  // if no fail mesage store the input
             }

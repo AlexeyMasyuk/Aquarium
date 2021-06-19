@@ -18,6 +18,6 @@ _forgotNoUserMatch_$No such user.$
 _DBnoAlarms_$Perfect no alarms.$
 _DBalChkTxtArrStrt_$? Alarm Occure at $
 _DBalChkTxtArrMidd_$ and the ? was $
-_DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='feedAlarmSkip.php'>Return To Alarms</a>$
+_DBalarmFeedingTime_$ It's feeding time, please feed the fishes <br><a href='PageActClasses/AFS.php?o=1'>Return To Alarms</a>$
 _DBalarmFeedingTimeOFF_$<br><a href='feedAlarmSkip.php?OFF=1'>Already fed today</a>$
 _DBalarmsNotDefined_$No alarms not defined <a href='PageActClasses/da.php'>Set to Default</a>$

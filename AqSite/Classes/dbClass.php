@@ -216,7 +216,7 @@ class dbClass
 	public function arduinoPush($data){
 		$t = $this->init();
 		$stmnt=Query::insert($this->connection,$this->user->getUserName(),$t['sD']);
-		$stmnt->execute(array($data));
+		$stmnt->execute($data);
 	}
 }
 ?>

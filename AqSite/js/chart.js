@@ -66,7 +66,7 @@ var nn='9';
 
 // messages
 var wdt="Wrong date Format";
-var fe="Fatal Error";
+var fe="Fatal error";
 
 var sendVarName="settings";
 var p="personal";

@@ -44,6 +44,12 @@ include=dbClass,TextAndMSG,sessionHandler,userClass,passNmail,Validation;
 tagsNstrings=un-uname,fn-fname,ln-lname,e-email,oU-onlyUser,up-pass,f-flag,tce-tableCreatErro,
 qA-queryError,uE-userExist,cBU-cannotBeUser,h-headers,b-back,a-agn,r-rules,EF-EmptyField;
 
-[LittleAct]
-headers=back-dataTbl;
+[AFS]
+headers=back-dataTbl,ind-indexAq;
 include=sessionHandler;
+tagsNstrings=of-OFF,fl-flag,o-1,f-FA,tm-tomorrow midnight,fas-feedAlertSkip,h-headers,b-back,
+G-GLOBALS,i-ind;
+
+[ArdPort]
+include=dbClass,userClass;
+tagsNstrings=p-push,d-data;

@@ -1,6 +1,6 @@
 echo"<pre>";
 print_r($sql);
-echo"<pre>";
+echo"<pre/>";
 exit;
 
 alert(arr);

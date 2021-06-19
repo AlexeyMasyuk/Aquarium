@@ -31,7 +31,8 @@ namespace ComputerToArduino
             WlanClient.wifiFind(wifiList);
         }
 
-        // Function controlling
+        // Function controlling object that need to be changed when port connected.
+        // open text boxes for user to fill
         private void connectionControl()
         {
             if(isConnected)
@@ -41,6 +42,8 @@ namespace ComputerToArduino
             buttonsAndText.UserBoxesAndBtnStateControll(isConnected);
         }
 
+        // Action when connect/disconnect button clicked.
+        // Connection or disconnectiong port, show/hide relevant boxes and pop needed massege.
         private void connect_Click(object sender, EventArgs e)
         {
             if (!isConnected)
@@ -55,7 +58,7 @@ namespace ComputerToArduino
         }
 
 
-
+        //
         private void write_Click(object sender, EventArgs e)
         {
             string commStr = buttonsAndText.ComunicationString(wifiList.SelectedItems[0].Text.ToString());

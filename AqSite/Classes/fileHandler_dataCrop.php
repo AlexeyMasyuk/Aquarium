@@ -34,7 +34,12 @@ define("f", "feedAlert");
 // Used for Validation
 define("az",'/[a-z]/i');
 define("zn",'/[0-9]/');
+
+define("O",'OFF');
 define("tNs",'tagsNstrings');
+
+define("d",'data');
+define("ps",'push');
 
 class fileHandler_dataCrop{
 //-------------------------------- Messege Func --------------------------------//

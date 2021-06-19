@@ -18,22 +18,42 @@
     wantedSess=user,msg,feedAlertSkip;
     tagsNstrings=u-user,m-msg,fAS-feedAlertSkip,sA-sessArr;    
 */
-define("fileHandlerPath",'../Classes/fileHandler.php');
-define("dataFilePath",'../TextData/PageTagMap.txt');
+// define("fileHandlerPath",'../Classes/fileHandler.php');
+// define("dataFilePath",'../TextData/PageTagMap.txt');
+// define("sessHandlerPath",'../Classes/sessionHandler.php');
+
 define("ws",'wantedSess');
-define("sessHandlerPath",'../Classes/sessionHandler.php');
 define("sa",'sessArr');
+
+// echo " ".substr_count(getcwd(),'\\')." ";
+// exit;
+if(substr_count(getcwd(),'\\')<=3){                     // If wrapper if called from root folder
+  define("fileHandlerPath",'Classes/fileHandler.php');
+  define("dataFilePath",'TextData/PageTagMap.txt');
+  define("sessHandlerPath",'Classes/sessionHandler.php');
+}
+else{
+  define("fileHandlerPath",'../Classes/fileHandler.php');
+  define("dataFilePath",'../TextData/PageTagMap.txt');
+  define("sessHandlerPath",'../Classes/sessionHandler.php');
+  
+}
 
 require_once(fileHandlerPath);
 class WrappingClass {
   public $tagMap;
   public $T;
   public function __construct($location) {
-    
-    $TM=fileHandler::Pull(dataFilePath)[$location];                  // 1
-    foreach($TM[i] as $val){                                         // 2
+
+    $TM=fileHandler::Pull(dataFilePath)[$location];                   // 1
+
+    foreach($TM[i] as $val){                                          // 2
+      strpos(fileHandlerPath,"../")!==false?null:$val=substr($val,3); // Adjusting path if called from root folder
+
+      
       require_once($val);
     }
+    
     if(array_key_exists(ws,$TM)!==false||in_array(ws,$TM)!==false){  // 3
       require_once(sessHandlerPath);
       $TM[sa]=sessionClass::sessionPull($TM[ws]);
