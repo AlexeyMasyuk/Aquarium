@@ -104,6 +104,7 @@ namespace ComputerToArduino
             WifiPassBox.Enabled = state;
             UserNameBox.Enabled = state;
             UserPassBox.Enabled = state;
+            WriteBtn.Enabled = state;
             ConnectDisconnect_Switch();
         }
 
@@ -145,7 +146,7 @@ namespace ComputerToArduino
         public string ComunicationString(string wifiName)
         {
             string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString() };
-            string[] signs = { "<OKEY", ",", "\n" };
+            string[] signs = { "<OKEY", ",", ">" };
             StringBuilder str = new StringBuilder();
             for (int i = 0; i < 4; i++)
             {

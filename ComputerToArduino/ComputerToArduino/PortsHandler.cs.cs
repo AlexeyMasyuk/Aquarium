@@ -14,7 +14,7 @@ namespace ComputerToArduino
         private SerialPort port;
         private ComboBox portsBox;
         private static int PortBoundRate = 9600;
-        private static int arduinoAnswerWaitingTime = 20;
+        private static int arduinoAnswerWaitingTime = 40;
         // Cunstructor need ComboBox for adding the scaned ports to display
         public PortsHandler(ComboBox portsBox)
         {
@@ -114,6 +114,7 @@ namespace ComputerToArduino
         {
             if (Port.IsOpen)
             {
+                List<string> arrey = new List<string>();
                 Port.DiscardInBuffer();
                 DateTime now = DateTime.Now;
                 DateTime prev = now;
@@ -126,6 +127,7 @@ namespace ComputerToArduino
                     try
                     {
                         data_rx = Port.ReadExisting();
+                        arrey.Add(data_rx);
                     }
                     catch (Exception)
                     {
