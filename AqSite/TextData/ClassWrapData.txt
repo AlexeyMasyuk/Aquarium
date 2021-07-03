@@ -3,7 +3,7 @@ include=userClass,Querys,TextAndMSG,DB_DataHandler;
 credential=host-localhost,db-test,charset-utf8,serverUser-root,pass-;
 tagsNstrings=c-credential,h-host,d-db,ch-charset,su-serverUser,p-pass,ps-password,uap-userAndPass,up-userpass,u-username,
 ou-onlyUser,f-forgot,e-email,ph-phHigh,pl-phLow,th-tempHigh,tl-tempLow,T-Temp,P-PH,l-level,a-alarms,sD-sensorData,
-nd-DBalarmsNotDefined,lt-limits,pr-personal,s-select;
+nd-DBalarmsNotDefined,lt-limits,pr-personal,s-select,NF-<NUF>,OK-<OKEY>;
 
 [DB_DataHandler]
 include=TextAndMSG,dateTimeHandler;

@@ -4,11 +4,11 @@ require_once('Wrapper.php');
 class AFS extends WrappingClass
 {
 
-	public ArduinoValidation($postArr){
+	public function ArduinoValidation($postArr){
 		$t=$this->T;
 
 		$data = $postArr[$t['d']];
-	
+		$data = preg_replace( "/\r|\n/", "", $data );
 		$pieces = explode(",", $data);
 		$user=new User($pieces[0],$pieces[1]);
 		$sql = new dbClass($user);
@@ -19,7 +19,7 @@ class AFS extends WrappingClass
 		}
 	}
 
-	public ArduinoToDB($postArr){
+	public function ArduinoToDB($postArr){
 		$t=$this->T;
 		$sp=explode(',',$postArr[$t['p']]);
 		$user=new User($sp[count($sp)-1],"");

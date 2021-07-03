@@ -203,16 +203,19 @@ class dbClass
 	}
 
 	// Function for validating connection between the arduino and the sqlDB.
+	// Returnning $st as validating string containing relevant answer.
 	public function arduinoUserValidation()
 	{
-		$st = "<NUF>"; // not found user
-		$row=$this->userExists("userAndPass");
-		if(isset($row)&&$row!=null){
-			$st="<OKEY!>";
+		$t = $this->init();
+		$st = $t['NF']; // First defined as user not found. 
+		$row=$this->userExists($t['uap']);
+		if(isset($row)&&$row!==false){
+			$st=$t['OK'];
 		}
 		return $st;
 	}
 
+	// Function pushing data to DB
 	public function arduinoPush($data){
 		$t = $this->init();
 		$stmnt=Query::insert($this->connection,$this->user->getUserName(),$t['sD']);
