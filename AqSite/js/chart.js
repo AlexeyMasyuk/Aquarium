@@ -238,8 +238,8 @@ function change(week=false){
             
         google.load(v, o, {packages:[c]});
         var UserDataArr = this.responseText;
-        console.log(UserDataArr);
-        alert(UserDataArr);
+        // console.log(UserDataArr);
+        // alert(UserDataArr);
         if(UserDataArr.includes(fe)){
             window.location.replace(ix);
         }

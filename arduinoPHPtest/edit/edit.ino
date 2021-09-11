@@ -49,7 +49,7 @@ String phpValidFailMsg = "FALSEuser";
 String serialFailMsg = "FALSEser";
 
 // PHP connection server
-String server = "192.168.1.40";
+String server = "192.168.1.17";
 //--------Definders Ends--------//
 userData data = { "" , "" , "" , "" };
 // [      [0]              [1]                 [2]                 [3]         ]
@@ -67,9 +67,9 @@ void(* resetFunc)(void) = 0;
 void setup() {
   Serial.begin(9600);
   delay(2000);
-  
+
   if (Serial) {
-    if(ValidationEvent()){
+    if (ValidationEvent()) {
       return;
     }
   }
@@ -106,7 +106,7 @@ void loop() {
 
 //---------------------------- FUNCTIONS --------------------------//
 
-//======================= Control Events =======================// 
+//======================= Control Events =======================//
 
 // Function handling validation and saving user credential sent via Windows Application.
 // Return true or false depends on serialAndDataHandler and phpEvantHandler returns.
@@ -124,7 +124,7 @@ boolean ValidationEvent() {
     }
     else {
       if (WIFIorPHPfail[WIFI_Fail]) {
-        Serial.print(wifiFailMsg);      // Failed to connect to wifi 
+        Serial.print(wifiFailMsg);      // Failed to connect to wifi
       } else {
         Serial.print(phpValidFailMsg);  // Failed to connect to site
       }
@@ -163,6 +163,7 @@ boolean serialAndDataHandler(userData cred)
 boolean phpEvantHandler(userData cred)
 {
   if (wifiConnect(cred)) {
+    Serial.println("phpEvantHandler");
     if (phpReq(DataToPHPreq(ValidCred, cred))) {
       if (phpAns()) {
         return true;
@@ -239,7 +240,7 @@ String DataToPHPreq(int act, userData cred) {
     post.concat(cred[SiteUser]);
     post.concat(WordSep);
     post.concat(cred[SitePass]);
-  } else if(act == PushData){
+  } else if (act == PushData) {
     post = DataToSQL(cred);
   }
   return post;
@@ -310,7 +311,7 @@ void mmRead(userData cred)
       CopyIndex++;
     }
   }
-  CredCopy(cred, TmpCred);                                          
+  CredCopy(cred, TmpCred);
   delay(1000);
   EEPROM.end();
 }
@@ -336,7 +337,7 @@ void mmWrite(userData cred)
       WriteIndex++;
     }
   }
-
+Serial.println("CharWriten"+WriteIndex);
   delay(1000);
   EEPROM.commit();
   delay(150);
@@ -356,6 +357,7 @@ boolean phpReq(String post)
   while (true) {
     if (client.connect(server, 80))
     {
+      Serial.println("PHPclientConnected reqSent" + post);
       client.println("POST /AqSite/PageActClasses/ArdPort.php HTTP/1.1");
       client.print("Host: ");
       client.println(server);
@@ -384,12 +386,12 @@ boolean phpReq(String post)
 // Return input.
 String phpAns_ReadingSeq(char ActChar, String input) {
   char c;
-  c = client.read(); 
-  while (c != ActChar) { 
+  c = client.read();
+  while (c != ActChar) {
     if (ActChar == ReadEndSign) {
-      input.concat(c); 
+      input.concat(c);
     }
-    c = client.read(); 
+    c = client.read();
     delay(0);
   }
   return input;
@@ -398,7 +400,7 @@ String phpAns_ReadingSeq(char ActChar, String input) {
 // Function controling reading action from PHP server.
 // Using phpAns_ReadingSeq() for reading chars,
 // rise flag through WIFIorPHPfail if credential validation failed
-// or readed answer is empty or not match to needed string "<OKEY>". 
+// or readed answer is empty or not match to needed string "<OKEY>".
 boolean phpAns()
 {
   String input = "";
@@ -408,13 +410,14 @@ boolean phpAns()
     input = phpAns_ReadingSeq(ReadStartSign, input);   // "Garbage chars" filter.
     input = phpAns_ReadingSeq(ReadEndSign, input);     // Reading data
     delay(0);
-    
+
   }
-  client.stop();  
+  client.stop();
   if (input.length() > 0)
   {
-    boolean PHP_Ans = (input.indexOf(ValidInput) == indexOf_ValidInputPHP);
+    boolean PHP_Ans = (input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     WIFIorPHPfail[PHP_Fail] = !PHP_Ans;
+    Serial.println("PHPanswer Readed");
     return PHP_Ans;
   }
   WIFIorPHPfail[PHP_Fail] = true;
@@ -427,6 +430,7 @@ boolean wifiConnect(userData cred)
 {
   WiFi.mode(WIFI_STA);
   WiFi.begin(cred[wifiSSID], cred[ssidPASS]);
+  Serial.println(cred[wifiSSID]); Serial.println(cred[ssidPASS]);
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
 

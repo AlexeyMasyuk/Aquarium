@@ -28,8 +28,8 @@ function currentSettings(){
     var settings=localStorage.getItem(s);
     settings=personalDataCrop(settings);
     var p=document.getElementsByClassName(us);
-    alert(settings.length);
-    console.log(settings);
+    // alert(settings.length);
+    // console.log(settings);
 
     for(var i=0;i<settings.length;i++){
         if(typeof p[i]!=u){
@@ -58,7 +58,7 @@ function personalDataCrop(personalData){
     personalData=personalData.replace(br,cm);
     personalData=personalData.replace('}',cm);
     personalData=personalData.replace(per,'');
-    alert(personalData);
+    // alert(personalData);
     
     personalData=alertFreq(personalData);
     return personalData;
