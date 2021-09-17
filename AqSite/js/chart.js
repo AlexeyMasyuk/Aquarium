@@ -120,9 +120,10 @@ function weekFilter(UserDataArr){
     var spitedArr=Union(UserDataArr.split(cm));
     var tmpArr=[];
     //alert(spitedArr);
+    try{
     var daySplit=spitedArr[spitedArr.length-2].split(s)[0];
     
-    try{
+
     for(i=spitedArr.length-2,j=0;j<7;j++){        
         for(;spitedArr[i].includes(daySplit);i--){           
             tmpArr.push(spitedArr[i]+cm);       
@@ -239,7 +240,7 @@ function change(week=false){
         google.load(v, o, {packages:[c]});
         var UserDataArr = this.responseText;
         // console.log(UserDataArr);
-        // alert(UserDataArr);
+        
         if(UserDataArr.includes(fe)){
             window.location.replace(ix);
         }

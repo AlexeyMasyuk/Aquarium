@@ -53,5 +53,7 @@ class Forget extends WrappingClass{
 
 // Forget Activation.
 $frgt=new Forget(basename(__FILE__,".php"));
-$frgt->ForgetAct()
+$frgt->ForgetAct();
+
+
 ?>

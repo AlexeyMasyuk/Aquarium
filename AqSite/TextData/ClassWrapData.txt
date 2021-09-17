@@ -1,16 +1,16 @@
 [dbClass]
-include=userClass,Querys,TextAndMSG,DB_DataHandler;
+include=userClass,Querys,DB_DataHandler;
 credential=host-localhost,db-test,charset-utf8,serverUser-root,pass-;
 tagsNstrings=c-credential,h-host,d-db,ch-charset,su-serverUser,p-pass,ps-password,uap-userAndPass,up-userpass,u-username,
 ou-onlyUser,f-forgot,e-email,ph-phHigh,pl-phLow,th-tempHigh,tl-tempLow,T-Temp,P-PH,l-level,a-alarms,sD-sensorData,
-nd-DBalarmsNotDefined,lt-limits,pr-personal,s-select,NF-<NUF>,OK-<OKEY>;
+nd-DBalarmsNotDefined,lt-limits,pr-personal,s-select,NF-<NUF>,OK-<OKEY>,pc-pullCycle;
 
 [DB_DataHandler]
 include=TextAndMSG,dateTimeHandler;
 tagsNstrings=p-ph,P-PH,ph-phHigh,pl-phLow,t-Temp,T-Temperature,th-tempHigh,tl-tempLow,a-alarms,fA-feedAlert,l-level,
 lt-limits,tm-time,TF-d.m.y H:i:s,s-start,m-midd,b-<br>,df-defined,pr-personal,f-fname,ln-lname,u-uname,e-email,
 fN-firstName,lN-lastName,un-username,md-DBalChkTxtArrMidd,st-DBalChkTxtArrStrt,ft-DBalarmFeedingTime,na-DBnoAlarms,
-ftF-DBalarmFeedingTimeOFF,l-level,nd-DBalarmsNotDefined,up-userpass;
+ftF-DBalarmFeedingTimeOFF,l-level,nd-DBalarmsNotDefined,up-userpass,pc-pullingCycle,no-DBnoAlarms;
 
 [Validation]
 tagsNstrings=p-ph,t-temp,f-feed,ln-lname,fn-fname,b-<br>,ml-fnamelnameMaxLen,ps-pass,pm-pasMax,pn-pasMin,u-uname,um-userMax,

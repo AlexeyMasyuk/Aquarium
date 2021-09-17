@@ -143,6 +143,7 @@ class dbClass
 		$stmnt=Query::select($this->connection,$tbl);
 		$stmnt->execute(array($this->user->getUserName()));
 		while($row = $stmnt->fetch(PDO::FETCH_ASSOC)) {
+
 			$this->helpingClass->UserAlarmsAndPersonal_DataArrange($userData,$row);
 		}
 		return $userData;
@@ -171,7 +172,6 @@ class dbClass
 			}
 			
 			$dataArr=$this->helpingClass->chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTimeFlag,$msg);
-
 			return $dataArr;
 		} catch (Exception $e) {
 			$this->disconnect();
@@ -215,11 +215,19 @@ class dbClass
 		return $st;
 	}
 
-	// Function pushing data to DB
+	// Function pushing data from arduino sensors to DB
 	public function arduinoPush($data){
 		$t = $this->init();
 		$stmnt=Query::insert($this->connection,$this->user->getUserName(),$t['sD']);
 		$stmnt->execute($data);
+	}
+
+	// Function pushing pulling cycle to DB
+	public function SetPullCycleArduino($PullCycle){
+		$t = $this->init();
+		
+		$stmnt=Query::update($this->connection,$t['up'],$this->user->getUserName(),$t['pc']);
+		$stmnt->execute(array($PullCycle));
 	}
 }
 ?>

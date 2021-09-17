@@ -1,19 +1,13 @@
 ﻿using NativeWifi;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.IO.Ports;
-using System.Timers;
+
 
 // Main class controling all the objects and buttens of the app
 
 namespace ComputerToArduino
 {
-    public partial class Form1 : Form
+    public partial class CredToAquaController : Form
     {
         private PortsHandler portsHandler;                        // Handling all port needs
         private ButtonsAndTextBoxesControl buttonsAndText;        // Controlling buttens and text
@@ -21,12 +15,12 @@ namespace ComputerToArduino
         bool isConnected = false;
 
 
-        public Form1()
+        public CredToAquaController()
         { // Initializing all needed classes, buttens and objects
             InitializeComponent();
             portsHandler = new PortsHandler(portsBox);
             buttonsAndText = new ButtonsAndTextBoxesControl
-                (connectBtn, refreshBtn, writeBtn, wifiPassTextBox, userNameTextBox, userPassTextBox);
+                (connectBtn, refreshBtn, writeBtn, wifiPassTextBox, userNameTextBox, userPassTextBox, dataPullingBox);
             buttonsAndText.ConnectBtnStatusSwitch(portsHandler.PortsNames.Length != 0);  // Swiching off connection button that need data before click.
             WlanClient.wifiFind(wifiList);
         }
@@ -91,6 +85,11 @@ namespace ComputerToArduino
         }
 
         private void userPassTextBox_TextChanged(object sender, EventArgs e)
+        {
+            buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
+        }
+
+        private void dataPullingBox_TextChanged(object sender, EventArgs e)
         {
             buttonsAndText.writeBtnVision(isConnected, wifiList.SelectedItems.Count);
         }

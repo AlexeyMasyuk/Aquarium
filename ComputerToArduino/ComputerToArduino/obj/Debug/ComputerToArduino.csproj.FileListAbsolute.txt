@@ -36,7 +36,6 @@ C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\b
 C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
 C:\Users\amasyuk\Documents\GitHub\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csprojAssemblyReference.cache
-D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Form1.resources
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.Properties.Resources.resources
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csproj.GenerateResource.cache
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe
@@ -48,3 +47,4 @@ D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Debug\ComputerTo
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.exe.manifest
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.application
 D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.csproj.CoreCompileInputs.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Debug\ComputerToArduino.CredToAquaController.resources

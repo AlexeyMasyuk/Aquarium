@@ -16,18 +16,20 @@ namespace ComputerToArduino
         private TextBox wifiPass;
         private TextBox userName;
         private TextBox userPass;
+        private TextBox dataPulling;
 
         // Class constructor, initiallizing object parameters,
         public ButtonsAndTextBoxesControl
             (Button connectBtn, Button refreshBtn, Button writeBtn,
-                TextBox wifiPassBox, TextBox userNameBox, TextBox userPassBox)
+                TextBox wifiPassBox, TextBox userNameBox, TextBox userPassBox, TextBox dataPulling)
         {
             ConnectBtn = connectBtn;
             RefreshBtn = refreshBtn;
             WriteBtn = writeBtn;
             WifiPassBox = wifiPassBox;
             UserNameBox = userNameBox;
-            UserPassBox = userPassBox;       
+            UserPassBox = userPassBox;
+            DataPulling = dataPulling;
         }
 
         // Get/Set Methods
@@ -97,6 +99,17 @@ namespace ComputerToArduino
                 userPass = value;
             }
         }
+        public TextBox DataPulling
+        {
+            get
+            {
+                return dataPulling;
+            }
+            set
+            {
+                dataPulling = value;
+            }
+        }
 
         // Changing control state text boxes to be filled by user.
         public void UserBoxesAndBtnStateControll(bool state)
@@ -104,7 +117,8 @@ namespace ComputerToArduino
             WifiPassBox.Enabled = state;
             UserNameBox.Enabled = state;
             UserPassBox.Enabled = state;
-            WriteBtn.Enabled = state;
+            DataPulling.Enabled = state;
+            WriteBtn.Enabled = !state;
             ConnectDisconnect_Switch();
         }
 
@@ -114,13 +128,23 @@ namespace ComputerToArduino
             WifiPassBox.Text = "";
             UserNameBox.Text = "";
             UserPassBox.Text = "";
+            DataPulling.Text = "60";
         }
 
         // Validating text boxes not empty.
         public bool textValidation()
         {
-            if (WifiPassBox.Text.Length > 0 && UserNameBox.Text.Length > 0 && UserPassBox.Text.Length > 0)
-                return true;
+
+            if (WifiPassBox.Text.Length > 0 && UserNameBox.Text.Length > 0 && UserPassBox.Text.Length > 0 && DataPulling.Text.Length > 0)
+            {
+                long number = 0;
+                bool canConvert = long.TryParse(DataPulling.Text.ToString(), out number);
+                if (canConvert)
+                {
+                    return true;
+                }               
+            }
+                
             return false;
         }
 
@@ -145,17 +169,22 @@ namespace ComputerToArduino
         // Returning the string
         public string ComunicationString(string wifiName)
         {
-            string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString() };
+            long number = 0;
+            int toMilliSecConv = 60000;
+            bool canConvert = long.TryParse(DataPulling.Text.ToString(), out number);
+
+            string[] strArr = { wifiName, WifiPassBox.Text.ToString(), UserNameBox.Text.ToString(), UserPassBox.Text.ToString(), (number * toMilliSecConv).ToString() };
+
             string[] signs = { "<OKEY", ",", ">" };
             StringBuilder str = new StringBuilder();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < strArr.Length; i++)
             {
                 if (i == 0)
                     str.Append(signs[i]);
                 str.Append(strArr[i]);
-                if (i == 3)
+                if (i == strArr.Length-1)
                 {
-                    str.Append(signs[i - 1]);
+                    str.Append(signs[signs.Length - 1]);
                     break;
                 }
                 str.Append(signs[1]);

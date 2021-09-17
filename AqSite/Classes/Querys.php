@@ -72,6 +72,9 @@ class Query
         $qrStart="UPDATE `$tabelName` SET ";
 		switch($updateAction)
 		{
+            case "pullCycle":
+                $qString=$qrStart."`pullingCycle`=? WHERE `username`='$userName'";
+            break;
 		    case "phHigh":
                 $qString=$qrStart."`phHigh`=? WHERE `username`='$userName'";
             break;

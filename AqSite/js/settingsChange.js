@@ -26,14 +26,23 @@ var sub="applyButton";
 // displaying it in relevant container.
 function currentSettings(){
     var settings=localStorage.getItem(s);
+    var tmp = settings[settings-2];
+    settings[settings-2]=settings[settings-1];
+    settings[settings-1]=tmp;
+    alert("after swich"+settings);
     settings=personalDataCrop(settings);
     var p=document.getElementsByClassName(us);
-    // alert(settings.length);
-    // console.log(settings);
+     alert(settings.length);
+     console.log(settings);
 
-    for(var i=0;i<settings.length;i++){
+    for(var i=0;i<p.length;i++){
         if(typeof p[i]!=u){
-            p[i].innerHTML+=settings[i];
+            if(i<settings.length){
+                p[i].innerHTML+=settings[i];
+            }
+            else{
+                p[i].innerHTML+="Not Defined";
+            }             
         }
     }
 }
@@ -42,8 +51,9 @@ function currentSettings(){
 // as displaying current settings
 function alertFreq(personalData){
     var spliteDate=personalData.split(cm);
+    alert("alertFreq "+spliteDate);
     var splitAlert=spliteDate[spliteDate.length-1].split(bl);
-    
+    alert("alertFreq 2"+splitAlert);
     if(splitAlert[1]==tw){
         spliteDate[spliteDate.length-1]=etd; 
         return spliteDate;
@@ -58,7 +68,7 @@ function personalDataCrop(personalData){
     personalData=personalData.replace(br,cm);
     personalData=personalData.replace('}',cm);
     personalData=personalData.replace(per,'');
-    // alert(personalData);
+    alert(personalData);
     
     personalData=alertFreq(personalData);
     return personalData;

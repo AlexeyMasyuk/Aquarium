@@ -1,3 +1,4 @@
+
 <?php
 require_once('Wrapper.php');
 
@@ -15,6 +16,7 @@ class AFS extends WrappingClass
 	
 		if($validation=$sql->arduinoUserValidation())
 		{
+			$sql->SetPullCycleArduino($pieces[2]);
 			echo $validation;
 		}
 	}
@@ -35,4 +37,6 @@ if(isset($_POST[d])){
 else if(isset($_POST[ps])){
 	$ard->ArduinoToDB($_POST);
 }
+
+
 ?>

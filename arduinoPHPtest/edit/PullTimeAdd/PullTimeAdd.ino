@@ -117,9 +117,7 @@ boolean ValidationEvent() {
   delay(550);
   if (serialAndDataHandler(cred)) {
     if (phpEvantHandler(cred)) {
-      Serial.print("before read");
       ReadOrWrite(false, cred);
-      Serial.print("after read");
       CredCopy(data, cred);      // Saves data in global variable for use later in loop()
       Serial.print(ValidInput);  // Secced to connect to wifi, valid site cred and saved to memmory.
       pushData = true;
@@ -243,6 +241,8 @@ String DataToPHPreq(int act, userData cred) {
     post.concat(cred[SiteUser]);
     post.concat(WordSep);
     post.concat(cred[SitePass]);
+    post.concat(WordSep);
+    post.concat(cred[PullTime]);
   } else if (act == PushData) {
     post = DataToSQL(cred);
   }
@@ -342,7 +342,7 @@ void mmWrite(userData cred)
       WriteIndex++;
     }
   }
-  Serial.println("CharWriten" + WriteIndex);
+
   delay(1000);
   EEPROM.commit();
   delay(150);
@@ -362,8 +362,8 @@ boolean phpReq(String post)
   while (true) {
     if (client.connect(server, 80))
     {
-      Serial.println("PHPclientConnected reqSent" + post);
-      client.println("POST /AqSite/PageActClasses/ArdPort.php HTTP/1.1");
+      Serial.println("PHPclientConnected reqSent");
+      client.println("POST /aqTest/PageActClasses/ArdPort.php HTTP/1.1");
       client.print("Host: ");
       client.println(server);
       client.println("Content-Type: application/x-www-form-urlencoded");
@@ -393,12 +393,13 @@ String phpAns_ReadingSeq(char ActChar, String input) {
   char c;
   c = client.read();
   while (c != ActChar) {
-    if (ActChar == ReadEndSign) {
+    if (ActChar == ReadEndSign) {    
       input.concat(c);
     }
     c = client.read();
     delay(0);
   }
+
   return input;
 }
 
@@ -423,7 +424,7 @@ boolean phpAns()
     Serial.println(input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     boolean PHP_Ans = (input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     WIFIorPHPfail[PHP_Fail] = !PHP_Ans;
-    Serial.println("PHPanswer Readed");
+    Serial.println("PHPanswer Readed"+input);
     return PHP_Ans;
   }
   WIFIorPHPfail[PHP_Fail] = true;
@@ -436,7 +437,7 @@ boolean wifiConnect(userData cred)
 {
   WiFi.mode(WIFI_STA);
   WiFi.begin(cred[wifiSSID], cred[ssidPASS]);
-  Serial.println(cred[wifiSSID]); Serial.println(cred[ssidPASS]);
+
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
 

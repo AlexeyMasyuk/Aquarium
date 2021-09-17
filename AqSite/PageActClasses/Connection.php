@@ -25,7 +25,8 @@ class Connection extends WrappingClass{
         if(isset($_POST[$t['p']])&&isset($_POST[$t['un']]))
         {
             $user=new User($_POST[$t['un']],$_POST[$t['p']]); 
-            $sql=new dbClass($user);                         
+            $sql=new dbClass($user);
+                
             if($sql->userExists($t['up']))   
             {   
                 $this->seccesfullyConnected($user,$tm,$t,$msg);

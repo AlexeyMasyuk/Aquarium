@@ -27,12 +27,14 @@
       <label class='userSettigs'>,LastName-</label>
       <label class='userSettigs'>,UserName-</label>
       <label class='userSettigs'>,Email-</label>
-      
+<br>
       <label class='userSettigs'> ,Aquarium Settings: PH High-</label>
       <label class='userSettigs'>,PH Low-</label>
       <label class='userSettigs'>,Temp. High-</label>
       <label class='userSettigs'>,Temp. Low-</label>
+      <label class='userSettigs'>,Puuling Cycle in Ms. </label>
       <label class='userSettigs'>,Feeding Time Alert </label>
+      
       </div>
 	  
 	   <div class="buttons">

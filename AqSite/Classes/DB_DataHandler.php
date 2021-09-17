@@ -12,6 +12,8 @@
 	------------------------------------------------------
 */
 require_once('extractData.php');
+define("tNs", "tagsNstrings");
+
 class DB_DataHandler extends extractData
 { 
 	// Cunstractor, call wraping class, all data stored in $this->ClassData.
@@ -24,15 +26,15 @@ class DB_DataHandler extends extractData
 	// Function storing user alarms limits and personal data from sqlDB, given in $row parameter
 	// and storing it in given array $userData for later JS Chart and setting change use.
 	public function UserAlarmsAndPersonal_DataArrange(&$userData,$row){
-		$t = $this->ClassData['tagsNstrings'];
+		$t = $this->ClassData[tNs];
 
-		$personal=5;
-		$tg=array($t['ph'],$t['pl'],$t['th'],$t['tl'],$t['fA'],$t['pr'],$t['f'],$t['fN'],$t['ln'],$t['lN'],$t['u'],$t['un'],$t['e']);
+		$personal=6;
+		$tg=array($t['ph'],$t['pl'],$t['th'],$t['tl'],$t['pc'] ,$t['fA'],$t['pr'],$t['f'],$t['fN'],$t['ln'],$t['lN'],$t['u'],$t['un'],$t['e']);
 
 		for($i=0;$i<$personal;$i++){            // Loop for Aquarium limits
 			$userData[$tg[$i]]=$row[$tg[$i]];
 		}
-		for($i=6;$i<count($tg);$i++){           // Loop for personal data
+		for($i=$personal+1;$i<count($tg);$i++){           // Loop for personal data
 			$userData[$tg[$personal]][$tg[$i++]]=$row[$tg[$i]];
 			$i==(count($tg)-2)?$userData[$tg[$personal]][$tg[++$i]]=$row[$tg[$i]]:null;
 		}
@@ -44,12 +46,15 @@ class DB_DataHandler extends extractData
 	// $alarms -> store all user alarms limit parameters.
 	// Returning $dataArr after initiating all neeeded cells.
 	public function UserDataInit($msg,&$alarms){    
-		$t = $this->ClassData['tagsNstrings'];  
+		$t = $this->ClassData[tNs];  
 
 		$dataArr=array($t['t']=>"",$t['P']=>"",$t['l']=>"",
 		$t['a']=>$msg->getMessge($t['nd']),$t['lt']=>"",$t['pr']=>"");
 
 		$dataArr[$t['pr']]=implode(',',$alarms[$t['pr']]);
+
+
+
 		unset($alarms[$t['pr']]);          // delete personal data from user alarms
 		return $dataArr;
 	}
@@ -61,7 +66,7 @@ class DB_DataHandler extends extractData
 	//    and special sign, $insertSign='?' , to be raplaced by the alarm data.
 	private function risedAlarmCheck($row,$alarmsArr,$msg)
 	{
-		$t = $this->ClassData['tagsNstrings'];
+		$t = $this->ClassData[tNs];
 		$alarmStr="";
 		$insertSign='?';
 		$dateTime=dateTimeHandler::getTime($t['TF'],$row[$t['tm']]);
@@ -95,7 +100,7 @@ class DB_DataHandler extends extractData
 	// - $alarms -> store alarm limits string from sqlDB.
 	// - $dataArr -> store all needed data for JS Chart and settings change displayed data.
 	public function chartQuery_AlarmsAndFeedingCheck($alarms,$dataArr,$feedAlertSkip,&$feedingTimeFlag,&$defineAlarmFlag,$msg){
-		$t = $this->ClassData['tagsNstrings'];
+		$t = $this->ClassData[tNs];
 	    // Checking if all limits set
 		if(strlen($alarms[$t['ph']])>0 && strlen($alarms[$t['pl']])>0 && strlen($alarms[$t['th']])>0 && strlen($alarms[$t['tl']])>0 && strlen($alarms[$t['fA']])>0){
 			$defineAlarmFlag=true;				
@@ -120,7 +125,7 @@ class DB_DataHandler extends extractData
 	// using risedAlarmCheck() func, if feeding alarm flag not rised,
 	// for storing alarms will shown in alarms_div          
 	public function chartQuery_sqlRow_strToArr($row,$alarms,$dataArr,$feedingTimeFlag,$defineAlarmFlag,$msg){
-		$t = $this->ClassData['tagsNstrings'];
+		$t = $this->ClassData[tNs];
 		$dateTime=dateTimeHandler::getTime($t['TF'],$row[$t['tm']]);
 		$dataArr[$t['t']] .= $dateTime.",".$row[$t['t']].",";
 		$dataArr[$t['P']] .= $dateTime.",".$row[$t['p']].",";
@@ -138,10 +143,10 @@ class DB_DataHandler extends extractData
 	// if $defineAlarmFlag are true and $feedingTimeFlag are false,
 	// store dedicated message to be shown in alarms_div.
 	public function chartQuery_noAlarmsCheck($dataArr,$defineAlarmFlag,$feedingTimeFlag,$msg){
-		$t = $this->ClassData['tagsNstrings'];
+		$t = $this->ClassData[tNs];
 		if($defineAlarmFlag&&!$feedingTimeFlag){
 			if(strpos($dataArr[$t['a']],$t['df']) !== false){
-				$dataArr[$t['a']] = $msg->getMessge("DBnoAlarms");
+				$dataArr[$t['a']] = $msg->getMessge($t['no']);
 			}
 		}
 		return $dataArr;
