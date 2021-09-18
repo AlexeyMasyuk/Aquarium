@@ -40,7 +40,7 @@ var ll="LowLimit";
 var aq='Aquarium';
 var f='function';
 var btn='bottom';
-var ChartRefreshTime = 30000;
+var chartRefreshInterval = 30000
 
 // filter options
 var d="day";
@@ -53,6 +53,7 @@ var a="all";
 // style display varibles
 var no="none";
 var i="inline";
+var b="block";
 
 // Navigation location
 var ix="indexAq.php";
@@ -64,6 +65,7 @@ var cm=',';
 var ap='"';
 var z='0';
 var nn='9';
+var un = 'undefined';
 
 // messages
 var wdt="Wrong date Format";
@@ -274,21 +276,20 @@ function closAll(){
     }
 }
 
-var myVar = setInterval(ChartRefresh, ChartRefreshTime);
+var myVar = setInterval(ChartRefresh, chartRefreshInterval);
 function ChartRefresh(){
-    
-    var timeFilter = document.getElementById("chartFilter").value;
-    var mainFilter = document.getElementById("chart").value;
-    if(timeFilter!="week" && timeFilter!="all"){
-        var dayMonthForm = document.getElementById("dayMonthForm").value;
+
+    var timeFilter = document.getElementById(chartfilterCN).value;
+    var mainFilter = document.getElementById(chartCN).value;
+    if(timeFilter!=w && timeFilter!=a){
+        var dayMonthForm = document.getElementById(wantedDateCN).value;
     }
     openSelection(timeFilter);
 
-    document.getElementById("chart").value = timeFilter;
-    document.getElementById("chart").value = mainFilter
-
-    if(typeof dayMonthForm !== 'undefined'){
-        document.getElementById("dayMonthForm").innerHTML = dayMonthForm;
+    document.getElementById(chartfilterCN).value = timeFilter;
+    document.getElementById(chartCN).value = mainFilter
+    if(typeof dayMonthForm !== un){
+        document.getElementById(wantedDateCN).value = dayMonthForm;
     }
 }
 
@@ -311,8 +312,8 @@ function openSelection(val){
 // Function revealing day and month filtering form
 function dayMonth(val){
     closAll();
-    document.getElementById(val).style.display=i;
-    document.getElementById(dayMonthFormCN).style.display=i;
+    document.getElementById(val).style.display=b;
+    document.getElementById(dayMonthFormCN).style.display=b;
 }
 
 // Function validating day and month filtering form 

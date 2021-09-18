@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="styles/st_dataTbl.css">
  </head>
  
- <body onload="openSelection('week')">
+ <body onload=" openSelection('week')">
  <div class="content">
   <header>
          <nav class="topnav" id="myTopnav">
@@ -25,7 +25,7 @@
   </header>
 	  <h1>Your aquarium</h1>
       <div id="alarms_div"></div>
-      <div id="chart_div"></div>
+      <div id="chart_div" ></div>
 	
     <select id="chart" onchange="ContentSwich()">
       <option name="select" value="Temp">Temp</option>

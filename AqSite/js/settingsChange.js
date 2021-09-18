@@ -11,6 +11,7 @@ var s="settings";
 // user settings container class name
 var us='userSettigs';
 var u="undefined";
+var nd="Not Defined";
 
 var cm=',';
 var tw='2';
@@ -29,10 +30,10 @@ function currentSettings(){
     var tmp = settings[settings-2];
     settings[settings-2]=settings[settings-1];
     settings[settings-1]=tmp;
-    alert("after swich"+settings);
+    //alert("after swich"+settings);
     settings=personalDataCrop(settings);
     var p=document.getElementsByClassName(us);
-     alert(settings.length);
+     //alert(settings.length);
      console.log(settings);
 
     for(var i=0;i<p.length;i++){
@@ -41,7 +42,7 @@ function currentSettings(){
                 p[i].innerHTML+=settings[i];
             }
             else{
-                p[i].innerHTML+="Not Defined";
+                p[i].innerHTML+=nd;
             }             
         }
     }
@@ -51,9 +52,9 @@ function currentSettings(){
 // as displaying current settings
 function alertFreq(personalData){
     var spliteDate=personalData.split(cm);
-    alert("alertFreq "+spliteDate);
+    //alert("alertFreq "+spliteDate);
     var splitAlert=spliteDate[spliteDate.length-1].split(bl);
-    alert("alertFreq 2"+splitAlert);
+    //alert("alertFreq 2"+splitAlert);
     if(splitAlert[1]==tw){
         spliteDate[spliteDate.length-1]=etd; 
         return spliteDate;
@@ -68,7 +69,7 @@ function personalDataCrop(personalData){
     personalData=personalData.replace(br,cm);
     personalData=personalData.replace('}',cm);
     personalData=personalData.replace(per,'');
-    alert(personalData);
+    //alert(personalData);
     
     personalData=alertFreq(personalData);
     return personalData;
