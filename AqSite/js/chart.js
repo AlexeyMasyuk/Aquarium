@@ -40,6 +40,7 @@ var ll="LowLimit";
 var aq='Aquarium';
 var f='function';
 var btn='bottom';
+var ChartRefreshTime = 30000;
 
 // filter options
 var d="day";
@@ -270,6 +271,24 @@ function closAll(){
     document.getElementById(wantedDateCN).value="";
     for(var i=0;i<toClose.length;i++){
         toClose[i].style.display=no;
+    }
+}
+
+var myVar = setInterval(ChartRefresh, ChartRefreshTime);
+function ChartRefresh(){
+    
+    var timeFilter = document.getElementById("chartFilter").value;
+    var mainFilter = document.getElementById("chart").value;
+    if(timeFilter!="week" && timeFilter!="all"){
+        var dayMonthForm = document.getElementById("dayMonthForm").value;
+    }
+    openSelection(timeFilter);
+
+    document.getElementById("chart").value = timeFilter;
+    document.getElementById("chart").value = mainFilter
+
+    if(typeof dayMonthForm !== 'undefined'){
+        document.getElementById("dayMonthForm").innerHTML = dayMonthForm;
     }
 }
 
