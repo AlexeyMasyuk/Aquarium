@@ -22,13 +22,14 @@
       </header>
       <h1>Change Your Settings</h1>
       <div>
-      <label>Personal: </label>
+      <label id='n' class='userSettigs'>Personal: </label>
       <label class='userSettigs'>FirstName-</label>
       <label class='userSettigs'>,LastName-</label>
       <label class='userSettigs'>,UserName-</label>
       <label class='userSettigs'>,Email-</label>
-<br>
-      <label class='userSettigs'> ,Aquarium Settings: PH High-</label>
+<br><br><br>
+      <label id='n' class='userSettigs'> Aquarium Settings: </label>
+      <label class='userSettigs'> PH High-</label>
       <label class='userSettigs'>,PH Low-</label>
       <label class='userSettigs'>,Temp. High-</label>
       <label class='userSettigs'>,Temp. Low-</label>

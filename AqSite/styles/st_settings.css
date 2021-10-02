@@ -209,6 +209,9 @@ footer{
 	padding: 1vw;
 }
 label.userSettigs{
-    color: black;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    color:rgba(13, 11, 107, 0.6);
+    margin-left: 2%;
+    font-weight: bold;
 }
-

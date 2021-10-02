@@ -135,6 +135,10 @@ class fileHandler_dataCrop{
         $key=substr($pageNamesSplit[0], strpos($pageNamesSplit[0],pageTagStart)+1,strlen($pageNamesSplit[0])-1);
         return $pageNamesSplit[1];
     }
+    
+    private function RulesTrim_store($val){
+        
+    }
 
     // Function controlling all cropping methods, seperating diffrent tags from the data.
     // $read -> all readed text from file

@@ -3,7 +3,7 @@
 // Revealing and hidding relevant input fields and displaying personal and aquarium credential and limits.
 
 var i="inline";
-var n="none";
+var no="none";
 
 // Parameter name to be pollen from chart.js containing personal data and credentials.
 var s="settings";
@@ -12,7 +12,7 @@ var s="settings";
 var us='userSettigs';
 var u="undefined";
 var nd="Not Defined";
-
+var n='n';
 var cm=',';
 var tw='2';
 var bl=' ';
@@ -34,12 +34,12 @@ function currentSettings(){
     settings=personalDataCrop(settings);
     var p=document.getElementsByClassName(us);
      //alert(settings.length);
-     console.log(settings);
-
+     //console.log(settings);
+     var copyIndx=0;
     for(var i=0;i<p.length;i++){
-        if(typeof p[i]!=u){
-            if(i<settings.length){
-                p[i].innerHTML+=settings[i];
+        if(typeof p[i]!=u && p[i].id!=n){
+            if(copyIndx<settings.length){
+                p[i].innerHTML+=settings[copyIndx++];
             }
             else{
                 p[i].innerHTML+=nd;
@@ -95,7 +95,7 @@ function openAllTextBox(idToCheck,nameToOpen){
         changeCycle(document.getElementsByClassName(nameToOpen),i);
     }                
    else{
-    changeCycle(document.getElementsByClassName(nameToOpen),n);
+    changeCycle(document.getElementsByClassName(nameToOpen),no);
     }
 }
 
@@ -105,17 +105,17 @@ function openAllTextBox(idToCheck,nameToOpen){
 
    
    function openOrClose(name1,name2){                
-   if(document.getElementById(name1).style.display==n){
+   if(document.getElementById(name1).style.display==no){
        document.getElementById(name1).style.display = i;
 	   document.getElementById(sub).style.display=i;
    }
    else{
-       document.getElementById(name1).style.display=n;
+       document.getElementById(name1).style.display=no;
        document.getElementById(name1).value="";
    }
   
-  if((document.getElementById(name1).style.display==n)&&(document.getElementById(name2).style.display==n))
-		document.getElementById(sub).style.display=n;
+  if((document.getElementById(name1).style.display==no)&&(document.getElementById(name2).style.display==no))
+		document.getElementById(sub).style.display=no;
 	
 	
 } 

@@ -40,7 +40,7 @@ int indexOf_ValidInputPHP = 0;
 String CredValidPre = "data=";
 String DataPushPre = "push=";
 
-int WaitingInterval = 10000;
+int WaitingInterval = 7000;
 
 int MemmoryCycle = 2;
 
@@ -376,12 +376,14 @@ boolean phpReq(String post)
       delay(1000);
       return true;
     }
+    Serial.println("conToPHP...");
     if (currentMillis - previousMillis > WaitingInterval) {
       break;
     }
     delay(0);
   }
   delay(5000);
+  WIFIorPHPfail[PHP_Fail] = true;
   return false;
 }
 
@@ -390,9 +392,15 @@ boolean phpReq(String post)
 // or save the data echoed from PHP server if '>' passed.
 // Return input.
 String phpAns_ReadingSeq(char ActChar, String input) {
+    unsigned long currentMillis = millis();
+  unsigned long previousMillis = currentMillis;
   char c;
   c = client.read();
   while (c != ActChar) {
+        if (currentMillis - previousMillis > WaitingInterval) {
+          Serial.println("PHPtimeBreak");
+      break;
+    }
     if (ActChar == ReadEndSign) {
       input.concat(c);
     }

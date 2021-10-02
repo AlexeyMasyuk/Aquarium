@@ -47,7 +47,7 @@
     <input type="submit" value="Submit">
     </form>
     
-    <a class="forgot" onclick="limitsToSettChngData()" href="settChng.php">Settings Change</a>
+    
 	
 	 <video loop muted autoplay poster="video/ClearWater.mp4" class="BgVideo">
                         <source src="video/ClearWater.mp4" type="video/mp4">
