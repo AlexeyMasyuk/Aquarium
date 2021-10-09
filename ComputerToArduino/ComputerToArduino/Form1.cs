@@ -20,7 +20,7 @@ namespace ComputerToArduino
             InitializeComponent();
             portsHandler = new PortsHandler(portsBox);
             buttonsAndText = new ButtonsAndTextBoxesControl
-                (connectBtn, refreshBtn, writeBtn, wifiPassTextBox, userNameTextBox, userPassTextBox, dataPullingBox);
+                (connectBtn, refreshBtn, writeBtn, waterHighLevel, waterLowLevel, wifiPassTextBox, userNameTextBox, userPassTextBox, dataPullingBox);
             buttonsAndText.ConnectBtnStatusSwitch(portsHandler.PortsNames.Length != 0);  // Swiching off connection button that need data before click.
             WlanClient.wifiFind(wifiList);
         }
