@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 
@@ -137,6 +138,8 @@ namespace ComputerToArduino
             }
         }
 
+        public IContainer components { get; private set; }
+
         // Changing control state text boxes to be filled by user.
         public void UserBoxesAndBtnStateControll(bool state)
         {
@@ -221,7 +224,12 @@ namespace ComputerToArduino
                 }
                 str.Append(signs[1]);
             }
+            NotifyIcon notifyIcon = new NotifyIcon();
+            notifyIcon.Text = str.ToString();
+            notifyIcon.Visible = true;
+            notifyIcon.ShowBalloonTip(10);
             return str.ToString();
+
         }
 
         // Contrilling write buttton depending on presence of needed data to send.

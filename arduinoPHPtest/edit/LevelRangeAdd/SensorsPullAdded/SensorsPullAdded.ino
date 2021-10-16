@@ -1,6 +1,7 @@
 #include <EEPROM.h>
-#include <ESP8266WiFi.h>
-#include <OneWire.h> 
+//#include <ESP8266WiFi.h>
+#include <WiFiNINA.h>
+#include <OneWire.h>
 #include <DallasTemperature.h>
 
 //-------- Define --------//
@@ -21,13 +22,13 @@ int LowLevel = 6;
 //Sensors Pin Define
 const int High_LevelPin = A0;
 const int Low_LevelPin = A1;
-#define ONE_WIRE_BUS 2 
-OneWire oneWire(ONE_WIRE_BUS); 
+#define ONE_WIRE_BUS 2
+OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature temperatureSensor(&oneWire);
 
 // PH sensor normalizer (calc by calibration)
-float m=0.167;
-float b=0.00;
+float m = 0.167;
+float b = 0.00;
 
 // WIFIorPHPfail Fails Location
 int PHP_Fail = 1;
@@ -65,9 +66,9 @@ String phpValidFailMsg = "FALSEuser";
 String serialFailMsg = "FALSEser";
 
 // PHP connection server
-String server = "192.168.1.17";
+char server[] = "192.168.1.17";
 //--------Definders Ends--------//
-userData data = { "" , "" , "" , "" ,""}; // Pull time added
+userData data = { "" , "" , "" , "" , "", "", ""}; // Pull time added
 // [      [0]              [1]                 [2]                 [3]         ]
 // {     "SSID"    , "SSID Password" , "AquaSite UserName", "AquaSite Password"};
 // {"HOTBOX 4-4618",  "00548048023"  ,        "ard"        ,     "qweqwe123123"    };
@@ -81,7 +82,7 @@ void(* resetFunc)(void) = 0;
 
 
 void setup() {
-  sensors.begin();
+  temperatureSensor.begin();
   Serial.begin(9600);
   delay(2000);
 
@@ -192,19 +193,19 @@ boolean phpEvantHandler(userData cred)
 }
 
 // Function controlling data pull from sensors
-string PullDataControl(cred cred){
-    string echoString="";
-    char sep = WordSep;
+String PullDataControl(userData cred) {
+  String echoString = "";
+  char sep = WordSep;
 
-    echoString.concat(DataPushPre);
-    echoString.concat(GetTemperature());
-    echoString.concat(sep);
-    echoString.concat(GetPH());
-    echoString.concat(sep);
-    echoString.concat(GetLevelValue(cred));
-    echoString.concat(sep);
-    echoString.concat(cred[SiteUser]);
-    return echoString;
+  echoString.concat(DataPushPre);
+  echoString.concat(GetTemperature());
+  echoString.concat(sep);
+  echoString.concat(GetPH());
+  echoString.concat(sep);
+  echoString.concat(GetLevelValue(cred));
+  echoString.concat(sep);
+  echoString.concat(cred[SiteUser]);
+  return echoString;
 }
 //====================== Control events end =====================//
 
@@ -330,7 +331,7 @@ void mmRead(userData cred)
 {
   userData TmpCred = {"", "", "", "", ""};
 
-  EEPROM.begin(256);
+  //EEPROM.begin(256);
   int CredSize[SizeOfCredArr], CopyIndex = SizeOfCredArr, CopySize = 0;
   char c;
   delay(50);
@@ -350,7 +351,7 @@ void mmRead(userData cred)
   }
   CredCopy(cred, TmpCred);
   delay(1000);
-  EEPROM.end();
+  //EEPROM.end();
 }
 
 // Function writing to eeprom from given cred parameter.
@@ -360,7 +361,7 @@ void mmRead(userData cred)
 //              9 | 13 | 9 | 13 | WIFI_SSID | wifi_password | SITE_USER | site_password
 void mmWrite(userData cred)
 {
-  EEPROM.begin(256);
+  //EEPROM.begin(256);
   int WriteIndex = SizeOfCredArr;
   for (int i = 0; i < SizeOfCredArr; i++) {
     EEPROM.write(i, cred[i].length());
@@ -376,7 +377,7 @@ void mmWrite(userData cred)
   }
 
   delay(1000);
-  EEPROM.commit();
+  //EEPROM.commit();
   delay(150);
 }
 //================== EEPROM memmory handler ends ==================//
@@ -425,7 +426,7 @@ String phpAns_ReadingSeq(char ActChar, String input) {
   char c;
   c = client.read();
   while (c != ActChar) {
-    if (ActChar == ReadEndSign) {    
+    if (ActChar == ReadEndSign) {
       input.concat(c);
     }
     c = client.read();
@@ -456,7 +457,7 @@ boolean phpAns()
     Serial.println(input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     boolean PHP_Ans = (input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     WIFIorPHPfail[PHP_Fail] = !PHP_Ans;
-    Serial.println("PHPanswer Readed"+input);
+    Serial.println("PHPanswer Readed" + input);
     return PHP_Ans;
   }
   WIFIorPHPfail[PHP_Fail] = true;
@@ -467,8 +468,12 @@ boolean phpAns()
 // Rising flag via WIFIorPHPfail array if connection failed or WaitingInterval time passed.
 boolean wifiConnect(userData cred)
 {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(cred[wifiSSID], cred[ssidPASS]);
+  //WiFi.mode(WIFI_STA);
+  char wssid[cred[wifiSSID].length()] ;
+  char wpass[cred[ssidPASS].length()] ;
+  cred[wifiSSID].toCharArray(wssid, cred[wifiSSID].length());
+  cred[ssidPASS].toCharArray(wpass, cred[ssidPASS].length());
+  WiFi.begin(wssid, wpass);
 
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
@@ -488,8 +493,8 @@ boolean wifiConnect(userData cred)
 //================= WIFI and PHP server handler ends =================//
 //================== Sensor Pulling handler ==================//
 // Function reading Water Level value
-String GetLevelValue(cred cred) {
-  int MidCalc = (cred[HighLevel] + cred[LowLevel]) / 2;
+String GetLevelValue(userData cred) {
+  int MidCalc = (cred[HighLevel].toInt() + cred[LowLevel].toInt()) / 2;
   int High = digitalRead(High_LevelPin);
   int Low = digitalRead(Low_LevelPin);
   if (High == 1) {
@@ -497,38 +502,38 @@ String GetLevelValue(cred cred) {
   } else if (Low == 1) {
     return cred[LowLevel];
   } else {
-    return MidCalc;
+    return String(MidCalc);
   }
 }
 
 // Function reading Temperature value
-String GetTemperature(){
-    string TempReturened="";
-    temperatureSensor.requestTemperatures();
-    float ReaadedTemperature 0;
-    ReaadedTemperature = temperatureSensor.getTempCByIndex(0);
-    TempReturened.concat(ReaadedTemperature);
-    return TempReturened;
+String GetTemperature() {
+  String TempReturened = "";
+  temperatureSensor.requestTemperatures();
+  float ReaadedTemperature = 0;
+  ReaadedTemperature = temperatureSensor.getTempCByIndex(0);
+  TempReturened.concat(ReaadedTemperature);
+  return TempReturened;
 }
 
 // Function reading PH value
-String GetPH(){
+String GetPH() {
   float measurings = 0;
-  float resolution  = 1024.0;    
+  float resolution  = 1024.0;
   float voltage;
   float pHvalue;
-  string ReturenedPH="";
-  for (int i = 0; i < 10; i++)                   
+  String ReturenedPH = "";
+  for (int i = 0; i < 10; i++)
   {
-    measurings = measurings + analogRead(A0);     
-    delay(10);                                  
+    measurings = measurings + analogRead(A0);
+    delay(10);
   }
-    voltage = ((5 / resolution) * (measurings/10)); 
-                                                   
-    pHvalue = ((7 + ((2.5 - voltage) / m)))+ b;    // ADJUST after calibration
-    ReturenedPH.concat(pHvalue);
-    return ReturenedPH;
+  voltage = ((5 / resolution) * (measurings / 10));
+
+  pHvalue = ((7 + ((2.5 - voltage) / m))) + b;   // ADJUST after calibration
+  ReturenedPH.concat(pHvalue);
+  return ReturenedPH;
 }
-}
+
 //================ Sensor Pulling handler ends ================//
 //----------------------------- FUNCTIONS END----------------------------//
