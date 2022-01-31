@@ -66,7 +66,7 @@ String phpValidFailMsg = "FALSEuser";
 String serialFailMsg = "FALSEser";
 
 // PHP connection server
-char server[] = "192.168.1.17";
+char server[] = "192.168.43.77";
 //--------Definders Ends--------//
 userData data = { "" , "" , "" , "" , "", "", ""}; // Pull time added
 // [      [0]              [1]                 [2]                 [3]         ]
@@ -82,11 +82,17 @@ void(* resetFunc)(void) = 0;
 
 
 void setup() {
-  temperatureSensor.begin();
   Serial.begin(9600);
+  //  while(true){
+  //    Serial.println("Test_");
+  //  }
+  Serial.println("B_sensorDefine");
+  temperatureSensor.begin();
+  Serial.println("A_sensorDefine");
   delay(2000);
-
+  Serial.println("sensorDefine");
   if (Serial) {
+    Serial.println("serialBegin");
     if (ValidationEvent()) {
       return;
     }
@@ -132,6 +138,7 @@ void loop() {
 boolean ValidationEvent() {
   userData cred = {"", "" , "", "", ""};
   delay(550);
+  Serial.println("validationBegin");
   if (serialAndDataHandler(cred)) {
     if (phpEvantHandler(cred)) {
       ReadOrWrite(false, cred);
@@ -164,7 +171,7 @@ boolean serialAndDataHandler(userData cred)
     delay(100);
     input = serialRead();
     delay(50);
-
+    Serial.println("SerialReaded");
     if (input.indexOf(ValidInput) == indexOf_ValidInput) {
       dataToStruct(cred, input);
       return true;
@@ -277,7 +284,8 @@ String DataToPHPreq(int act, userData cred) {
     post.concat(WordSep);
     post.concat(cred[PullTime]);
   } else if (act == PushData) {
-    post = PullDataControl(cred);
+    //post = PullDataControl(cred);
+    post = DataToSQL(cred);
   }
   return post;
 }
@@ -468,20 +476,30 @@ boolean phpAns()
 // Rising flag via WIFIorPHPfail array if connection failed or WaitingInterval time passed.
 boolean wifiConnect(userData cred)
 {
+  Serial.println("----GlobalCred-----");
+  Serial.println(cred[wifiSSID]);
+  Serial.println(cred[ssidPASS]);
+  Serial.println("----GlobalCred-----");
   //WiFi.mode(WIFI_STA);
-  char wssid[cred[wifiSSID].length()] ;
-  char wpass[cred[ssidPASS].length()] ;
-  cred[wifiSSID].toCharArray(wssid, cred[wifiSSID].length());
-  cred[ssidPASS].toCharArray(wpass, cred[ssidPASS].length());
-  WiFi.begin(wssid, wpass);
-
+  char wssid[cred[wifiSSID].length()+1] ;
+  char wpass[cred[ssidPASS].length()+1] ;
+  cred[wifiSSID].toCharArray(wssid, cred[wifiSSID].length()+1);
+  cred[ssidPASS].toCharArray(wpass, cred[ssidPASS].length()+1);
+  int status = WL_IDLE_STATUS;
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
-
-  while (WiFi.status() != WL_CONNECTED) {
+Serial.println(wssid);
+Serial.println(wpass);
+  while ( status != WL_CONNECTED) {
+    status = WiFi.begin(wssid, wpass);
     if (currentMillis - previousMillis > WaitingInterval) {
       break;
+      delay(1000);
     }
+
+    //  while (WiFi.status() != WL_CONNECTED) {
+    //
+    //    }
     currentMillis = millis();
     delay(100);
   }

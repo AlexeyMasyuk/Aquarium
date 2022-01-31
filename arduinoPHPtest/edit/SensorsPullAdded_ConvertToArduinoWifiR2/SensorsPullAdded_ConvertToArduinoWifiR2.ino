@@ -1,8 +1,11 @@
 #include <EEPROM.h>
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
+#include <WiFiNINA.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 //-------- Define --------//
-const int SizeOfCredArr = 5;             // size of cred array.
+const int SizeOfCredArr = 7;             // size of cred array.
 typedef String userData[SizeOfCredArr];  // define custom type for credential store.
 // Note: as pointer of custom type passed to function, copy saved after function ends.
 
@@ -13,6 +16,20 @@ int ssidPASS = 1;
 int SiteUser = 2;
 int SitePass = 3;
 int PullTime = 4;
+int HighLevel = 5;
+int LowLevel = 6;
+
+//Sensors Pin Define
+const int High_LevelPin = A2;
+const int Low_LevelPin = A1;
+const int PH_PIN = A0;
+#define ONE_WIRE_BUS 2
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature temperatureSensor(&oneWire);
+
+// PH sensor normalizer (calc by calibration)
+float m = 0.167;
+float b = 0.00;
 
 // WIFIorPHPfail Fails Location
 int PHP_Fail = 1;
@@ -40,7 +57,7 @@ int indexOf_ValidInputPHP = 0;
 String CredValidPre = "data=";
 String DataPushPre = "push=";
 
-int WaitingInterval = 7000;
+int WaitingInterval = 10000;
 
 int MemmoryCycle = 2;
 
@@ -50,9 +67,9 @@ String phpValidFailMsg = "FALSEuser";
 String serialFailMsg = "FALSEser";
 
 // PHP connection server
-String server = "192.168.1.17";
+char server[] = "192.168.1.17";
 //--------Definders Ends--------//
-userData data = { "" , "" , "" , "" ,""}; // Pull time added
+userData data = { "" , "" , "" , "" , "", "", ""}; // Pull time added
 // [      [0]              [1]                 [2]                 [3]         ]
 // {     "SSID"    , "SSID Password" , "AquaSite UserName", "AquaSite Password"};
 // {"HOTBOX 4-4618",  "00548048023"  ,        "ard"        ,     "qweqwe123123"    };
@@ -63,13 +80,21 @@ boolean WIFIorPHPfail[2] = {false, false};
 WiFiClient client;
 
 void(* resetFunc)(void) = 0;
-
+String hs = "";
 
 void setup() {
   Serial.begin(9600);
+  //  while(true){
+  //    Serial.println("Test_");
+  //  }
+  //Serial.println("B_sensorDefine");
+  temperatureSensor.begin();
+  //Serial.println("A_sensorDefine");
   delay(2000);
-
+  //Serial.println("sensorDefine");
+  
   if (Serial) {
+    Serial.println("serialBegin");
     if (ValidationEvent()) {
       return;
     }
@@ -115,11 +140,10 @@ void loop() {
 boolean ValidationEvent() {
   userData cred = {"", "" , "", "", ""};
   delay(550);
+  Serial.println("validationBegin");
   if (serialAndDataHandler(cred)) {
     if (phpEvantHandler(cred)) {
-      Serial.print("before read");
       ReadOrWrite(false, cred);
-      Serial.print("after read");
       CredCopy(data, cred);      // Saves data in global variable for use later in loop()
       Serial.print(ValidInput);  // Secced to connect to wifi, valid site cred and saved to memmory.
       pushData = true;
@@ -149,7 +173,9 @@ boolean serialAndDataHandler(userData cred)
     delay(100);
     input = serialRead();
     delay(50);
-
+    Serial.println("SerialReaded");
+    Serial.println(input.indexOf(ValidInput));
+    //Serial.println(input);
     if (input.indexOf(ValidInput) == indexOf_ValidInput) {
       dataToStruct(cred, input);
       return true;
@@ -166,7 +192,8 @@ boolean serialAndDataHandler(userData cred)
 boolean phpEvantHandler(userData cred)
 {
   if (wifiConnect(cred)) {
-    Serial.println("phpEvantHandler");
+    Serial.println("phpEvantHandler: ");
+    Serial.print(cred[0]);Serial.print(cred[1]);Serial.print(cred[2]);Serial.print(cred[3]);Serial.print(cred[4]);Serial.print(cred[5]);Serial.print(cred[6]);
     if (phpReq(DataToPHPreq(ValidCred, cred))) {
       if (phpAns()) {
         return true;
@@ -175,6 +202,26 @@ boolean phpEvantHandler(userData cred)
   }
   delay(999);
   return false;
+}
+
+// Function controlling data pull from sensors
+String PullDataControl(userData cred) {
+  String echoString = "";
+  char sep = WordSep;
+
+  echoString.concat(DataPushPre);
+  echoString.concat(GetTemperature());
+  delay(1000);
+  echoString.concat(sep);
+  echoString.concat(GetPH());
+  delay(1000);
+  echoString.concat(sep);
+  echoString.concat(GetLevelValue(cred));
+  delay(1000);
+  echoString.concat(sep);
+  echoString.concat(cred[SiteUser]);
+  delay(500);
+  return echoString;
 }
 //====================== Control events end =====================//
 
@@ -243,8 +290,11 @@ String DataToPHPreq(int act, userData cred) {
     post.concat(cred[SiteUser]);
     post.concat(WordSep);
     post.concat(cred[SitePass]);
+    post.concat(WordSep);
+    post.concat(cred[PullTime]);
   } else if (act == PushData) {
-    post = DataToSQL(cred);
+    post = PullDataControl(cred);
+    //post = DataToSQL(cred);
   }
   return post;
 }
@@ -298,7 +348,7 @@ void mmRead(userData cred)
 {
   userData TmpCred = {"", "", "", "", ""};
 
-  EEPROM.begin(256);
+  //EEPROM.begin(256);
   int CredSize[SizeOfCredArr], CopyIndex = SizeOfCredArr, CopySize = 0;
   char c;
   delay(50);
@@ -318,7 +368,7 @@ void mmRead(userData cred)
   }
   CredCopy(cred, TmpCred);
   delay(1000);
-  EEPROM.end();
+  //EEPROM.end();
 }
 
 // Function writing to eeprom from given cred parameter.
@@ -328,7 +378,7 @@ void mmRead(userData cred)
 //              9 | 13 | 9 | 13 | WIFI_SSID | wifi_password | SITE_USER | site_password
 void mmWrite(userData cred)
 {
-  EEPROM.begin(256);
+  //EEPROM.begin(256);
   int WriteIndex = SizeOfCredArr;
   for (int i = 0; i < SizeOfCredArr; i++) {
     EEPROM.write(i, cred[i].length());
@@ -342,9 +392,9 @@ void mmWrite(userData cred)
       WriteIndex++;
     }
   }
-  Serial.println("CharWriten" + WriteIndex);
+
   delay(1000);
-  EEPROM.commit();
+  //EEPROM.commit();
   delay(150);
 }
 //================== EEPROM memmory handler ends ==================//
@@ -362,8 +412,8 @@ boolean phpReq(String post)
   while (true) {
     if (client.connect(server, 80))
     {
-      Serial.println("PHPclientConnected reqSent" + post);
-      client.println("POST /AqSite/PageActClasses/ArdPort.php HTTP/1.1");
+      Serial.println("PHPclientConnected reqSent");
+      client.println("POST /aqTest/PageActClasses/ArdPort.php HTTP/1.1");
       client.print("Host: ");
       client.println(server);
       client.println("Content-Type: application/x-www-form-urlencoded");
@@ -376,14 +426,12 @@ boolean phpReq(String post)
       delay(1000);
       return true;
     }
-    Serial.println("conToPHP...");
     if (currentMillis - previousMillis > WaitingInterval) {
       break;
     }
     delay(0);
   }
   delay(5000);
-  WIFIorPHPfail[PHP_Fail] = true;
   return false;
 }
 
@@ -392,21 +440,16 @@ boolean phpReq(String post)
 // or save the data echoed from PHP server if '>' passed.
 // Return input.
 String phpAns_ReadingSeq(char ActChar, String input) {
-    unsigned long currentMillis = millis();
-  unsigned long previousMillis = currentMillis;
   char c;
   c = client.read();
   while (c != ActChar) {
-        if (currentMillis - previousMillis > WaitingInterval) {
-          Serial.println("PHPtimeBreak");
-      break;
-    }
     if (ActChar == ReadEndSign) {
       input.concat(c);
     }
     c = client.read();
     delay(0);
   }
+
   return input;
 }
 
@@ -426,12 +469,13 @@ boolean phpAns()
 
   }
   client.stop();
+  //Serial.println(input);
   if (input.length() > 0)
   {
     Serial.println(input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     boolean PHP_Ans = (input.indexOf(ValidInput) >= indexOf_ValidInputPHP);
     WIFIorPHPfail[PHP_Fail] = !PHP_Ans;
-    Serial.println("PHPanswer Readed");
+    //hySerial.println("PHPanswer Readed" + input);
     return PHP_Ans;
   }
   WIFIorPHPfail[PHP_Fail] = true;
@@ -442,16 +486,30 @@ boolean phpAns()
 // Rising flag via WIFIorPHPfail array if connection failed or WaitingInterval time passed.
 boolean wifiConnect(userData cred)
 {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(cred[wifiSSID], cred[ssidPASS]);
-  Serial.println(cred[wifiSSID]); Serial.println(cred[ssidPASS]);
+  Serial.println("----GlobalCred-----");
+  Serial.println(cred[wifiSSID]);
+  Serial.println(cred[ssidPASS]);
+  Serial.println("----GlobalCred-----");
+  //WiFi.mode(WIFI_STA);
+  char wssid[cred[wifiSSID].length()+1] ;
+  char wpass[cred[ssidPASS].length()+1] ;
+  cred[wifiSSID].toCharArray(wssid, cred[wifiSSID].length()+1);
+  cred[ssidPASS].toCharArray(wpass, cred[ssidPASS].length()+1);
+  int status = WL_IDLE_STATUS;
   unsigned long currentMillis = millis();
   unsigned long previousMillis = currentMillis;
-
-  while (WiFi.status() != WL_CONNECTED) {
+Serial.println(wssid);
+Serial.println(wpass);
+  while ( status != WL_CONNECTED) {
+    status = WiFi.begin(wssid, wpass);
     if (currentMillis - previousMillis > WaitingInterval) {
       break;
+      delay(1000);
     }
+
+    //  while (WiFi.status() != WL_CONNECTED) {
+    //
+    //    }
     currentMillis = millis();
     delay(100);
   }
@@ -461,4 +519,49 @@ boolean wifiConnect(userData cred)
   return ConnectionStatus;
 }
 //================= WIFI and PHP server handler ends =================//
+//================== Sensor Pulling handler ==================//
+// Function reading Water Level value
+String GetLevelValue(userData cred) {
+  int MidCalc = (cred[HighLevel].toInt() + cred[LowLevel].toInt()) / 2;
+  int High = digitalRead(High_LevelPin);
+  int Low = digitalRead(Low_LevelPin);
+  if (High == 1) {
+    return cred[HighLevel];
+  } else if (Low == 1) {
+    return cred[LowLevel];
+  } else {
+    return String(MidCalc);
+  }
+}
+
+// Function reading Temperature value
+String GetTemperature() {
+  String TempReturened = "";
+  temperatureSensor.requestTemperatures();
+  float ReaadedTemperature = 0;
+  ReaadedTemperature = temperatureSensor.getTempCByIndex(0);
+  TempReturened.concat(ReaadedTemperature);
+  return TempReturened;
+}
+
+// Function reading PH value
+String GetPH() {
+  float measurings = 0;
+  float resolution  = 1024.0;
+  float voltage;
+  float pHvalue;
+  String ReturenedPH = "";
+  for (int i = 0; i < 10; i++)
+  {
+    measurings = measurings + analogRead(PH_PIN);
+    delay(10);
+  }
+  voltage = ((5 / resolution) * (measurings / 10));
+
+  pHvalue = ((7 + ((2.5 - voltage) / m))) + b;   // ADJUST after calibration
+  ReturenedPH.concat(pHvalue);
+  return ReturenedPH;
+}
+
+//================ Sensor Pulling handler ends ================//
 //----------------------------- FUNCTIONS END----------------------------//

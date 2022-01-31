@@ -224,10 +224,6 @@ namespace ComputerToArduino
                 }
                 str.Append(signs[1]);
             }
-            NotifyIcon notifyIcon = new NotifyIcon();
-            notifyIcon.Text = str.ToString();
-            notifyIcon.Visible = true;
-            notifyIcon.ShowBalloonTip(10);
             return str.ToString();
 
         }

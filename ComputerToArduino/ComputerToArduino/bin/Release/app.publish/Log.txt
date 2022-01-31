@@ -1,0 +1,15 @@
+serialBegin
+validationBegin
+SerialReaded
+1
+----GlobalCred-----
+Home
+no064879
+----GlobalCred-----
+Home
+no064879
+1
+phpEvantHandler: 
+Homeno064879ltqweqwe1231236000042PHPclientConnected reqSent
+1
+B WriteA WriteB WriteA WriteOKEY

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
@@ -14,7 +16,7 @@ namespace ComputerToArduino
         private SerialPort port;
         private ComboBox portsBox;
         private static int PortBoundRate = 9600;
-        private static int arduinoAnswerWaitingTime = 40;
+        private static int arduinoAnswerWaitingTime = 20;
         // Cunstructor need ComboBox for adding the scaned ports to display
         public PortsHandler(ComboBox portsBox)
         {
@@ -88,7 +90,8 @@ namespace ComputerToArduino
             try
             {
                 Port = new SerialPort(portName, PortBoundRate, Parity.None, 8, StopBits.One);
-                Port.Open();
+                Port.DtrEnable = true;
+                Port.Open(); // Working with Uno Wifi Rev2
                 PortsBox.Enabled = false;
                 return Port.IsOpen;
             }
@@ -105,41 +108,69 @@ namespace ComputerToArduino
             Port.Close();
         }
 
+        private void WriteLog(string array)
+        {
+            array.Trim();
+
+            using (StreamWriter outputFile = new StreamWriter("Log.txt"))
+            {
+                    outputFile.WriteLine(array);
+                outputFile.Close();
+            }       
+        }
+
         // Function reading answer from arduino.
         // If data_rx get "OKEY" from connected port (arduino) -> arduino seccesfuly connected to WIFI and get validation from DB
         // If data_rx get "FALSE" arduino -> failed to connect
         // If "arduinoAnswerWaitingTime" (20) passed -> no anser from arduino
         // All the cases stop the reading loop
-        private void AnsRead()
+        public void AnsRead()
         {
+            
             if (Port.IsOpen)
             {
-                List<string> arrey = new List<string>();
+                List<string> arrey1 = new List<string>();
                 Port.DiscardInBuffer();
                 DateTime now = DateTime.Now;
                 DateTime prev = now;
                 string data_rx = "";
+                StringBuilder readConvert = new StringBuilder();
                 while (true)           // reading loop
                 {
-                    System.Threading.Thread.Sleep(200);
+                    //System.Threading.Thread.Sleep(200);
                     if (now > prev.AddSeconds(arduinoAnswerWaitingTime))
+                    {
+                        WriteLog(readConvert.ToString());
                         throw new Exception(MAT.NoAns());
+                    }
+                        
                     try
                     {
                         data_rx = Port.ReadExisting();
-                        arrey.Add(data_rx);
+                        readConvert.Append(data_rx);
+                        arrey1.Add(data_rx);
+                       // data_rx = Port.ReadLine();
+                       // arrey2.Add(data_rx);
+                        //arrey3.Add((byte)Port.ReadByte());
                     }
                     catch (Exception)
                     {
+                        WriteLog(readConvert.ToString());
                         throw new Exception(MAT.NoAns());
                     }
-                    if (data_rx.Contains("OKEY"))
+
+                    if (readConvert.ToString().Contains("OKEY"))
+                    {
+                        WriteLog(readConvert.ToString());
                         break;
-                    else if (data_rx.Contains("FALSEser"))
+                    }
+
+                    
+                    else if (readConvert.ToString().Contains("FALSEser"))
                         throw new Exception(MAT.WrFail());
-                    else if (data_rx.Contains("FALSEwifi"))
+                    else if (readConvert.ToString().Contains("FALSEwifi"))
                         throw new Exception(MAT.WIFIfaile());
-                    else if (data_rx.Contains("FALSEuser"))
+                    else if (readConvert.ToString().Contains("FALSEuser"))
                         throw new Exception(MAT.USERfaile());
                     now = DateTime.Now;
                 }
@@ -148,7 +179,9 @@ namespace ComputerToArduino
             else
             {
                 throw new Exception(MAT.NoAns());
+                
             }
+
         }
 
         // Function writing to connected port given massege "MessageToWrite"
@@ -159,7 +192,7 @@ namespace ComputerToArduino
             try
             {
                 Port.Write(MessageToWrite);
-                System.Threading.Thread.Sleep(2000);
+                //System.Threading.Thread.Sleep(2000);
                 AnsRead();
                 return true;
             }

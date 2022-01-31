@@ -55,6 +55,7 @@ namespace ComputerToArduino
         //
         private void write_Click(object sender, EventArgs e)
         {
+            //portsHandler.AnsRead();
             string commStr = buttonsAndText.ComunicationString(wifiList.SelectedItems[0].Text.ToString());
             MAT.ArdRes();
             portsHandler.writeToPort(commStr);

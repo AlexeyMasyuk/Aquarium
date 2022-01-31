@@ -1,0 +1,13 @@
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Release\ComputerToArduino.exe.manifest
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Release\ComputerToArduino.application
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Release\ComputerToArduino.exe
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\bin\Release\ComputerToArduino.pdb
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.csproj.AssemblyReference.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.CredToAquaController.resources
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.Properties.Resources.resources
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.csproj.GenerateResource.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.csproj.CoreCompileInputs.cache
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.exe.manifest
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.application
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.exe
+D:\AquariumGiT\Aquarium\ComputerToArduino\ComputerToArduino\obj\Release\ComputerToArduino.pdb
